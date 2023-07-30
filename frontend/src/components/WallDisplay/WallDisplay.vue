@@ -47,7 +47,7 @@ export default {
 /* Div component */
 .div-wall-display{
     height: 96vh;
-    background-color: #121212;
+    background-color: var(--background-color-black-2);
     border-radius: 5px;
 }
 </style>

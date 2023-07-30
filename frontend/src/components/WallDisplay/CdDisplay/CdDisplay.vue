@@ -38,7 +38,10 @@ export default {
         cd: Object,
     },
     created(){
-        this.imageSrc = new URL("../../../assets/albums/"+this.cd.albumName.replaceAll(" ","_") + ".jpg", import.meta.url).href
+        try {
+            this.imageSrc = new URL("../../../assets/albums/"+this.cd.albumName.replaceAll(" ","_") + ".jpg", import.meta.url).href
+        } catch (error) {
+        }
     },
     data () {
         return {
@@ -100,7 +103,7 @@ export default {
   transition: transform 0.5s;
 }
 
-.cube-container:hover .cube {
+.div-cd-wall:hover .cube {
   transform: rotateY(180deg);
 }
 

@@ -1,5 +1,7 @@
 <script setup>
-    const iconClose = new URL('../../assets/icons/close.png', import.meta.url).href
+    const iconSave = new URL('../../assets/icons/save_white.png', import.meta.url).href
+    const iconClose = new URL('../../assets/icons/close_white.png', import.meta.url).href
+    const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.url).href
 </script>
 <!-- Popup de création/modification de cd, avec les fonction qui permettent la gestion -->
 <template>
@@ -9,7 +11,7 @@
             <v-row class="mx-2 my-2 header-row justify-center d-flex">  
                 <v-col cols="1"></v-col>     
                 <v-col cols="10">
-                    <p class="text-h5 text-center" v-if="this.function == 'Edit'">{{ cd.albumName }}</p>
+                    <p class="text-h5 text-center font-weight-bold" v-if="this.function == 'Edit'">{{ cd.albumName }}</p>
                     <p class="text-h5 text-center" v-if="this.function == 'Add'">Ajouter un nouveau cd</p>
                 </v-col>     
                 <v-col cols="1">
@@ -23,39 +25,48 @@
                         <v-col cols="7" class="px-0">
                             <!-- Nom de l'album -->
                             <v-row class="d-flex justify-space-between mx-6">
-                                <v-text-field class="item-name" v-model="cd.albumName" :value="cd.albumName" label="Nom de l'album" variant="outlined"></v-text-field>
+                                <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup" v-model="cd.albumName">
+                                <!-- <v-text-field class="item-name" v-model="cd.albumName" :value="cd.albumName" label="Nom de l'album" variant="underlined"></v-text-field> -->
                             </v-row>
                             <!-- Nom de l'artiste -->
                             <v-row class="d-flex justify-space-between mx-6">
-                                <v-text-field class="item-name" v-model="cd.artiste" :value="cd.artiste" label="Nom de l'artiste" variant="outlined"></v-text-field>
+                                <input type="text" name="artisteName" placeholder="Nom de l'artiste" class="input-cd-popup" v-model="cd.artiste">
+                                <!-- <v-text-field class="item-name" v-model="cd.artiste" :value="cd.artiste" label="Nom de l'artiste" variant="underlined"></v-text-field> -->
                             </v-row>
                             <!-- Nombre de tracks -->
                             <v-row class="d-flex justify-space-between mx-6">
-                                <v-text-field class="item-name" v-model="cd.trackNb" :value="cd.trackNb" label="Nombre de tracks" variant="outlined"></v-text-field>
+                                <input type="text" name="trackNb" placeholder="Nombre de tracks" class="input-cd-popup" v-model="cd.trackNb">
+                                <!-- <v-text-field class="item-name" v-model="cd.trackNb" :value="cd.trackNb" label="Nombre de tracks" variant="underlined"></v-text-field> -->
                             </v-row>
                             <!-- Date de sortie -->
-                            <v-row class="d-flex justify-space-between mx-6 mb-4">
-                                <label for="releaseDate">Date de sortie:</label>
-                                <input type="date" name="releaseDate" v-model="cd.releaseDate">
+                            <v-row class="d-flex justify-start mx-6">
+                                <!-- <label class="mr-2" for="releaseDate">Date de sortie:</label> -->
+                                <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate">
                             </v-row>
                             <!-- Position -->
                             <v-row v-if="this.function == 'Edit'" class="d-flex justify-space-between mx-6">
-                                <v-text-field class="item-name" v-model="cd.position" :value="cd.position" label="Position du cd" variant="outlined"></v-text-field>
+                                <input type="text" name="position" placeholder="Position du cd" class="input-cd-popup" v-model="cd.position">
+                                <!-- <v-text-field class="item-name" v-model="cd.position" :value="cd.position" label="Position du cd" variant="underlined"></v-text-field> -->
                             </v-row>
                         </v-col>
-                        <v-col cols="5" class="d-flex align-center justify-center px-0">
+                        <v-col cols="5" class="d-flex flex-column align-center justify-center px-0">
                             <div class="display-cd-img-popup d-flex align-center justify-center mb-5">
-                                <v-img :src="imageSrc" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
+                                <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
+                            </div>
+                            <div class="div-input-file d-flex justify-start">
+                                <v-file-input label="File input" accept="image/jpeg" variant="underlined"></v-file-input>
                             </div>
                         </v-col>
                     </v-row>
                     <!-- Boutons de validation et annulation -->
-                    <v-row class="mt-0 mb-1 my-0 px-5 d-flex align-center">
+                    <v-row class="mt-0 mb-1 my-0 px-5 d-flex align-center justify-space-between">
                         <v-col cols="6">           
-                            <v-btn type="submit" block class="mt-1 edit-btn" variant="outlined"><p class="font-weight-bold">Enregistrer</p></v-btn>
+                            <!-- <v-btn type="submit" block class="mt-1 edit-btn" variant="outlined"><p class="font-weight-bold">Enregistrer</p></v-btn> -->
+                            <v-img :src="iconSave" type="submit" class="icon-close pa-3" @click="valideCd()"></v-img>
                         </v-col>
-                        <v-col v-if="this.function == 'Edit'" cols="6">
-                            <v-btn block class="mt-1 exit-btn" @click="delet()" variant="outlined"><p class="font-weight-bold">Supprimer</p></v-btn>
+                        <v-col v-if="this.function == 'Edit'" cols="1" class="d-flex justify-end">
+                            <!-- <v-btn block class="mt-1 exit-btn" @click="delet()" variant="outlined"><p class="font-weight-bold">Supprimer</p></v-btn> -->
+                            <v-img :src="iconDelete" class="icon-close pa-3" @click="delet()"></v-img>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -88,7 +99,7 @@ export default {
             cd: {
                 'albumName': '', 
                 'artiste': '', 
-                'trackNb': 0, 
+                'trackNb': '', 
                 'releaseDate': '0000-00-00', 
                 'position': 0
             },
@@ -107,7 +118,7 @@ export default {
             this.cd = {
                 'albumName': '', 
                 'artiste': '', 
-                'trackNb': 0, 
+                'trackNb': '', 
                 'releaseDate': '0000-00-00', 
                 'position': 0
             }
@@ -152,9 +163,12 @@ export default {
             let colorThief = new ColorThief();
             // Extraire la couleur dominante de l'image
             let dominantColor = colorThief.getColor(image, 10);
+            console.log(colorThief.getPalette(image))
             // Maintenant, vous avez les valeurs RGB des couleurs dominantes dans dominantColor ou dominantColors.
             let background = document.getElementsByClassName("item-cu")
-            background[0].style.background = "linear-gradient(0deg, rgba(72,72,72,1) 87.5%, rgba("+dominantColor[0]+","+dominantColor[1]+","+dominantColor[2]+",1) 100%)"
+            background[0].style.background = "linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba("+dominantColor[0]+","+dominantColor[1]+","+dominantColor[2]+",1) 100%)"
+            document.documentElement.style.setProperty('--border-color-cd-popup', 'rgba('+dominantColor[0]+','+dominantColor[1]+','+dominantColor[2]+',1)');
+
         }
     }
 }
@@ -178,7 +192,7 @@ export default {
     z-index: 999;
 }
 .item-cu{
-    background-color: #484848;
+    background-color: var(--background-color-black-4);
     color: whitesmoke;
     height: 100%;
     width: 100%;
@@ -193,6 +207,8 @@ export default {
     height: 100%;
 }#album-img-popup{
     border-radius: 5px;
+}#album-img-popup:hover{
+    cursor: pointer;
 }
 /* Icon */
 .icon-close{
@@ -200,6 +216,8 @@ export default {
     width: 30px;
 }.icon-close:hover{
     cursor: pointer;
+    background-color: rgba(107, 107, 107, 0.4);
+    border-radius: 5px;
 }
 .header-row{
     width: 100%;
@@ -210,8 +228,25 @@ export default {
 .s-s-form{
     width: 100% !important;
 }
-input{
+/* input{
     color: white;
+    /* border-color: red; */
+.input-cd-popup{
+    color: white;
+    border-bottom: 1px solid var(--border-color-cd-popup);
+    margin: 12px 5px;
+    padding: 5px 3px;
+    width: 100%;
+}
+/* Cacher l'icon calendrier */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+/* Ajout image */
+.div-input-file{
+    width: 20vw;
 }
 /* Couleur des boutons */
 .edit-btn{

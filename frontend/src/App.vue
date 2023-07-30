@@ -84,43 +84,52 @@ export default {
 </script>
 
 <style>
+/* Equivalent var global mais pour couleurs CSS */
+:root {
+   --background-color-black-1: #000000;
+   --background-color-black-2: #121212;
+   --background-color-black-3: #282828;
+   --background-color-black-4: #484848;
+   --border-color-cd-popup: white;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 html::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 html {
-  margin: 0;
-  height: 100%;
-  background-color: #000000;
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+    margin: 0;
+    height: 100%;
+    background-color: var(--background-color-black-1);
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 #app {
-  font-family: Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: white;
-  background-color: #000000 !important;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: white;
+    background-color: var(--background-color-black-1) !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 /* Surlignage du texte */
 ::selection{
-  background-color: #ebe5dc;
-  color: #7eb3e8;
+    background-color: #ebe5dc;
+    color: #7eb3e8;
 }
 ::-moz-selection{
-  background-color: #ebe5dc;
-  color: #2c3e50;
+    background-color: #ebe5dc;
+    color: #2c3e50;
 }
-
+/* Cols affichage */
 .col-list-display, .col-wall-display{
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 </style>

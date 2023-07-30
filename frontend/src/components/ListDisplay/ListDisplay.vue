@@ -1,9 +1,15 @@
+<script setup>
+    const iconAdd = new URL('../../assets/icons/add_white.png', import.meta.url).href
+    const iconSync = new URL('../../assets/icons/sync_white.png', import.meta.url).href
+</script>
 <template>
     <div class="div-list-display d-flex flex-column pa-3 ma-1">
         <!-- Btn ajout cd -->
-        <div class="div-btn-add ma-1 pa-1 justify-center">
-            <v-btn class="btn-add" variant="outlined" @click="addCd()">Ajouter</v-btn>
-            <v-btn class="btn-add" variant="outlined" @click="Sync()">Sync</v-btn>
+        <div class="div-btn-add ma-1 pa-1 d-flex justify-center">
+            <!-- <v-btn class="btn-add" variant="outlined" @click="addCd()">Ajouter</v-btn> -->
+            <v-img title="Ajouter un cd" :src="iconAdd" class="list-icons" @click="addCd()"></v-img>
+            <!-- <v-btn class="btn-add" variant="outlined" @click="Sync()">Sync</v-btn> -->
+            <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img>
         </div>
         <!-- List des CD en rab, v-for -->
         <div v-for="cd in list" class="div-cd-list ma-2" @click="openCd(cd)">
@@ -38,7 +44,7 @@ export default {
         addCd(){
             eventBus.emit('openCdCu',   // On créer un cd, on envoie un modèle vide pour le remplir
                 {"data":
-                    {'albumName': '', 'artiste': '', 'trackNb': 0, 'releaseDate': new Date().toISOString().split('T')[0], position: 0},
+                    {'albumName': '', 'artiste': '', 'trackNb': '', 'releaseDate': new Date().toISOString().split('T')[0], 'position': 0},
                 "function": "Add"
             });   
         },
@@ -74,7 +80,7 @@ export default {
 .div-list-display{
     width: 100%;
     height: 95vh;
-    background-color: #121212;
+    background-color: var(--background-color-black-2);
     border-radius: 5px;
     /* overflow-y: scroll; */
 }
@@ -82,7 +88,7 @@ export default {
 .div-btn-add{
     height: fit-content;
 }.btn-add:hover{
-    color: #121212;
+    color: var(--background-color-black-2);
     background-color: white;
 }
 
@@ -90,8 +96,27 @@ export default {
     height: 10vh;
 }.div-cd-list:hover{
     cursor: pointer;
-    background-color: #282828;
+    background-color: var(--background-color-black-3);
     border-radius: 5px;
 }
+
+/* Icon */
+.list-icons{
+    height: 30px;
+    width: 30px;
+}.list-icons:hover{
+    cursor: pointer;
+    animation: rotate 1.2s infinite;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
 
 </style>

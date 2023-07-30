@@ -42,7 +42,7 @@ def syncData():
 
       # Ouvrir le fichier JSON en mode écriture
       with open('./static/data.json', 'w') as file:
-         json.dump(data, file)
+         json.dump(data, file, ensure_ascii=False)
 
       # Send results back as a json
       resp = {"success": True}

@@ -5,14 +5,12 @@
 <template>
     <div class="div-list-display d-flex flex-column pa-3 ma-1">
         <!-- Btn ajout cd -->
-        <div class="div-btn-add ma-1 pa-1 d-flex justify-center">
-            <!-- <v-btn class="btn-add" variant="outlined" @click="addCd()">Ajouter</v-btn> -->
+        <div class="div-btn-add ma-1 pb-4 d-flex justify-center">
             <v-img title="Ajouter un cd" :src="iconAdd" class="list-icons" @click="addCd()"></v-img>
-            <!-- <v-btn class="btn-add" variant="outlined" @click="Sync()">Sync</v-btn> -->
             <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img>
         </div>
         <!-- List des CD en rab, v-for -->
-        <div class="div-overflow-list">
+        <div class="div-overflow-list mt-2">
             <div v-for="cd in list" class="div-cd-list ma-2 d-flex flex-column align-end" @click="openCd(cd)">
                 <v-row class="my-0 mx-2">
                     <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
@@ -91,6 +89,7 @@ export default {
 /* Row btn add */
 .div-btn-add{
     height: fit-content;
+    border-bottom: 1px solid var(--background-color-black-4);
 }.btn-add:hover{
     color: var(--background-color-black-2);
     background-color: white;

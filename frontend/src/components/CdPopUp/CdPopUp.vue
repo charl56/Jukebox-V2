@@ -8,12 +8,13 @@
     <v-dialog v-model="open" v-if="open" transition="dialog-bottom-transition" class="div-item-cu mt-0 d-flex justify-center align-item-center">
         <v-row class="item-cu mx-1 my-2 pb-4 d-flex justify-center align-item-center">
             <!-- Header subSection Create/Update -->
-            <v-row class="mx-2 my-2 header-row justify-center d-flex">  
-                <v-col cols="1"></v-col>     
-                <v-col cols="10">
-                    <p class="text-h5 text-center font-weight-bold" v-if="this.function == 'Edit'">{{ cd.albumName }}</p>
-                    <p class="text-h5 text-center" v-if="this.function == 'Add'">Ajouter un nouveau cd</p>
+            <v-row class="mx-2 my-2 header-row d-flex justify-center">  
+                <v-col cols="6" class="py-0">
+                    <!-- <p class="text-h5 text-start font-weight-bold" v-if="this.function == 'Edit'"> </p> -->
+                    <input  v-if="this.function == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup-title" v-model="cd.albumName">
+                    <p class="text-h5 text-start" v-if="this.function == 'Add'">Ajouter un nouveau cd</p>
                 </v-col>     
+                <v-col cols="5"></v-col>
                 <v-col cols="1">
                     <v-img :src="iconClose" class="icon-close" @click="closeModal()"></v-img>
                 </v-col>     
@@ -24,7 +25,7 @@
                     <v-row>
                         <v-col cols="7" class="px-0">
                             <!-- Nom de l'album -->
-                            <v-row class="d-flex justify-space-between mx-6">
+                            <v-row v-if="this.function == 'Add'" class="d-flex justify-space-between mx-6">
                                 <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup" v-model="cd.albumName">
                                 <!-- <v-text-field class="item-name" v-model="cd.albumName" :value="cd.albumName" label="Nom de l'album" variant="underlined"></v-text-field> -->
                             </v-row>
@@ -53,7 +54,7 @@
                             <div class="display-cd-img-popup d-flex align-center justify-center mb-5">
                                 <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
                             </div>
-                            <div class="div-input-file d-flex justify-start">
+                            <div v-if="this.function == 'Add'" class="div-input-file d-flex justify-start">
                                 <v-file-input label="File input" accept="image/jpeg" variant="underlined"></v-file-input>
                             </div>
                         </v-col>
@@ -228,15 +229,33 @@ export default {
 .s-s-form{
     width: 100% !important;
 }
-/* input{
-    color: white;
-    /* border-color: red; */
+.input-cd-popup-title{
+    color: var(--border-color-cd-popup);
+    /* border-bottom: 1px solid var(--border-color-cd-popup); */
+    margin: 12px 5px 0px 5px;
+    padding: 5px 3px;
+    width: 100%;
+    font-size: larger;
+    font-weight: bold;
+}.input-cd-popup-title:focus-within{
+    outline: none; /* Supprimer le contour par défaut (utile pour certains navigateurs) */
+
+}
 .input-cd-popup{
-    color: white;
+    color: var(--border-color-cd-popup);
     border-bottom: 1px solid var(--border-color-cd-popup);
     margin: 12px 5px;
     padding: 5px 3px;
-    width: 100%;
+    width: 80%;
+}.input-cd-popup:hover{
+    cursor: pointer;
+    border: 1px solid var(--border-color-cd-popup);
+    border-radius: 5px;
+}.input-cd-popup:focus-within{
+    outline: none; /* Supprimer le contour par défaut (utile pour certains navigateurs) */
+    border: 1px solid var(--border-color-cd-popup);
+    border-radius: 5px;
+    /* background-color: var(--border-color-cd-popup); */
 }
 /* Cacher l'icon calendrier */
 input[type="date"]::-webkit-inner-spin-button,

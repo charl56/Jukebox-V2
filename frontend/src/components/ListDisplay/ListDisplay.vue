@@ -12,8 +12,8 @@
             <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img>
         </div>
         <!-- List des CD en rab, v-for -->
-        <div v-for="cd in list" class="div-cd-list ma-2" @click="openCd(cd)">
-            <div>
+        <div class="div-overflow-list">
+            <div v-for="cd in list" class="div-cd-list ma-2" @click="openCd(cd)">
                 {{ cd.albumName }}
             </div>
         </div>
@@ -82,7 +82,6 @@ export default {
     height: 95vh;
     background-color: var(--background-color-black-2);
     border-radius: 5px;
-    /* overflow-y: scroll; */
 }
 /* Row btn add */
 .div-btn-add{
@@ -91,14 +90,27 @@ export default {
     color: var(--background-color-black-2);
     background-color: white;
 }
-
+/* Liste des cd */
 .div-cd-list{
     height: 10vh;
 }.div-cd-list:hover{
     cursor: pointer;
     background-color: var(--background-color-black-3);
     border-radius: 5px;
+}.div-overflow-list{  /* Scroll bar */
+    overflow-y: scroll;
+    margin-left: 10px;
+}.div-overflow-list::-webkit-scrollbar{             /* Fond de la barre de scroll */
+    width: 10px;
+    background-color: var(--background-color-black-3);
+    border-radius: 5px;
+}.div-overflow-list::-webkit-scrollbar-button{      /* Boutons haut/bas */ 
+    display: none;
+}.div-overflow-list::-webkit-scrollbar-thumb{      /* Bouton de la barre de scroll */
+  background-color: var(--background-color-black-4);
+  border-radius: 5px;
 }
+
 
 /* Icon */
 .list-icons{

@@ -3,7 +3,7 @@
 </script>
 <template>
     <div v-if="cd != undefined" class="div-cd-wall d-flex flex-column justify-space-between align-center" @click="openCdOnWall()">
-        <div class="cube-container">
+        <div class="cube-container d-flex align-center justify-center">
             <div class="cube d-flex align-center justify-center">
                 <!-- Mettez ici les deux images que vous souhaitez afficher -->
                 <div class="display-cd-img d-flex align-center justify-center">
@@ -31,6 +31,7 @@
 <script>
 import { eventBus } from '../../../plugins/eventBus'
 // import Logo from "../../../assets/icons/play.svg"; // Assurez-vous que le chemin d'importation est correct
+import axios from 'axios';
 
 export default {
     name: 'AppCdDisplay',
@@ -61,6 +62,8 @@ export default {
         },
         playThisAlbum(){        // C'est lede la fonction
             console.log("play this : ", this.cd)
+            let data = this.cd
+            axios.post("http://127.0.0.1:5025/playThisCd", {"data": data})
         }
     },
 }
@@ -71,7 +74,7 @@ export default {
 .div-cd-wall{
     background-color: #181818;
     border-radius: 5px;
-    height: 100%;
+    height: 28vh;
 }.div-cd-wall:hover{
     cursor: pointer;
     background-color: #282828;
@@ -93,6 +96,8 @@ export default {
 /* Effet rotation d'un cube */
 .cube-container {
   perspective: 1000px;
+  height: 100%;
+  width: 100%;
 }
 
 .cube {
@@ -109,8 +114,8 @@ export default {
 
 .cube div {
   position: absolute;
-  width: 80%;
-  height: 80%;
+  width: 95%;
+  height: 95%;
   backface-visibility: hidden;
 }
 

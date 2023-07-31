@@ -34,7 +34,6 @@ export default {
         axios.get("http://127.0.0.1:5025/getData")
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)
-                console.log(Data)
                 // On commence par mettre les données du JS dans une liste, pour mieux manipuler
                 // Pour recupe l'index des object dans le JS
                 const keys = Object.keys(Data.cd);

@@ -33,7 +33,7 @@ def getData():
 
 
 
-# Route pour recevoir des requetes du front (POST)
+# Route pour syncroniser les données de l'app dans le back (POST)
 @app.route('/syncData', methods=['POST'])
 def syncData():
    try:
@@ -43,6 +43,23 @@ def syncData():
       # Ouvrir le fichier JSON en mode écriture
       with open('./static/data.json', 'w') as file:
          json.dump(data, file, ensure_ascii=False)
+
+      # Send results back as a json
+      resp = {"success": True}
+      return jsonify(resp), 200 
+   
+   except Exception as e:
+      return "error: " + str(e)
+   
+
+# Route pour syncroniser les données de l'app dans le back (POST)
+@app.route('/playThisCd', methods=['POST'])
+def playThisCd():
+   try:
+      # data from front
+      data = str(request.json['data'])
+
+      print("Play this CD : ", data)
 
       # Send results back as a json
       resp = {"success": True}

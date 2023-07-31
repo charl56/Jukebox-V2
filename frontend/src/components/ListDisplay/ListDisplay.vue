@@ -13,8 +13,13 @@
         </div>
         <!-- List des CD en rab, v-for -->
         <div class="div-overflow-list">
-            <div v-for="cd in list" class="div-cd-list ma-2" @click="openCd(cd)">
-                {{ cd.albumName }}
+            <div v-for="cd in list" class="div-cd-list ma-2 d-flex flex-column align-end" @click="openCd(cd)">
+                <v-row class="my-0 mx-2">
+                    <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
+                </v-row>
+                <v-row class="my-0 mx-2">
+                    <p class="text-subtitle-2">{{ cd.artiste }}</p>
+                </v-row>
             </div>
         </div>
     </div>

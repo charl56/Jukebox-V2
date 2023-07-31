@@ -5,17 +5,16 @@
     <div v-if="cd != undefined" class="div-cd-wall d-flex flex-column justify-space-between align-center" @click="openCdOnWall()">
         <div class="cube-container d-flex align-center justify-center">
             <div class="cube d-flex align-center justify-center">
-                <!-- Mettez ici les deux images que vous souhaitez afficher -->
+                <!-- Les 2 images du cube qui pivote -->
                 <div class="display-cd-img d-flex align-center justify-center">
                     <v-img :src="imageSrc" class="album-class" @error="imgSrcNotFound()"></v-img>
                 </div>
                 <div class="div-btn-play d-flex align-center justify-center">
                     <v-img :src="iconPlay" class="img-play-btn" @click.stop="playThisAlbum()"></v-img>
-                    <!-- <img :src="Logo" alt="Logo" /> -->
                 </div>
             </div>
         </div>
-
+        <!-- Affichage du nom de l'album et l'artiste -->
         <div class="row-display-cd-data">
             <div>
                 <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }}</p>

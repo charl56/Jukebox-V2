@@ -1,7 +1,7 @@
 import json 
 from flask_cors import CORS
 from flask import Flask, jsonify, request
-
+import time
 # configuration
 DEBUG = True
 
@@ -60,7 +60,9 @@ def playThisCd():
       data = str(request.json['data'])
 
       print("Play this CD : ", data)
-
+      # Permet de simuler la pose du cd
+      time.sleep(2)
+      
       # Send results back as a json
       resp = {"success": True}
       return jsonify(resp), 200 

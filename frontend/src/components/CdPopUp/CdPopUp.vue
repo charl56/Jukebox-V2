@@ -92,7 +92,7 @@ export default {
             this.cdName = this.cd.albumName
             this.function = data.function       // Type de fonction
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
-            this.imageSrc = new URL("../../assets/albums/"+this.cd.albumName.replaceAll(" ","_") + ".jpg", import.meta.url).href      // Source img album 
+            this.imageSrc = new URL("../../assets/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href      // Source img album 
         });
     },
     data() {
@@ -164,7 +164,6 @@ export default {
             let colorThief = new ColorThief();
             // Extraire la couleur dominante de l'image
             let dominantColor = colorThief.getColor(image, 10);
-            console.log(colorThief.getPalette(image))
             // Maintenant, vous avez les valeurs RGB des couleurs dominantes dans dominantColor ou dominantColors.
             let background = document.getElementsByClassName("item-cu")
             background[0].style.background = "linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba("+dominantColor[0]+","+dominantColor[1]+","+dominantColor[2]+",1) 100%)"

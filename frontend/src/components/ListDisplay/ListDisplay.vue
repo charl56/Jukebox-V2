@@ -10,8 +10,8 @@
             <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img>
         </div>
         <!-- List des CD en rab, v-for -->
-        <div class="div-overflow-list mt-2">
-            <div v-for="cd in list" class="div-cd-list ma-2 d-flex flex-column align-end" @click="openCd(cd)">
+        <div class="div-overflow-list mt-2" @drop="onDrop(0, $event)" @dragover="allowDrop($event)">
+            <div v-for="cd in list" class="div-cd-list ma-2 d-flex flex-column align-end" @click="openCd(cd)" draggable="true" @dragstart="drag(cd)">
                 <v-row class="my-0 mx-2">
                     <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
                 </v-row>
@@ -26,6 +26,7 @@
 <script>
 import { eventBus } from '../../plugins/eventBus';
 import axios from 'axios';
+import { drag, drop, allowDrop } from '../../plugins/dragNdrop';
 
 export default {
     name: 'AppListDisplay',
@@ -35,7 +36,6 @@ export default {
         list: Array,
     },
     created(){
-        //   this.iconDl = new URL('../../assets/Icons/download.png', import.meta.url).href
     },
     data () {
         return {
@@ -72,6 +72,20 @@ export default {
                 .catch((err) => {
                     console.log(err)
                 })
+        },
+        onDrop(pos){
+            // On recupère le cd déplacé dans la liste, avec sa position en 0
+            let newCd = drop()
+            // On recupre la liste de tous les albums
+            let listCds = JSON.parse(localStorage.dataList) // On met a jour la liste
+            // Puis l'index du cd changé
+            let index = listCds.findIndex((cd) => cd.albumName == newCd.albumName)
+            // On le modifie dans la liste
+            listCds[index].position = 0
+            // On remet la liste en localStorage, pour pouvoir refresh
+            localStorage.dataList = JSON.stringify(listCds, null, 2) // On met a jour la liste
+            // On actualise la liste dans l'app
+            eventBus.emit('updateLists')
         }
     },
 }
@@ -101,7 +115,12 @@ export default {
     cursor: pointer;
     background-color: var(--background-color-black-3);
     border-radius: 5px;
-}.div-overflow-list{  /* Scroll bar */
+}.div-cd-list:-moz-drag-over{
+    background-color: red;
+    color: red;
+}
+
+.div-overflow-list{  /* Scroll bar */
     overflow-y: scroll;
     margin-left: 10px;
 }.div-overflow-list::-webkit-scrollbar{             /* Fond de la barre de scroll */

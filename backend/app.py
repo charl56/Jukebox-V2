@@ -52,7 +52,7 @@ def syncData():
       return "error: " + str(e)
    
 
-# Route pour syncroniser les données de l'app dans le back (POST)
+# Route pour ajouter un cd sur le lecteur
 @app.route('/playThisCd', methods=['POST'])
 def playThisCd():
    try:
@@ -61,7 +61,25 @@ def playThisCd():
 
       print("Play this CD : ", data)
       # Permet de simuler la pose du cd
-      time.sleep(2)
+      time.sleep(1)
+      
+      # Send results back as a json
+      resp = {"success": True}
+      return jsonify(resp), 200 
+   
+   except Exception as e:
+      return "error: " + str(e)
+   
+# Route pour mettre eplay sur le cd en place
+@app.route('/playMusic', methods=['POST'])
+def playMusic():
+   try:
+      # data from front
+      data = str(request.json['data'])
+
+      print("play this CD : ", data)
+      # Permet de simuler la pose du cd
+      time.sleep(1)
       
       # Send results back as a json
       resp = {"success": True}
@@ -70,6 +88,40 @@ def playThisCd():
    except Exception as e:
       return "error: " + str(e)
 
+# Route pour mettre en pause le cd en place
+@app.route('/pauseMusic', methods=['POST'])
+def pauseMusic():
+   try:
+      # data from front
+      data = str(request.json['data'])
+
+      print("pause this CD : ", data)
+      # Permet de simuler la pose du cd
+      time.sleep(1)
+      
+      # Send results back as a json
+      resp = {"success": True}
+      return jsonify(resp), 200 
+   
+   except Exception as e:
+      return "error: " + str(e)
+
+
+# Route enlever le cd en place
+@app.route('/removeFromPlayer', methods=['POST'])
+def removeFromPlayer():
+   try:
+
+      print("Remove this CD : ")
+      # Permet de simuler la pose du cd
+      time.sleep(1)
+      
+      # Send results back as a json
+      resp = {"success": True}
+      return jsonify(resp), 200 
+   
+   except Exception as e:
+      return "error: " + str(e)
 
 
 if __name__ == '__main__':

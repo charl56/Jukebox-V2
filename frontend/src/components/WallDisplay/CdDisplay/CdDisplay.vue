@@ -6,8 +6,8 @@
         <div class="cube-container d-flex align-center justify-center pt-2">
             <div class="cube d-flex align-center justify-center">
                 <!-- Les 2 images du cube qui pivote -->
-                <div class="display-cd-img d-flex align-center justify-center">
-                    <v-img :src="imageSrc" class="album-class" @error="imgSrcNotFound()"></v-img>
+                <div class="display-cd-img d-flex align-center justify-center px-2">
+                    <v-img :src="imageSrc" class="album-class rounded" @error="imgSrcNotFound()"></v-img>
                 </div>
                 <div class="div-btn-play d-flex align-center justify-center">
                     <v-img :src="iconPlay" class="img-play-btn" @click.stop="playThisAlbum()"></v-img>
@@ -63,12 +63,16 @@ export default {
             this.imageSrc = new URL('../../../assets/albums/default.jpg', import.meta.url).href
         },
         playThisAlbum(){        // C'est le nom de la fonction
-            eventBus.emit("waitCdPause", {"bool" : true, "name": this.cd.albumName})      // Active animation du chargemeent de la pause
-            axios.post("http://127.0.0.1:5025/playThisCd", {"data": this.cd.position})
-                .then(() => {
-                    eventBus.emit("waitCdPause", {"bool": false, "name": ''})     // Arrête animation de la pause
-                    eventBus.emit("displayPlayer", {"bool": true, "name": this.cd.albumName})     // Affichage du lecteur cd 
-                })
+            let confirm = window.confirm("Lancer ce cd ?")
+            if(confirm){
+                eventBus.emit("waitCdPause", {"bool" : true, "name": this.cd.albumName, "movement": "Chargement"})      // Active animation du chargemeent de la pause
+                axios.post("http://127.0.0.1:5025/playThisCd", {"data": this.cd.position})
+                    .then(() => {
+                        eventBus.emit("waitCdPause", {"bool": false, "name": ''})     // Arrête animation de la pause
+                        eventBus.emit("displayPlayer", {"bool": true, "name": this.cd.albumName, "artist": this.cd.artiste})     // Affichage du lecteur cd 
+                    })
+                    .catch((err) => console.log(err))
+            }
         },
         onDrop(pos){
             // On recupere le cd drag
@@ -120,8 +124,6 @@ export default {
     height: 100%;
 }.img-play-btn:hover{
     animation: rotate-play 0.7s linear 200ms 1; 
-    /* background-color: var(--background-color-black-4); */
-    /* border-radius: 5px; */
 }@keyframes rotate-play {
     0%{
         transform: rotate(0deg);
@@ -130,10 +132,6 @@ export default {
         transform: rotate(360deg);
     }
 }
-/* Fleche play
-.div-btn-play{
-    transform: rotateY(0deg);
-} */
 
 /* Effet rotation d'un cube */
 .cube-container {

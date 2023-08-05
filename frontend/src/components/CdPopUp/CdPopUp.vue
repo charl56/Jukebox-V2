@@ -27,36 +27,31 @@
                             <!-- Nom de l'album -->
                             <v-row v-if="this.function == 'Add'" class="d-flex justify-space-between mx-6">
                                 <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup" v-model="cd.albumName">
-                                <!-- <v-text-field class="item-name" v-model="cd.albumName" :value="cd.albumName" label="Nom de l'album" variant="underlined"></v-text-field> -->
                             </v-row>
                             <!-- Nom de l'artiste -->
                             <v-row class="d-flex justify-space-between mx-6">
                                 <input type="text" name="artisteName" placeholder="Nom de l'artiste" class="input-cd-popup" v-model="cd.artiste">
-                                <!-- <v-text-field class="item-name" v-model="cd.artiste" :value="cd.artiste" label="Nom de l'artiste" variant="underlined"></v-text-field> -->
                             </v-row>
                             <!-- Nombre de tracks -->
                             <v-row class="d-flex justify-space-between mx-6">
                                 <input type="text" name="trackNb" placeholder="Nombre de tracks" class="input-cd-popup" v-model="cd.trackNb">
-                                <!-- <v-text-field class="item-name" v-model="cd.trackNb" :value="cd.trackNb" label="Nombre de tracks" variant="underlined"></v-text-field> -->
                             </v-row>
                             <!-- Date de sortie -->
                             <v-row class="d-flex justify-start mx-6">
-                                <!-- <label class="mr-2" for="releaseDate">Date de sortie:</label> -->
                                 <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate">
                             </v-row>
-                            <!-- Position -->
+                            <!-- Position
                             <v-row v-if="this.function == 'Edit'" class="d-flex justify-space-between mx-6">
-                                <input type="text" name="position" placeholder="Position du cd" class="input-cd-popup" v-model="cd.position">
-                                <!-- <v-text-field class="item-name" v-model="cd.position" :value="cd.position" label="Position du cd" variant="underlined"></v-text-field> -->
-                            </v-row>
+                                <p class="input-cd-popup">{{cd.position}}</p>
+                            </v-row> -->
                         </v-col>
                         <v-col cols="5" class="d-flex flex-column align-center justify-center px-0">
                             <div class="display-cd-img-popup d-flex align-center justify-center mb-5">
                                 <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
                             </div>
-                            <div v-if="this.function == 'Add'" class="div-input-file d-flex justify-start">
-                                <v-file-input label="File input" accept="image/jpeg" variant="underlined"></v-file-input>
-                            </div>
+                            <!-- <div v-if="this.function == 'Add'" class="div-input-file d-flex justify-start">
+                                <v-file-input v-model="albumImage" label="File input" accept="image/jpeg" variant="underlined"></v-file-input>
+                            </div> -->
                         </v-col>
                     </v-row>
                     <!-- Boutons de validation et annulation -->
@@ -104,6 +99,7 @@ export default {
                 'releaseDate': '0000-00-00', 
                 'position': 0
             },
+            albumImage: [],
             cdName: '',
             function: '',
             imageSrc: '', 
@@ -123,8 +119,8 @@ export default {
                 'releaseDate': '0000-00-00', 
                 'position': 0
             }
-            this.function = ''
-            this.cdName = ''
+            this.albumImage = []
+            this.function = this.cdName = ''
             this.open = false
         },
         valideCd(){
@@ -209,6 +205,7 @@ export default {
     border-radius: 5px;
 }#album-img-popup:hover{
     cursor: pointer;
+    transform: scale(1.02);
 }
 /* Icon */
 .icon-close{
@@ -230,7 +227,6 @@ export default {
 }
 .input-cd-popup-title{
     color: var(--border-color-cd-popup);
-    /* border-bottom: 1px solid var(--border-color-cd-popup); */
     margin: 12px 5px 0px 5px;
     padding: 5px 3px;
     width: 100%;

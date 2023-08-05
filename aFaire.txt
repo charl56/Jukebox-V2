@@ -1,3 +1,1 @@
-Input image, et renomer avec nom de album.remplaceAll(" ","_")
 Animation au DragNDrop
-Animation 'attente du placement du cd'

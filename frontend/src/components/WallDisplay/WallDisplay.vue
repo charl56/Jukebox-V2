@@ -3,7 +3,7 @@
         <div v-if="waitCdPause" class="waiting-screen d-flex align-center justify-center">
             <div class="lds-dual-ring">
                 <div class="d-flex align-center justify-center">
-                    <p class="text-subtitle-1">Chargement de {{ albumNameLoad }}</p>
+                    <p class="text-subtitle-1">{{ movement }} de {{ albumNameLoad }}</p>
                 </div>
             </div>        
         </div>
@@ -46,9 +46,11 @@ export default {
         eventBus.on('waitCdPause', (data) => {
             if(data.bool){
                 this.waitCdPause = data.bool
+                this.movement = data.movement
                 this.albumNameLoad = data.name
             } else {
                 this.waitCdPause = data.bool
+                this.movement = data.movement
             }
         })
     },
@@ -57,6 +59,7 @@ export default {
             keyUpdate: 0,
             waitCdPause: false,
             albumNameLoad: '',
+            movement: '',
         }
     },
     methods:{

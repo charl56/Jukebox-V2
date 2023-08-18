@@ -18,7 +18,7 @@
 import WallDisplay from './components/WallDisplay/WallDisplay.vue';
 import ListDisplay from './components/ListDisplay/ListDisplay.vue';
 import CdPopUp from './components/CdPopUp/CdPopUp.vue';
-
+import data from "./assets/data.json"
 import { eventBus } from './plugins/eventBus';
 
 export default {
@@ -31,8 +31,8 @@ export default {
     created(){   
         // On récupère les données du JSON dans le back 
         // let Data = JSON.parse(resp.data.data)
-        let Data 
-
+        let Data = JSON.parse(data)
+    
         // On commence par mettre les données du JS dans une liste, pour mieux manipuler
         // Pour recupe l'index des object dans le JS
         const keys = Object.keys(Data.cd);

@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  frontend:
+    container_name: jukebox
+    build:
+      # context: ../frontend      # Lieu du dossier 'frontend' dans le projet
+      dockerfile: ./Dockerfile  # Lieu du dockerfile, par rapport au context
+
+    image: portfolio/jukebox:frontend
+    restart: always
+    ports:
+      - "127.0.0.1:8084:80"

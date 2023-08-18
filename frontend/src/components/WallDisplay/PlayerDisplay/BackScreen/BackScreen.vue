@@ -38,7 +38,7 @@ export default {
             this.open = true
             this.artist = data.artist
             this.album = data.albumName
-            this.imageAlbumSrc = new URL("../../../../assets/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            this.imageAlbumSrc = new URL("../../../../static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
             this.imageBackSrc = new URL("../../../../assets/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
         });
     },

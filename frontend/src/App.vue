@@ -30,8 +30,7 @@ export default {
     },
     created(){   
         // On récupère les données du JSON dans le back 
-        // let Data = JSON.parse(resp.data.data)
-        let Data = JSON.parse(data)
+        let Data = JSON.parse(data) 
     
         // On commence par mettre les données du JS dans une liste, pour mieux manipuler
         // Pour recupe l'index des object dans le JS

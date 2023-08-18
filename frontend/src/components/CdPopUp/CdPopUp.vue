@@ -87,7 +87,7 @@ export default {
             this.cdName = this.cd.albumName
             this.function = data.function       // Type de fonction
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
-            this.imageSrc = new URL("../../assets/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href      // Source img album 
+            this.imageSrc = new URL("../../static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href      // Source img album 
         });
     },
     data() {
@@ -151,7 +151,7 @@ export default {
             eventBus.emit('updateLists')                    // On actualise l'app
         },
         imgSrcNotFound(){
-            this.imageSrc = new URL('../../assets/albums/default.jpg', import.meta.url).href
+            this.imageSrc = new URL('../../static/albums/default.jpg', import.meta.url).href
         },
         setBackgroundColor(){
             // Récupérer l'image dont vous voulez extraire les couleurs

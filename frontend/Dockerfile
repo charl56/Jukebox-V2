@@ -21,9 +21,12 @@ COPY index.html ./
 # build app for production with minification
 RUN npm run build
 
+# Data 
+COPY static/ /backend/templates/dist/static
+
 # production stage
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /backend/templates/dist /usr/share/nginx/html
 
 
 EXPOSE 80

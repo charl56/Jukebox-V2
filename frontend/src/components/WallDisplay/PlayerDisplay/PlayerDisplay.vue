@@ -26,7 +26,6 @@
   
 <script>
 import { eventBus } from '../../../plugins/eventBus';
-import axios from 'axios';
 import BackScreen from './BackScreen/BackScreen.vue'
 
 export default {
@@ -56,32 +55,22 @@ export default {
     methods:{
         play(){
             if(this.cdInPlayer){
-                axios.post("http://127.0.0.1:5025/playMusic")
-                .then((resp) => {
-                    this.setAnimation(true)
-                })
-                .catch((err) => console.log(err))
+                this.setAnimation(true)
             }
         },
         pause(){    // Mettre en pause le cd actuel
             if(this.cdInPlayer){
-                axios.post("http://127.0.0.1:5025/pauseMusic")
-                .then((resp) => {
-                    this.setAnimation(false)
-                })
-                .catch((err) => console.log(err))
+                this.setAnimation(false)
             }
         },
         stop(){
             if(this.cdInPlayer){
                 eventBus.emit("waitCdPause", {"bool" : true, "name": this.albumName, "movement": "Enlèvement" })      // Active animation du chargemeent de la pause
-                axios.post("http://127.0.0.1:5025/removeFromPlayer")
-                .then(() => {
+                setTimeout(() => {
                     this.imageSrc = ''      // On enleve la src de l'image
                     this.cdInPlayer = false;    // Plus de cd dans le lecteur
                     eventBus.emit("waitCdPause", {"bool" : false, "name": '' })      // Desactive animation du chargemeent de la pause
-                })
-                .catch((error) => console.log(error))
+                }, "3000");
             }
         },
         setAnimation(bool){

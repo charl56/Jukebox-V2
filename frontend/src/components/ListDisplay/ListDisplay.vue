@@ -25,7 +25,6 @@
   
 <script>
 import { eventBus } from '../../plugins/eventBus';
-import axios from 'axios';
 import { drag, drop, allowDrop } from '../../plugins/dragNdrop';
 
 export default {
@@ -60,18 +59,6 @@ export default {
             });  
         },
         Sync(){
-            // Creation du json qui sera save dans le fichier
-            let data = {
-                "cd": JSON.parse(localStorage.dataList)
-            }
-            // Requete vers le back pour save les données du JSON
-            axios.post('http://127.0.0.1:5025/syncData', {data: JSON.stringify(data)})
-                .then((resp) => {
-                    console.log(resp)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
         },
         onDrop(pos){
             // On recupère le cd déplacé dans la liste, avec sa position en 0

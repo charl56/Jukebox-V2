@@ -20,7 +20,6 @@ import ListDisplay from './components/ListDisplay/ListDisplay.vue';
 import CdPopUp from './components/CdPopUp/CdPopUp.vue';
 
 import { eventBus } from './plugins/eventBus';
-import axios from 'axios';
 
 export default {
     name: 'App',
@@ -31,32 +30,28 @@ export default {
     },
     created(){   
         // On récupère les données du JSON dans le back 
-        axios.get("http://127.0.0.1:5025/getData")
-            .then((resp) => {
-                let Data = JSON.parse(resp.data.data)
-                // On commence par mettre les données du JS dans une liste, pour mieux manipuler
-                // Pour recupe l'index des object dans le JS
-                const keys = Object.keys(Data.cd);
-                // Pour chaques items
-                for (const index of keys) {
-                    const cd = Data.cd[index];
-                    this.dataList.push(cd)
-                }
-                localStorage.dataList = JSON.stringify(this.dataList, null, 2)
-                this.dataLoad = true
-                // Puis on trie ente les 2 listes : cd en rab ou sur le mur
-                this.setLists()
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-      // Permet de mettre à jour les listes
-      eventBus.on('updateLists', () => {
-        this.dataList = JSON.parse(localStorage.dataList) // On met a jour les données dans la liste
-        this.wallCds = []              // On vide les listes
-        this.listCds = []                 
+        // let Data = JSON.parse(resp.data.data)
+        let Data 
+
+        // On commence par mettre les données du JS dans une liste, pour mieux manipuler
+        // Pour recupe l'index des object dans le JS
+        const keys = Object.keys(Data.cd);
+        // Pour chaques items
+        for (const index of keys) {
+            const cd = Data.cd[index];
+            this.dataList.push(cd)
+        }
+        localStorage.dataList = JSON.stringify(this.dataList, null, 2)
+        this.dataLoad = true
+        // Puis on trie ente les 2 listes : cd en rab ou sur le mur
         this.setLists()
-      });
+        // Permet de mettre à jour les listes
+        eventBus.on('updateLists', () => {
+            this.dataList = JSON.parse(localStorage.dataList) // On met a jour les données dans la liste
+            this.wallCds = []              // On vide les listes
+            this.listCds = []                 
+            this.setLists()
+        });
     },
     data () {
         return {

@@ -31,7 +31,6 @@
   
 <script>
 import { eventBus } from '../../../plugins/eventBus'
-import axios from 'axios';
 import { drag, drop, allowDrop } from '../../../plugins/dragNdrop';
 
 export default {
@@ -66,12 +65,10 @@ export default {
             let confirm = window.confirm("Lancer ce cd ?")
             if(confirm){
                 eventBus.emit("waitCdPause", {"bool" : true, "name": this.cd.albumName, "movement": "Chargement"})      // Active animation du chargemeent de la pause
-                axios.post("http://127.0.0.1:5025/playThisCd", {"data": this.cd.position})
-                    .then(() => {
-                        eventBus.emit("waitCdPause", {"bool": false, "name": ''})     // Arrête animation de la pause
-                        eventBus.emit("displayPlayer", {"bool": true, "name": this.cd.albumName, "artist": this.cd.artiste})     // Affichage du lecteur cd 
-                    })
-                    .catch((err) => console.log(err))
+                setTimeout(() => {
+                    eventBus.emit("waitCdPause", {"bool": false, "name": ''})     // Arrête animation de la pause
+                    eventBus.emit("displayPlayer", {"bool": true, "name": this.cd.albumName, "artist": this.cd.artiste})     // Affichage du lecteur cd 
+                }, "3000");
             }
         },
         onDrop(pos){

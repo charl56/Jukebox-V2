@@ -1,3 +1,6 @@
+<script setup>
+    const iconClose = new URL('../../../../assets/icons/close_white.png', import.meta.url).href
+</script>
 <!-- Popup -->
 <template>
     <div v-if="open" class="div-back-screen d-flex justify-center align-item-center" @keyup="keyup" tabindex="0" v-focus>
@@ -19,6 +22,9 @@
                 </div>
             </v-col>
         </div>
+        <div class="div-close-icon">
+            <v-img :src="iconClose" class="img-close-icon" @click="closeModal()"></v-img>
+        </div>
     </div>
 </template>
 
@@ -38,8 +44,14 @@ export default {
             this.open = true
             this.artist = data.artist
             this.album = data.albumName
-            this.imageAlbumSrc = new URL("../../../../static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
-            this.imageBackSrc = new URL("../../../../assets/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            if(import.meta.env.DEV){
+                this.imageAlbumSrc = new URL("../../../../../static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+                this.imageBackSrc = new URL("../../../../../static/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            } else {
+                this.imageAlbumSrc = "static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"
+                this.imageBackSrc = "static/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"
+            }   
+
         });
     },
     data() {
@@ -152,5 +164,18 @@ export default {
 }.text-artist:hover{
     transform: scale(1.1);
     cursor: none;
+}
+/* Icon close  */
+.div-close-icon{
+    top: 30px;
+    right: 30px;
+    position: absolute;
+    z-index: 100;
+}.img-close-icon{
+    width: 30px;
+    height: 30px;
+}.img-close-icon:hover{
+    cursor: pointer;
+    transform: scale(1.1);
 }
 </style>

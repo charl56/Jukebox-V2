@@ -41,7 +41,11 @@ export default {
             this.cdInPlayer = data.bool
             this.albumName = data.name
             this.artist = data.artist
-            this.imageSrc = new URL("../../../static/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            if(import.meta.env.DEV){
+                this.imageSrc = new URL("../../../../static/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            } else {
+                this.imageSrc = "static/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"    // Source img album 
+            }   
         })
     },
     data () {

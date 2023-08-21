@@ -1,1 +1,2 @@
 Animation au DragNDrop
+Quand change de cd, et 1 est play, il disparait du lecteur

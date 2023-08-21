@@ -41,7 +41,11 @@ export default {
     },
     created(){
         try {
-            this.imageSrc = new URL("../../../static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            if(import.meta.env.DEV){
+                this.imageSrc = new URL("../../../../static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            } else {
+                this.imageSrc = "static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"    // Source img album 
+            }   
         } catch (error) {
         }
     },
@@ -59,7 +63,11 @@ export default {
             }); 
         },
         imgSrcNotFound(){       // Si image album pas trouvée
-            this.imageSrc = new URL('../../../static/albums/default.jpg', import.meta.url).href
+            if(import.meta.env.DEV){
+                this.imageSrc = new URL('../../../static/albums/default.jpg', import.meta.url).href
+            } else {
+                this.imageSrc = "static/albums/default.jpg"    // Source img album 
+            }   
         },
         playThisAlbum(){        // C'est le nom de la fonction
             let confirm = window.confirm("Lancer ce cd ?")

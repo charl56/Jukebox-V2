@@ -10,9 +10,8 @@
             <!-- Header subSection Create/Update -->
             <v-row class="mx-2 my-2 header-row d-flex justify-center">  
                 <v-col cols="6" class="py-0">
-                    <!-- <p class="text-h5 text-start font-weight-bold" v-if="this.function == 'Edit'"> </p> -->
-                    <input  v-if="this.function == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup-title" v-model="cd.albumName">
-                    <p class="text-h5 text-start" v-if="this.function == 'Add'">Ajouter un nouveau cd</p>
+                    <input  v-if="cdFunction == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup-title" v-model="cd.albumName">
+                    <p class="text-h5 text-start" v-if="cdFunction == 'Add'">Ajouter un nouveau cd</p>
                 </v-col>     
                 <v-col cols="5"></v-col>
                 <v-col cols="1">
@@ -25,7 +24,7 @@
                     <v-row>
                         <v-col cols="7" class="px-0">
                             <!-- Nom de l'album -->
-                            <v-row v-if="this.function == 'Add'" class="d-flex justify-space-between mx-6">
+                            <v-row v-if="cdFunction == 'Add'" class="d-flex justify-space-between mx-6">
                                 <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup" v-model="cd.albumName">
                             </v-row>
                             <!-- Nom de l'artiste -->
@@ -40,18 +39,11 @@
                             <v-row class="d-flex justify-start mx-6">
                                 <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate">
                             </v-row>
-                            <!-- Position
-                            <v-row v-if="this.function == 'Edit'" class="d-flex justify-space-between mx-6">
-                                <p class="input-cd-popup">{{cd.position}}</p>
-                            </v-row> -->
                         </v-col>
                         <v-col cols="5" class="d-flex flex-column align-center justify-center px-0">
                             <div class="display-cd-img-popup d-flex align-center justify-center mb-5">
                                 <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
                             </div>
-                            <!-- <div v-if="this.function == 'Add'" class="div-input-file d-flex justify-start">
-                                <v-file-input v-model="albumImage" label="File input" accept="image/jpeg" variant="underlined"></v-file-input>
-                            </div> -->
                         </v-col>
                     </v-row>
                     <!-- Boutons de validation et annulation -->
@@ -60,7 +52,7 @@
                             <!-- <v-btn type="submit" block class="mt-1 edit-btn" variant="outlined"><p class="font-weight-bold">Enregistrer</p></v-btn> -->
                             <v-img :src="iconSave" type="submit" class="icon-close pa-3" @click="valideCd()"></v-img>
                         </v-col>
-                        <v-col v-if="this.function == 'Edit'" cols="1" class="d-flex justify-end">
+                        <v-col v-if="cdFunction == 'Edit'" cols="1" class="d-flex justify-end">
                             <!-- <v-btn block class="mt-1 exit-btn" @click="delet()" variant="outlined"><p class="font-weight-bold">Supprimer</p></v-btn> -->
                             <v-img :src="iconDelete" class="icon-close pa-3" @click="delet()"></v-img>
                         </v-col>
@@ -85,9 +77,14 @@ export default {
             this.open = true
             this.cd = data.data
             this.cdName = this.cd.albumName
-            this.function = data.function       // Type de fonction
+            this.cdFunction = data.function       // Type de fonction
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
-            this.imageSrc = new URL("../../static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href      // Source img album 
+
+            if(import.meta.env.DEV){
+                this.imageSrc = new URL("../../../static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href      // Source img album 
+            } else {
+                this.imageSrc = "static/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"    // Source img album 
+            }            
         });
     },
     data() {
@@ -101,7 +98,7 @@ export default {
             },
             albumImage: [],
             cdName: '',
-            function: '',
+            cdFunction: '',
             imageSrc: '', 
             open: false,
             cdList: [],
@@ -120,13 +117,13 @@ export default {
                 'position': 0
             }
             this.albumImage = []
-            this.function = this.cdName = ''
+            this.cdFunction = this.cdName = ''
             this.open = false
         },
         valideCd(){
-            if(this.function == 'Edit'){
+            if(this.cdFunction == 'Edit'){
                 this.edit()
-            } else if(this.function == 'Add'){
+            } else if(this.cdFunction == 'Add'){
                 this.create()
             }
         },
@@ -151,7 +148,11 @@ export default {
             eventBus.emit('updateLists')                    // On actualise l'app
         },
         imgSrcNotFound(){
-            this.imageSrc = new URL('../../static/albums/default.jpg', import.meta.url).href
+            if(import.meta.env.DEV){
+                this.imageSrc = new URL('../../../static/albums/default.jpg', import.meta.url).href
+            } else {
+                this.imageSrc = "static/albums/default.jpg"    // Source img album 
+            } 
         },
         setBackgroundColor(){
             // Récupérer l'image dont vous voulez extraire les couleurs

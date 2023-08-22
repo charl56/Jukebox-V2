@@ -44,7 +44,7 @@ export default {
             if(import.meta.env.DEV){
                 this.imageSrc = new URL("../../../../static/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
             } else {
-                this.imageSrc = "static/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"    // Source img album 
+                this.imageSrc = "./static/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"    // Source img album 
             }   
         })
     },
@@ -110,15 +110,19 @@ export default {
     cursor: pointer;
     background-color: rgba(107, 107, 107, 0.4);
     border-radius: 5px;
-    margin-bottom: 3px;
+    transform: scale(1.1);
+    /* margin-bottom: 3px; */
 }
 /* Affichae cd in player */
 .div-display-cd{
     height: 24vh !important;
     width: 24vh !important;
+    border-radius: 50%;
+}.div-display-cd:hover{
+    transform: scale(1.08);
 }.cd-in-player{
-    height: 24vh !important;
-    width: 24vh !important;
+    height: 100%;
+    width: 100%;
     border-radius: 50%;
 }.cd-in-player:hover{
     cursor: pointer;

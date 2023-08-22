@@ -48,8 +48,8 @@ export default {
                 this.imageAlbumSrc = new URL("../../../../../static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
                 this.imageBackSrc = new URL("../../../../../static/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
             } else {
-                this.imageAlbumSrc = "static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"
-                this.imageBackSrc = "static/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"
+                this.imageAlbumSrc = "./static/albums/"+data.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"
+                this.imageBackSrc = "./static/artists/"+data.artist.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg"
             }   
 
         });

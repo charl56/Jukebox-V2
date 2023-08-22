@@ -34,10 +34,8 @@ export default {
     components: {
         BackScreen,
     },
-    props: {
-        id: Number,
-    },
     created(){
+        console.log("playerdisplau")
         eventBus.on("displayPlayer", (data) => {
             this.cdInPlayer = data.bool
             this.albumName = data.name

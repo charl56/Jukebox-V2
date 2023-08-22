@@ -8,16 +8,16 @@
             </div>        
         </div>
         <!-- Afficha grille avec CDs et lecteur -->
-        <v-row v-for="n in 3" :key="keyUpdate">
+        <v-row v-for="n in 3">
             <v-col>
-                <CdDisplay :cd="list.find(cd => cd.position == (3*n - 2))" :position="(3*n - 2)"/>
+                <CdDisplay :cd="list.find(cd => cd.position == (3*n - 2))" :position="(3*n - 2)" :key="keyUpdate"/>
             </v-col>
             <v-col>
                 <PlayerDisplay v-if="(3*n - 1 == 5)" />
-                <CdDisplay v-else :cd="list.find(cd => cd.position == (3*n - 1))" :position="(3*n - 1)"/>
+                <CdDisplay v-else :cd="list.find(cd => cd.position == (3*n - 1))" :position="(3*n - 1)" :key="keyUpdate"/>
             </v-col>
             <v-col>
-                <CdDisplay :cd="list.find(cd => cd.position == (3*n))" :position="(3*n)"/>
+                <CdDisplay :cd="list.find(cd => cd.position == (3*n))" :position="(3*n)" :key="keyUpdate"/>
             </v-col>
         </v-row>
     </div>

@@ -35,7 +35,6 @@ export default {
         BackScreen,
     },
     created(){
-        console.log("playerdisplau")
         eventBus.on("displayPlayer", (data) => {
             this.cdInPlayer = data.bool
             this.albumName = data.name
@@ -79,7 +78,7 @@ export default {
                     this.cdInPlayer = false;    // Plus de cd dans le lecteur
                     eventBus.emit("waitCdPause", {"bool" : false, "name": '' })      // Desactive animation du chargemeent de la pause
                 })
-                .catch((error) => console.log(error))
+                .catch((err) => console.log(err))
             }
         },
         setAnimation(bool){

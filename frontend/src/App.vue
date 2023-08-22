@@ -75,8 +75,6 @@ export default {
                 } else {
                     this.wallCds.push(cd)
                 }
-                console.log(cd.position)
-
             })
         }
     },

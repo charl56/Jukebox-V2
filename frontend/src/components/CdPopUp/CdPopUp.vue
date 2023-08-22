@@ -57,12 +57,10 @@
                     <!-- Boutons de validation et annulation -->
                     <v-row class="mt-0 mb-1 my-0 px-5 d-flex align-center justify-space-between">
                         <v-col cols="6">           
-                            <!-- <v-btn type="submit" block class="mt-1 edit-btn" variant="outlined"><p class="font-weight-bold">Enregistrer</p></v-btn> -->
-                            <v-img :src="iconSave" type="submit" class="icon-close pa-3" @click="valideCd()"></v-img>
+                            <v-img :src="iconSave" type="submit" class="icon-close" @click="valideCd()"></v-img>
                         </v-col>
                         <v-col v-if="this.function == 'Edit'" cols="1" class="d-flex justify-end">
-                            <!-- <v-btn block class="mt-1 exit-btn" @click="delet()" variant="outlined"><p class="font-weight-bold">Supprimer</p></v-btn> -->
-                            <v-img :src="iconDelete" class="icon-close pa-3" @click="delet()"></v-img>
+                            <v-img :src="iconDelete" class="icon-close" @click="delet()"></v-img>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -215,6 +213,7 @@ export default {
     cursor: pointer;
     background-color: rgba(107, 107, 107, 0.4);
     border-radius: 5px;
+    transform: scale(1.06);
 }
 .header-row{
     width: 100%;

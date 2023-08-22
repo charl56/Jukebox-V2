@@ -115,17 +115,19 @@ export default {
     height: 40px;
 }.display-icon:hover{
     cursor: pointer;
-    background-color: rgba(107, 107, 107, 0.4);
+    background-color: #282828;
     border-radius: 5px;
-    margin-bottom: 3px;
+    transform: scale(1.1);
 }
 /* Affichae cd in player */
 .div-display-cd{
     height: 24vh !important;
     width: 24vh !important;
+}.div-display-cd:hover{
+    transform: scale(1.07);
 }.cd-in-player{
-    height: 24vh !important;
-    width: 24vh !important;
+    height: 100%;
+    width: 100%;
     border-radius: 50%;
 }.cd-in-player:hover{
     cursor: pointer;

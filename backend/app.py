@@ -1,6 +1,6 @@
 import json 
 from flask_cors import CORS
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, send_from_directory
 import time
 import subprocess
 
@@ -15,12 +15,21 @@ app.config.from_object(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
-####
+# Index app
+@app.route('/')
+def index():
+   return render_template('index.html')
+# Assets files
+@app.route('/assets/<path:filename>', methods=['GET'])
+def serve_static(filename):
+   return send_from_directory('templates/assets', filename)
 
-# # App
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
+
+# Pictures to front
+@app.route('/images/<path:filename>', methods=['GET'])
+def return_image(filename):
+   return send_from_directory('static/', filename)
+
 
 # Route envoyer les données au front
 @app.route('/getData', methods=['GET'])
@@ -45,10 +54,9 @@ def syncData():
    try:
       # data from front
       data = str(request.json['data'])
-
       # Ouvrir le fichier JSON en mode écriture
-      with open('./static/data.json', 'w') as file:
-         json.dump(data, file, ensure_ascii=False)
+      with open('./static/data.json', 'w', encoding='utf-8') as file:
+         json.dump(data, file, ensure_ascii=True)
 
       # Send results back as a json
       resp = {"success": True}
@@ -128,14 +136,17 @@ def removeFromPlayer():
 
 if __name__ == '__main__':
 
-   # path_frontend = '../frontend/'
-   # commande_npm = 'npm run build'
+   path_frontend = '../frontend/'
+   commande_npm = 'npm run build'
 
    # try:
    #    subprocess.run(commande_npm, shell=True, cwd=path_frontend, check=True)
    #    print("Frontend build ready !")
+   #    # Adresse ip pour lancer en local
+   #    app.run(host='127.0.0.1', port=5025, debug=True)
    # except subprocess.CalledProcessError as e:
    #    print("Error build frontend:", e)
+
 
    # Adresse ip pour lancer en local
    app.run(host='127.0.0.1', port=5025, debug=True)

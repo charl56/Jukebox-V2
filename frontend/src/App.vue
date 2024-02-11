@@ -31,7 +31,7 @@ export default {
     },
     created(){   
         // On récupère les données du JSON dans le back 
-        axios.get("http://127.0.0.1:5025/getData")
+        axios.get(this.$backendPort + "getData")
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)
                 // On commence par mettre les données du JS dans une liste, pour mieux manipuler

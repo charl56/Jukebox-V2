@@ -42,8 +42,9 @@ export default {
     },
     created(){
         try {
-            this.imageSrc = new URL("../../../assets/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            this.imageSrc = this.$backendPort + "images/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         } catch (error) {
+            
         }
     },
     data () {
@@ -63,16 +64,16 @@ export default {
             this.imageSrc = new URL('../../../assets/albums/default.jpg', import.meta.url).href
         },
         playThisAlbum(){        // C'est le nom de la fonction
-            let confirm = window.confirm("Lancer ce cd ?")
-            if(confirm){
+            // let confirm = window.confirm("Lancer ce cd ?")
+            // if(confirm){
                 eventBus.emit("waitCdPause", {"bool" : true, "name": this.cd.albumName, "movement": "Chargement"})      // Active animation du chargemeent de la pause
-                axios.post("http://127.0.0.1:5025/playThisCd", {"data": this.cd.position})
+                axios.post(this.$backendPort + "playThisCd", {"data": this.cd.position})
                     .then(() => {
                         eventBus.emit("waitCdPause", {"bool": false, "name": ''})     // Arrête animation de la pause
                         eventBus.emit("displayPlayer", {"bool": true, "name": this.cd.albumName, "artist": this.cd.artiste})     // Affichage du lecteur cd 
                     })
                     .catch((err) => console.log(err))
-            }
+            // }
         },
         onDrop(pos){
             // On recupere le cd drag

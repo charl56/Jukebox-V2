@@ -39,7 +39,7 @@ export default {
             this.cdInPlayer = data.bool
             this.albumName = data.name
             this.artist = data.artist
-            this.imageSrc = new URL("../../../assets/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href
+            this.imageSrc = this.$backendPort + "images/albums/"+this.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         })
     },
     data () {
@@ -53,7 +53,7 @@ export default {
     methods:{
         play(){
             if(this.cdInPlayer){
-                axios.post("http://127.0.0.1:5025/playMusic")
+                axios.post(this.$backendPort + "playMusic")
                 .then((resp) => {
                     this.setAnimation(true)
                 })
@@ -62,7 +62,7 @@ export default {
         },
         pause(){    // Mettre en pause le cd actuel
             if(this.cdInPlayer){
-                axios.post("http://127.0.0.1:5025/pauseMusic")
+                axios.post(this.$backendPort + "pauseMusic")
                 .then((resp) => {
                     this.setAnimation(false)
                 })
@@ -72,7 +72,7 @@ export default {
         stop(){
             if(this.cdInPlayer){
                 eventBus.emit("waitCdPause", {"bool" : true, "name": this.albumName, "movement": "Enlèvement" })      // Active animation du chargemeent de la pause
-                axios.post("http://127.0.0.1:5025/removeFromPlayer")
+                axios.post(this.$backendPort + "removeFromPlayer")
                 .then(() => {
                     this.imageSrc = ''      // On enleve la src de l'image
                     this.cdInPlayer = false;    // Plus de cd dans le lecteur
@@ -121,7 +121,7 @@ export default {
     height: 24vh !important;
     width: 24vh !important;
 }.div-display-cd:hover{
-    transform: scale(1.07);
+    transform: scale(1.03);
 }.cd-in-player{
     height: 100%;
     width: 100%;

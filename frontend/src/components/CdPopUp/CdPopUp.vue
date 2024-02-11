@@ -85,7 +85,7 @@ export default {
             this.cdName = this.cd.albumName
             this.function = data.function       // Type de fonction
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
-            this.imageSrc = new URL("../../assets/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e") + ".jpg", import.meta.url).href      // Source img album 
+            this.imageSrc = this.$backendPort + "images/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         });
     },
     data() {
@@ -153,7 +153,7 @@ export default {
         },
         setBackgroundColor(){
             // Récupérer l'image dont vous voulez extraire les couleurs
-            let image = document.getElementById('album-img-popup').children[1];
+            let image = document.getElementById('album-img-popup').children[1].src;
             // Créer une nouvelle instance de ColorThief
             let colorThief = new ColorThief();
             // Extraire la couleur dominante de l'image

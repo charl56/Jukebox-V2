@@ -2,7 +2,7 @@ import json
 from flask_cors import CORS
 from flask import Flask, jsonify, request, render_template, send_from_directory
 import time
-import subprocess
+import os
 
 # configuration
 DEBUG = True
@@ -64,7 +64,24 @@ def syncData():
    
    except Exception as e:
       return "error: " + str(e)
+
+# Upload albums image
+@app.route('/upload', methods=['POST'])
+def upload_file():
+   if 'file' not in request.files or 'fileName' not in request.form:
+      return 'No file or picture name part',  400
+
+   file = request.files['file']
+   picture_name = request.form['fileName']
    
+   if file.filename == '':
+      return 'No selected file',  400
+   
+   # Sauvegardez le fichier avec le nom donné
+   file.save(os.path.join('./static/albums/', picture_name))
+   return 200
+
+
 
 # Route pour ajouter un cd sur le lecteur
 @app.route('/playThisCd', methods=['POST'])

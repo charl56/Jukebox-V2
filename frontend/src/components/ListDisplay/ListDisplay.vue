@@ -40,6 +40,11 @@ export default {
     props: {
         list: Array,
     },
+    watch: {
+        list: function(newList, oldList) {
+            this.filteredList = newList;
+        }
+    },
     created() {
         this.filteredList = this.list
     },
@@ -75,9 +80,7 @@ export default {
             }
             // Requete vers le back pour save les données du JSON
             axios.post(this.$backendPort + "syncData", { data: JSON.stringify(data) })
-                .then((resp) => {
-                    console.log(resp)
-                })
+                .then((resp) => {})
                 .catch((err) => {
                     console.log(err)
                 })

@@ -112,7 +112,6 @@ export default {
     height: 40px;
 }.display-icon:hover{
     cursor: pointer;
-    background-color: #282828;
     border-radius: 5px;
     transform: scale(1.1);
 }
@@ -129,7 +128,7 @@ export default {
 }.cd-in-player:hover{
     cursor: pointer;
 }.rotate{
-    animation: rotate-cd 3.5s linear 200ms infinite; 
+    animation: rotate-cd 5s linear 200ms infinite; 
 }@keyframes rotate-cd {
     0%{
         transform: rotate(0deg);

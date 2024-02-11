@@ -1,1 +1,14 @@
 Animation au DragNDrop
+
+
+
+Quand edit cd, si on change une valeur, ça change dans l'affichage derriere
+
+
+affiche artist quand cd : mieux affichier noms et pochette en bas a gauche 
+    VOir si changer animation car pas foufouf
+    Image de fond : zed yun, 
+
+Couleur div pop up
+
+Ajouter nouveaux cd

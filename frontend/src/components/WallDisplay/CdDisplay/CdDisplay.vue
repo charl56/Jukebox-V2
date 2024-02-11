@@ -123,15 +123,6 @@ export default {
     border-radius: 3px;
     width: 100%;
     height: 100%;
-}.img-play-btn:hover{
-    animation: rotate-play 0.7s linear 200ms 1; 
-}@keyframes rotate-play {
-    0%{
-        transform: rotate(0deg);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
 }
 
 /* Effet rotation d'un cube */

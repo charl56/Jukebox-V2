@@ -1,13 +1,3 @@
-
-
-
-affiche artist quand cd : mieux affichier noms et pochette en bas a gauche 
-    VOir si changer animation car pas foufouf
-    Image de fond : zed yun, 
-
-Couleur div pop up
-
-
-
-Animation au DragNDrop : jsp a quoi je pensais
+onDrop : tous les cd clignotent
+Animation au DragNDrop : jsp a quoi je pensais. Peut être eclairer les zone où on peut déposer
 Quand edit cd, si on change une valeur, ça change dans l'affichage derriere : blc car c'est pour moi

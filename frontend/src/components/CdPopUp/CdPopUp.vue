@@ -12,9 +12,9 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
             <v-row class="mx-2 my-2 header-row d-flex justify-center">
                 <v-col cols="6" class="py-0">
                     <!-- <p class="text-h5 text-start font-weight-bold" v-if="this.function == 'Edit'"> </p> -->
-                    <input v-if="this.function == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
+                    <input v-if="functionType == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
                         class="input-cd-popup-title" v-model="cd.albumName">
-                    <p class="text-h5 text-start" v-if="this.function == 'Add'">Ajouter un nouveau cd</p>
+                    <p class="text-h5 text-start" v-if="functionType == 'Add'">Ajouter un nouveau cd</p>
                 </v-col>
                 <v-col cols="5"></v-col>
                 <v-col cols="1">
@@ -27,7 +27,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                     <v-row>
                         <v-col cols="7" class="px-0">
                             <!-- Nom de l'album -->
-                            <v-row v-if="this.function == 'Add'" class="d-flex justify-space-between mx-6">
+                            <v-row v-if="functionType == 'Add'" class="d-flex justify-space-between mx-6">
                                 <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup"
                                     v-model="cd.albumName">
                             </v-row>
@@ -47,7 +47,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                             </v-row>
                         </v-col>
                         <v-col cols="5" class="d-flex flex-column align-center justify-center px-0">
-                            <div v-if="this.function == 'Add'"
+                            <div v-if="functionType == 'Add'"
                                 class="display-cd-img-popup d-flex align-center justify-center mb-5">
                                 <input type="file" accept="image/jpeg" @change="handleFileUpload" />
                             </div>
@@ -61,7 +61,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                         <v-col cols="6">
                             <v-img :src="iconSave" type="submit" class="icon-close" @click="valideCd()"></v-img>
                         </v-col>
-                        <v-col v-if="this.function == 'Edit'" cols="1" class="d-flex justify-end">
+                        <v-col v-if="functionType == 'Edit'" cols="1" class="d-flex justify-end">
                             <v-img :src="iconDelete" class="icon-close" @click="deleteCd()"></v-img>
                         </v-col>
                     </v-row>
@@ -83,7 +83,10 @@ export default {
             this.open = true
             this.cd = data.data
             this.cdName = this.cd.albumName
-            this.function = data.function       // Type de fonction
+            this.functionType = data.function       // Type de fonction
+            if(this.functionType == 'Add') {
+                document.documentElement.style.setProperty('--border-color-cd-popup', 'white');
+            }
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
             this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         });
@@ -99,7 +102,7 @@ export default {
             },
             albumImage: [],
             cdName: '',
-            function: '',
+            functionType: '',
             imageSrc: '',
             open: false,
             cdList: [],
@@ -119,14 +122,14 @@ export default {
                 'position': 0
             }
             this.albumImage = []
-            this.function = this.cdName = ''
+            this.functionType = this.cdName = ''
             this.open = false
             this.selectedFile = null
         },
         valideCd() {
-            if (this.function == 'Edit') {
+            if (this.functionType == 'Edit') {
                 this.edit()
-            } else if (this.function == 'Add') {
+            } else if (this.functionType == 'Add') {
                 this.create()
             }
         },
@@ -181,18 +184,21 @@ export default {
             this.imageSrc = new URL('../../assets/albums/default.jpg', import.meta.url).href
         },
         setBackgroundColor() {
-            // Récupérer l'image dont vous voulez extraire les couleurs
-            let image = document.getElementById('album-img-popup').children[1];
-            image.crossOrigin = "Anonymous"
-            console.log(image);
-            // Créer une nouvelle instance de ColorThief
-            let colorThief = new ColorThief();
-            // Extraire la couleur dominante de l'image
-            let dominantColor = colorThief.getColor(image, 10);
-            // Maintenant, vous avez les valeurs RGB des couleurs dominantes dans dominantColor ou dominantColors.
-            let background = document.getElementsByClassName("item-cu")
-            background[0].style.background = "linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba(" + dominantColor[0] + "," + dominantColor[1] + "," + dominantColor[2] + ",1) 100%)"
-            document.documentElement.style.setProperty('--border-color-cd-popup', 'rgba(' + dominantColor[0] + ',' + dominantColor[1] + ',' + dominantColor[2] + ',1)');
+            try {
+                // Récupérer l'image dont vous voulez extraire les couleurs
+                let image = document.getElementById('album-img-popup').children[1];
+                image.crossOrigin = "Anonymous"
+                // Créer une nouvelle instance de ColorThief
+                let colorThief = new ColorThief();
+                // Extraire la couleur dominante de l'image
+                let dominantColor = colorThief.getColor(image, 10);
+                // Maintenant, vous avez les valeurs RGB des couleurs dominantes dans dominantColor ou dominantColors.
+                let background = document.getElementsByClassName("item-cu")
+                background[0].style.background = "linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba(" + dominantColor[0] + "," + dominantColor[1] + "," + dominantColor[2] + ",1) 100%)"
+                document.documentElement.style.setProperty('--border-color-cd-popup', 'rgba(' + dominantColor[0] + ',' + dominantColor[1] + ',' + dominantColor[2] + ',1)');
+            } catch (error) {
+                console.log(error)
+            }
         },
         handleFileUpload(event) {
             this.selectedFile = event.target.files[0];

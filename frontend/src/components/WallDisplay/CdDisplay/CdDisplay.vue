@@ -108,12 +108,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .div-cd-wall{
-    background-color: #181818;
+    background-color: var(--div-cd-color);
     border-radius: 5px;
     height: 28vh;
 }.div-cd-wall:hover{
     cursor: pointer;
-    background-color: #282828;
+    background-color: var(--div-cd-color-hover);
 }
 .row-display-cd-data{
     width: auto;

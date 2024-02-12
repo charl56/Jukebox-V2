@@ -86,7 +86,7 @@ export default {
             bool ? element.classList.add("rotate") : element.classList.remove("rotate")
         },
         backScreen(){
-            let data = {"albumName": this.albumName, "artist": this.artist}
+            let data = {"artist": this.artist}
             eventBus.emit("backScreen", data)
         }
     },

@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request, render_template, send_from_directory
 import time
 import os
+import subprocess
 
 # configuration
 DEBUG = True
@@ -156,14 +157,14 @@ if __name__ == '__main__':
    path_frontend = '../frontend/'
    commande_npm = 'npm run build'
 
-   # try:
-   #    subprocess.run(commande_npm, shell=True, cwd=path_frontend, check=True)
-   #    print("Frontend build ready !")
-   #    # Adresse ip pour lancer en local
-   #    app.run(host='127.0.0.1', port=5025, debug=True)
-   # except subprocess.CalledProcessError as e:
-   #    print("Error build frontend:", e)
+   try:
+      subprocess.run(commande_npm, shell=True, cwd=path_frontend, check=True)
+      print("Frontend build ready !")
+      # Adresse ip pour lancer en local
+      app.run(host='127.0.0.1', port=5025, debug=True)
+   except subprocess.CalledProcessError as e:
+      print("Error build frontend:", e)
 
 
-   # Adresse ip pour lancer en local
-   app.run(host='127.0.0.1', port=5025, debug=True)
+   # # Adresse ip pour lancer en local
+   # app.run(host='127.0.0.1', port=5025, debug=True)

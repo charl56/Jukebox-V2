@@ -90,6 +90,8 @@ export default {
    --background-color-black-3: #282828;
    --background-color-black-4: #484848;
    --border-color-cd-popup: white;
+   --div-cd-color: #181818;
+   --div-cd-color-hover: #282828;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

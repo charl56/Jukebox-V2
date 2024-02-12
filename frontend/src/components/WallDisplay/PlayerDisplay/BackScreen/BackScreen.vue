@@ -3,28 +3,14 @@
 const iconClose = new URL('../../../../assets/icons/close_white.png', import.meta.url).href
 </script>
 <template>
-    <div v-if="open" class="div-back-screen d-flex justify-center align-item-center" @keyup="keyup" tabindex="0" v-focus>
+    <div v-if="open" class="div-back-screen d-flex justify-center align-item-center" @keyup="keyup" @mousemove="mouseMove" tabindex="0" v-focus :class="{ 'show-mouse': showCloseIcon }">
         <div class="div-image-back pulse-filter">
             <v-img :src="imageBackSrc" cover class="image-back"></v-img>
         </div>
         <div class="back-filter">
             <div class="trail-box"></div>
         </div>
-        <div class=""></div>
-        <div class="back-display d-flex justify-start align-center">
-            <v-col class="col-image-back pa-0 ml-10 mr-5">
-                <v-img :src="imageAlbumSrc" cover class="album-back"></v-img>
-            </v-col>
-            <v-col class="pa-0">
-                <div class="max-content">
-                    <p class="text-album">{{ album }}</p>
-                </div>
-                <div class="max-content">
-                    <p class="text-artist">{{ artist }}</p>
-                </div>
-            </v-col>
-        </div>
-        <div class="div-close-icon">
+        <div class="div-close-icon" :class="{ 'show-close-icon': showCloseIcon }">
             <v-img :src="iconClose" class="img-close-icon" @click="closeModal()"></v-img>
         </div>
     </div>
@@ -44,19 +30,14 @@ export default {
     created() {
         eventBus.on('backScreen', (data) => {
             this.open = true
-            this.artist = data.artist
-            this.album = data.albumName
-            this.imageAlbumSrc = this.$backendPort + "images/albums/" + data.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
             this.imageBackSrc = this.$backendPort + "images/artists/" + data.artist.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         });
     },
     data() {
         return {
             open: false,
-            artist: '',
-            album: '',
-            imageAlbumSrc: '',
             imageBackSrc: '',
+            showCloseIcon: true,
         }
     },
     beforeMount() {                 // Lance la fonction au chargement de la page
@@ -65,12 +46,23 @@ export default {
     methods: {
         closeModal() {
             this.open = false
-            this.imageBackSrc = this.imageAlbumSrc = this.album = this.artist = ''
+            this.imageBackSrc = ''
         },
         keyup(e) {
             if (e.key === 'Escape') {
                 this.closeModal()
             }
+        },
+        mouseMove() {
+            this.showCloseIcon = true;
+
+            // Clear existing timer (if any)
+            clearTimeout(this.hideCloseIconTimer);
+
+            // Set a new timer to hide the close icon after 2 seconds
+            this.hideCloseIconTimer = setTimeout(() => {
+                this.showCloseIcon = false;
+            }, 2000);
         },
     }
 }
@@ -85,6 +77,9 @@ export default {
     position: absolute;
     width: 100vw;
     height: 100vh;
+    cursor: none;
+}.show-mouse{
+    cursor: default;
 }
 
 /* Image de fond */
@@ -117,17 +112,17 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50vw;
+    width: 100vw;
     height: 100vh;
     overflow: hidden;
 }
 
 .trail-box {
     position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 20px;
+    /* top: 50%; */
+    right: 0;
+    width: 30px;
+    height: 100%;
     /* Épaisseur du trait */
     background-color: rgba(0, 0, 0, 0.3);
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
@@ -137,19 +132,7 @@ export default {
 @keyframes rotateTrail {
 
     0% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(90deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    75% {
-        transform: rotate(270deg);
-    }
-    100% {
-        transform: rotate(360deg);
+        transform: translateX(-100vw);
     }
 }
 
@@ -165,8 +148,8 @@ export default {
         transform: scale(1);
     }
 
-    35% {
-        transform: scale(1.04);
+    50% {
+        transform: scale(1.01);
     }
 }
 
@@ -223,8 +206,12 @@ export default {
     right: 30px;
     position: absolute;
     z-index: 100;
+    opacity: 0;
 }
-
+.show-close-icon {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
 .img-close-icon {
     width: 30px;
     height: 30px;
@@ -233,4 +220,5 @@ export default {
 .img-close-icon:hover {
     cursor: pointer;
     transform: scale(1.1);
-}</style>
+}
+</style>

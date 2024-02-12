@@ -52,8 +52,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                                 <input type="file" accept="image/jpeg" @change="handleFileUpload" />
                             </div>
                             <div v-else class="display-cd-img-popup d-flex align-center justify-center mb-5">
-                                <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()"
-                                    @load="setBackgroundColor()"></v-img>
+                                <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
                             </div>
                         </v-col>
                     </v-row>
@@ -183,7 +182,9 @@ export default {
         },
         setBackgroundColor() {
             // Récupérer l'image dont vous voulez extraire les couleurs
-            let image = document.getElementById('album-img-popup').children[1].src;
+            let image = document.getElementById('album-img-popup').children[1];
+            image.crossOrigin = "Anonymous"
+            console.log(image);
             // Créer une nouvelle instance de ColorThief
             let colorThief = new ColorThief();
             // Extraire la couleur dominante de l'image
@@ -245,7 +246,7 @@ export default {
 
 #album-img-popup:hover {
     cursor: pointer;
-    transform: scale(1.02);
+    transform: scale(1.01);
 }
 
 /* Icon */
@@ -275,7 +276,8 @@ export default {
 }
 
 .input-cd-popup-title {
-    color: var(--border-color-cd-popup);
+    /* color: var(--border-color-cd-popup); */
+    color: white;
     margin: 12px 5px 0px 5px;
     padding: 5px 3px;
     width: 100%;
@@ -290,7 +292,8 @@ export default {
 }
 
 .input-cd-popup {
-    color: var(--border-color-cd-popup);
+    /* color: var(--border-color-cd-popup); */
+    color: white;
     border-bottom: 1px solid var(--border-color-cd-popup);
     margin: 12px 5px;
     padding: 5px 3px;

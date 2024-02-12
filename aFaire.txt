@@ -1,8 +1,4 @@
-Animation au DragNDrop
 
-
-
-Quand edit cd, si on change une valeur, ça change dans l'affichage derriere
 
 
 affiche artist quand cd : mieux affichier noms et pochette en bas a gauche 
@@ -11,4 +7,7 @@ affiche artist quand cd : mieux affichier noms et pochette en bas a gauche
 
 Couleur div pop up
 
-Ajouter nouveaux cd
+
+
+Animation au DragNDrop : jsp a quoi je pensais
+Quand edit cd, si on change une valeur, ça change dans l'affichage derriere : blc car c'est pour moi

@@ -160,11 +160,9 @@ if __name__ == '__main__':
    try:
       subprocess.run(commande_npm, shell=True, cwd=path_frontend, check=True)
       print("Frontend build ready !")
-      # Adresse ip pour lancer en local
-      app.run(host='127.0.0.1', port=5025, debug=True)
    except subprocess.CalledProcessError as e:
       print("Error build frontend:", e)
 
 
-   # # Adresse ip pour lancer en local
-   # app.run(host='127.0.0.1', port=5025, debug=True)
+   # Adresse ip pour lancer en local
+   app.run(host='127.0.0.1', port=5025, debug=True)

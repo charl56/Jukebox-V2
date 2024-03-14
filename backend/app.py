@@ -16,6 +16,8 @@ app.config.from_object(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
+actual_cd = 0
+
 # Index app
 @app.route('/')
 def index():
@@ -91,10 +93,19 @@ def playThisCd():
       # data from front
       data = str(request.json['data'])
 
+      global actual_cd
+      if actual_cd != 0:
+
+         print("Remove cd to ", actual_cd)
+         time.sleep(1)
+
+      # Save position of new cd
+      actual_cd = data
       print("Play this CD : ", data)
+
       # Permet de simuler la pose du cd
       time.sleep(1)
-      
+     
       # Send results back as a json
       resp = {"success": True}
       return jsonify(resp), 200 
@@ -141,6 +152,8 @@ def removeFromPlayer():
    try:
 
       print("Remove CD ")
+      global actual_cd
+      actual_cd = 0
       # Permet de simuler la pose du cd
       time.sleep(1)
       
@@ -154,14 +167,14 @@ def removeFromPlayer():
 
 if __name__ == '__main__':
 
-   path_frontend = '../frontend/'
-   commande_npm = 'npm run build'
+   # path_frontend = '../frontend/'
+   # commande_npm = 'npm run build'
 
-   try:
-      subprocess.run(commande_npm, shell=True, cwd=path_frontend, check=True)
-      print("Frontend build ready !")
-   except subprocess.CalledProcessError as e:
-      print("Error build frontend:", e)
+   # try:
+   #    subprocess.run(commande_npm, shell=True, cwd=path_frontend, check=True)
+   #    print("Frontend build ready !")
+   # except subprocess.CalledProcessError as e:
+   #    print("Error build frontend:", e)
 
 
    # Adresse ip pour lancer en local

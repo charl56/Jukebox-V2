@@ -1,0 +1,12 @@
+INIT OK
+verif les étapes : chaque deplacement est dans cet ordre : 
+	Départ à l'origin
+	Déplacement en XY
+	Approche ventouse
+	Ventouse ON
+	Recule ventouse
+	Déplacement en XY
+	Approche ventouse
+	Ventouse OFF
+	Recule ventouse
+	Déplamcenet origin

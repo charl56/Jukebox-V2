@@ -1,0 +1,19 @@
+## Première connection 
+Brancher la carte SD, modifier fichier root/cmdline.txt
+Ajouter a la fin : ip=169.254.25.25
+
+## Connexion ssh 
+ssh -L 5025:127.0.0.1:5025 charl@169.254.25.25
+password : network
+
+
+## Créer tunel avec mobaXterm
+Menu : tunneling
+- fowarded port : 5025
+* ssh server
+- adress : 169.254.25.25
+- user : charl
+- port : 22
+* remote server
+- adress : 127.0.0.1
+- port : 5025

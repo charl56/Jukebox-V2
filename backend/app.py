@@ -33,7 +33,9 @@ def serve_static(filename):
 def return_image(filename):
    return send_from_directory('static/', filename)
 
-
+###
+### Gestion des données, affichage
+###
 # Route envoyer les données au front
 @app.route('/getData', methods=['GET'])
 def getData():
@@ -84,8 +86,9 @@ def upload_file():
    file.save(os.path.join('./static/albums/', picture_name))
    return 200
 
-
-
+###
+### Action pour intéragir avec la jukebox
+###
 # Route pour ajouter un cd sur le lecteur
 @app.route('/playThisCd', methods=['POST'])
 def playThisCd():

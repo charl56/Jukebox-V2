@@ -17,6 +17,10 @@ DIRY_MOVE_Y = 27      # Moteur branché en Y, déplace en Y
 DIRZ_MOVE_X = 23      # Moteur branché en Z, déplace en Z           
 vitesse = 0.001	# Mieux que 0.0005
 
+# Variables pour calculer nb de step pour aller à un CD
+stepX = 0
+stepY = 0
+
 GPIO.setmode(GPIO.BCM)         # Paramétrage de la numérotation des GPIO en mode BCM
 GPIO.setwarnings(False)        # Ne pas tenir comte des alertes
 GPIO.setup(STEPX_MOVE_Y, GPIO.OUT)     # GPIO STEP configuré en sortie
@@ -109,11 +113,17 @@ while True:
         break
 	
     if keyboard.is_pressed("up"):
-        moveY(20, "cw")
+        moveY(1, "cw")
+        stepY += 1
     if keyboard.is_pressed("down"):
-        moveY(20, "ccw")
+        moveY(1, "ccw")
+        stepY -= 1
 
     if keyboard.is_pressed("left"):
-        moveX(20, "cw")	
+        moveX(1, "cw")
+        stepX += 1	
     if keyboard.is_pressed("right"):
-        moveX(20, "ccw")
+        stepX -=1
+        moveX(1, "ccw")
+        
+    print(f"Step X: {stepX}, Step Y: {stepY}")

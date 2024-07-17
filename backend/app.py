@@ -1,10 +1,11 @@
-import json 
+import json
+import threading 
 from flask_cors import CORS
 from flask import Flask, jsonify, request, render_template, send_from_directory
 import time
 import os
 import subprocess
-
+from embedded.stepmachine import JukeboxStateMachine
 # configuration
 DEBUG = True
 
@@ -17,6 +18,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 
 actual_cd = 0
+jukebox = JukeboxStateMachine()
 
 # Index app
 @app.route('/')
@@ -105,7 +107,8 @@ def playThisCd():
       # Save position of new cd
       actual_cd = data
       print("Play this CD : ", data)
-
+      jukebox.nextCD = data
+      jukebox.set_state("Play")
       # Permet de simuler la pose du cd
       time.sleep(1)
      
@@ -124,6 +127,7 @@ def playMusic():
       print("player start : ")
       # Permet de simuler la pose du cd
       time.sleep(1)
+      jukebox.set_state("Play")
       
       # Send results back as a json
       resp = {"success": True}
@@ -140,6 +144,7 @@ def pauseMusic():
       print("player pause")
       # Permet de simuler la pose du cd
       time.sleep(1)
+      jukebox.set_state("Pause")
       
       # Send results back as a json
       resp = {"success": True}
@@ -159,6 +164,7 @@ def removeFromPlayer():
       actual_cd = 0
       # Permet de simuler la pose du cd
       time.sleep(1)
+      jukebox.set_state("Stop")
       
       # Send results back as a json
       resp = {"success": True}
@@ -179,6 +185,10 @@ if __name__ == '__main__':
    # except subprocess.CalledProcessError as e:
    #    print("Error build frontend:", e)
 
+   jukebox_thread = threading.Thread(target=jukebox.transition)
+   jukebox_thread.daemon = True
+   jukebox_thread.start()
+
 
    # Adresse ip pour lancer en local
-   app.run(host='127.0.0.1', port=5025, debug=True)
+   app.run(host='127.0.0.1', port=5025, debug=True, use_reloader=False)

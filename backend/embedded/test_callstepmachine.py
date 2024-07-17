@@ -9,9 +9,9 @@ if __name__ == '__main__':
     
     time.sleep(10)
     jukebox.nextCD = 1
-    jukebox.set_state("GOTOPOS")
+    jukebox.set_state("GoToPos")
     
     time.sleep(10)
-    jukebox.set_state("CLOSE")
+    jukebox.set_state("Close")
     
     jukebox_thread.join()  # Ensure the thread has completed before exiting

@@ -6,8 +6,8 @@ import time
 
 class JukeboxStateMachine:
     def __init__(self):
-        self.states = ["INIT", "GOTOORIGIN", "GOTOEND", "WAIT", "CALCULCOORDS", "CLOSE"]
-        self.current_state = "INIT"
+        self.states = ["Init", "GoToOrigin", "GoToEnd", "Wait", "CalculCoords", "Close", "Play", "Pause", "Stop"]
+        self.current_state = "Init"
         self.next_state = None
         self.maxStepX = 0
         self.maxStepY = 0
@@ -35,48 +35,63 @@ class JukeboxStateMachine:
     def transition(self):
         while self.stepMachineActive:
             with self.lock:
-                if self.current_state == "INIT":
+                if self.current_state == "Init":
                     print("Initializing...")
-                    self.current_state = "GOTOORIGIN"
+                    self.current_state = "GoToOrigin"
                 
-                elif self.current_state == "GOTOORIGIN":
+                elif self.current_state == "GoToOrigin":
                     print("going to origin...")
+                    ## Etre sur que la fonction est terminée avant de passer à la suite
                     # moveXToOrigin()
                     # moveYToOrigin()
                     # moveZToAngle(0)
                     
+                    # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state is not None:
                         self.current_state = self.next_state
                         self.next_state = None
                     else:
-                        self.current_state = "GOTOEND"
+                        self.current_state = "GoToEnd"
                 
-                elif self.current_state == "GOTOEND":
+                elif self.current_state == "GoToEnd":
                     print("going to end...")
                     # self.maxStepX = moveXToEnd()
                     # self.maxStepY = moveYToEnd()
                     
-                    self.current_state = "GOTOORIGIN"
-                    self.next_state = "CALCULCOORDS"
+                    self.current_state = "GoToOrigin"
+                    self.next_state = "CalculCoords"
                 
-                elif self.current_state == "CALCULCOORDS":
+                elif self.current_state == "CalculCoords":
                     print("Calcul of steps for each cd...")
                     self.locationsPos = self.calculateCoords()
-                    self.current_state = "WAIT"
+                    self.current_state = "Wait"
                     
                 elif self.current_state == "GOTOPOS":
                     print("go to this cd : ")
                     print(self.nextCD)
-                    self.current_state = "WAIT"
+                    self.current_state = "Wait"
                     
+                elif self.current_state == "Play":
+                    print(f"Playing CD {self.nextCD}...")
+                    time.sleep(3)
+                    self.current_state = "Wait"
                 
-                elif self.current_state == "WAIT":
+                elif self.current_state == "Pause":
+                    print(f"Pausing CD {self.nextCD}...")
+                    time.sleep(3)
+                    self.current_state = "Wait"
+                
+                elif self.current_state == "Stop":
+                    print("Stopping CD...")
+                    time.sleep(3)
+                    self.current_state = "Wait"                
+                
+                elif self.current_state == "Wait":
                     print("Waiting for action...")
                     # Instead of sleeping inside the lock, release it and sleep outside
-                    self.wait_time = 1
                     self.should_sleep = True
                 
-                elif self.current_state == "CLOSE":
+                elif self.current_state == "Close":
                     print("Closing the machine...")
                     self.stepMachineActive = False
                     self.should_sleep = False
@@ -118,9 +133,9 @@ class JukeboxStateMachine:
     #     if self.current_state == "Init":
     #         print("Initializing...")
     #         # Example of moving to the origin
-    #         self.current_state = "GOTOORIGIN"
+    #         self.current_state = "GoToOrigin"
         
-    #     elif self.current_state == "GOTOORIGIN":
+    #     elif self.current_state == "GoToOrigin":
     #         print("Moving to origin...")
     #         self.masterStepX = 0
     #         self.masterStepY = 0
@@ -187,9 +202,9 @@ class JukeboxStateMachine:
 # if __name__ == "__main__":
 #     jukebox = JukeboxStateMachine()
 #     print(f"Initial state: {jukebox.get_state()}")
-#     jukebox.transition()  # Init -> GOTOORIGIN
+#     jukebox.transition()  # Init -> GoToOrigin
 #     print(f"Current state: {jukebox.get_state()}")
-#     jukebox.transition()  # GOTOORIGIN -> Wait
+#     jukebox.transition()  # GoToOrigin -> Wait
 #     print(f"Current state: {jukebox.get_state()}")
 #     jukebox.set_action("placer")  # Wait -> NewAction
 #     print(f"Current state: {jukebox.get_state()}")

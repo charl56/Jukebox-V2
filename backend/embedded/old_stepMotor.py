@@ -101,40 +101,11 @@ class StepMotorsFunctions:
 			## INIT
 			if state == INIT : 
 				
-				print("Initialisation machine")
-				# On travaille en 200 micropas par tour, sens horraire
-				print("Déplacement en X vers l'origine")
-				while GPIO.input(SWITCH_1):
-					GPIO.output(DIRY, GPIO.HIGH)
-					GPIO.output(STEPY, GPIO.HIGH)
-					sleep(vitesse)
-					GPIO.output(STEPY, GPIO.LOW)
-					sleep(vitesse)
-					GPIO.output(DIRX, GPIO.HIGH)
-					GPIO.output(STEPX, GPIO.HIGH)
-					sleep(vitesse)
-					GPIO.output(STEPX, GPIO.LOW)
-					sleep(vitesse)
-					
-				sleep(1)
-				print("Déplacement en Y vers l'origine")
-				
-				while GPIO.input(SWITCH_2):
-					 GPIO.output(DIRY, GPIO.LOW)
-					 GPIO.output(STEPY, GPIO.HIGH)
-					 sleep(vitesse)
-					 GPIO.output(STEPY, GPIO.LOW)
-					 sleep(vitesse)
-					 GPIO.output(DIRX, GPIO.HIGH)
-					 GPIO.output(STEPX, GPIO.HIGH)
-					 sleep(vitesse)
-					 GPIO.output(STEPX, GPIO.LOW)
-					 sleep(vitesse)
-				print("Ventouse à l'origine")
-				sleep(1)
-				
-				# prévoir que la ventouse recule au max pendant l'init
-				
+				# moveXToOrigin
+				# moveYToOrigin
+				# moveServoToAngle(0)
+    
+    
 				if(cdNumber == 420):
 					print("Fin machine à état")
 					break;
@@ -144,45 +115,11 @@ class StepMotorsFunctions:
 					state = GOTOCD
 			## GO TO END	
 			if state == GOTOEND : 
-				print("Ventouse en max en X et Y, pour calculer le nombre de pas.")
-				# Initialise les variables
-				stepToEndX = 0
-				stepToEndY = 0
-				sleep(2)
-				print("Déplacement au max en X")
-				while GPIO.input(SWITCH_3):	# à changer en switch_3
-					GPIO.output(DIRY, GPIO.LOW)
-					GPIO.output(STEPY, GPIO.HIGH)
-					sleep(vitesse)
-					GPIO.output(STEPY, GPIO.LOW)
-					sleep(vitesse)
-					GPIO.output(DIRX, GPIO.LOW)
-					GPIO.output(STEPX, GPIO.HIGH)
-					sleep(vitesse)
-					GPIO.output(STEPX, GPIO.LOW)
-					sleep(vitesse)
-					stepToEndX += 1
-				sleep(1)
-				print("Déplacement au max en Y")
-				#for x in range(200):
-				while GPIO.input(SWITCH_4):	# à changer en switch_4
-					 GPIO.output(DIRY, GPIO.LOW)
-					 GPIO.output(STEPY, GPIO.HIGH)
-					 sleep(vitesse)
-					 GPIO.output(STEPY, GPIO.LOW)
-					 sleep(vitesse)
-					 GPIO.output(DIRX, GPIO.HIGH)
-					 GPIO.output(STEPX, GPIO.HIGH)
-					 sleep(vitesse)
-					 GPIO.output(STEPX, GPIO.LOW)
-					 sleep(vitesse)
-					 stepToEndY += 1
-				print("Ventouse au max")
-				sleep(1)                 
-				print("--", stepToEndX, " step to end X; ",  stepToEndY, " step to end Y")
-				#		# Pour aller plus vite
-				stepToEndX = 2357
-				stepToEndY = 2500
+			
+				### Go to end to know nm of steps
+				# stepToEndX = moveXToEnd()
+				# stepToEndY = MoveXToEnd()
+				
 		
 
 				state = CALCULCOORDS

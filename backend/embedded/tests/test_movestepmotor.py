@@ -106,6 +106,7 @@ def moveY(step, direction):
 
 # Garder le programme en exécution pour écouter les événements de clavier
 print("Appuyez sur les flèches haut et bas pour déplacer le moteur. Appuyez sur 'q' pour quitter.")
+print("Appuyez sur 'espace' pour remettre a 0 les steps.")
 while True:
     if keyboard.is_pressed("q"):
         print("Quitter le programme.")
@@ -125,5 +126,10 @@ while True:
     if keyboard.is_pressed("right"):
         stepX -=1
         moveX(1, "ccw")
+        
+    if keyboard.is_pressed("space"):
+        stepX = 0
+        stepY = 0
+        print("Steps remis à 0.")
         
     print(f"Step X: {stepX}, Step Y: {stepY}")

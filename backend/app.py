@@ -95,29 +95,39 @@ def upload_file():
 @app.route('/playThisCd', methods=['POST'])
 def playThisCd():
    try:
-      # data from front
-      data = str(request.json['data'])
+      # Data from front
+      data = int(request.json['data'])  # S'assurer que data est un entier
 
       global actual_cd
       if actual_cd != 0:
+         print("Removing CD from position ", actual_cd)
+         jukebox.positionFirst = jukebox.locationsPos[5]
+         jukebox.positionSecond = jukebox.locationsPos[actual_cd]  # 5 est le lecteur
+         jukebox.set_state("GoToPos")
+         jukebox.state_complete_event.wait()  # Wait for the state to complete
 
-         print("Remove cd to ", actual_cd)
-         time.sleep(1)
-
-      # Save position of new cd
+      # Save position of new CD
       actual_cd = data
-      print("Play this CD : ", data)
-      jukebox.nextCD = data
+
+      jukebox.positionFirst = jukebox.locationsPos[actual_cd]
+      jukebox.positionSecond = jukebox.locationsPos[5]  # 5 est le lecteur
+      jukebox.set_state("GoToPos")
+      jukebox.state_complete_event.wait()  # Wait for the state to complete
+
+
+      # Jouer le CD
       jukebox.set_state("Play")
-      # Permet de simuler la pose du cd
-      time.sleep(1)
-     
-      # Send results back as a json
+      jukebox.state_complete_event.wait()  # Wait for the state to complete
+
+      # Envoyer les résultats en réponse JSON
       resp = {"success": True}
-      return jsonify(resp), 200 
-   
+      return jsonify(resp), 200
+
    except Exception as e:
-      return "error: " + str(e)
+      # Ajouter plus de détails dans l'erreur
+      print("Error in playThisCd: ", str(e))
+      return jsonify({"success": False, "error": str(e)}), 500
+
    
 # Route pour mettre play sur le cd en place
 @app.route('/playMusic', methods=['POST'])
@@ -125,9 +135,8 @@ def playMusic():
    try:
 
       print("player start : ")
-      # Permet de simuler la pose du cd
-      time.sleep(1)
       jukebox.set_state("Play")
+      jukebox.state_complete_event.wait()  # Wait for the state to complete
       
       # Send results back as a json
       resp = {"success": True}
@@ -143,9 +152,9 @@ def pauseMusic():
 
       print("player pause")
       # Permet de simuler la pose du cd
-      time.sleep(1)
       jukebox.set_state("Pause")
-      
+      jukebox.state_complete_event.wait()  # Wait for the state to complete
+
       # Send results back as a json
       resp = {"success": True}
       return jsonify(resp), 200 
@@ -163,8 +172,8 @@ def removeFromPlayer():
       global actual_cd
       actual_cd = 0
       # Permet de simuler la pose du cd
-      time.sleep(1)
       jukebox.set_state("Stop")
+      jukebox.state_complete_event.wait()  # Wait for the state to complete
       
       # Send results back as a json
       resp = {"success": True}

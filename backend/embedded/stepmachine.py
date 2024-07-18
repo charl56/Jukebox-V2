@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-# from movestepmotor import moveX, moveXToEnd, moveXToOrigin, moveY, moveYToEnd, moveYToOrigin
-# from moveservomotor import moveZToAngle
+from movestepmotor import moveX, moveXToEnd, moveXToOrigin, moveY, moveYToEnd, moveYToOrigin
+from moveservomotor import moveZToAngle
+from electromagnet import electro_magnet_on, electro_magnet_off
 import threading
 import time
 
@@ -19,6 +20,8 @@ class JukeboxStateMachine:
         self.locationsPos = []
         for _ in range(10):
             self.locationsPos.append({'x': 0, 'y': 0})
+        # Angle of Z, with servo motor
+        self.locationZ = [0, 180]
         # Player actions
         self.playerActions = ["play", "pause", "stop"]
         self.actualPlayerAction = "stop"
@@ -83,7 +86,35 @@ class JukeboxStateMachine:
                     
                 elif self.current_state == "GoToPos":
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}, then go to position {self.positionSecond}")
-                    print(f"{self.prefix} : Dans tous les cas, on grap puis drop.")
+
+                    ## Move X and Y to the first position
+                    moveX(self.positionFirst['x'], "cw")
+                    moveY(self.positionFirst['y'], "cw")
+                    
+                    ## Move forward electromagnet
+                    moveZToAngle(self.locationZ[0])
+                    
+                    ## Activer aimant
+                    electro_magnet_on()
+                    
+                    ## Move back electromagnet
+                    moveZToAngle(self.locationZ[1])
+                    
+                    ## Move X and Y to the second position, from the first position
+                    moveX(abs(self.positionSecond['x'] - self.positionFirst['x']), "cw" if self.positionSecond['x'] - self.positionFirst['x'] > 0 else "ccw")
+                    moveY(abs(self.positionSecond['y'] - self.positionFirst['y']), "cw" if self.positionSecond['y'] - self.positionFirst['y'] > 0 else "ccw")
+
+                    ## Move forward electromagnet
+                    moveZToAngle(self.locationZ[0])
+                    
+                    ## Activer aimant
+                    electro_magnet_off()
+                    
+                    ## Move back electromagnet
+                    moveZToAngle(self.locationZ[1]) 
+                    
+                    
+                    ## Simulate moving
                     time.sleep(5)                    
                     
                     self.next_state = "Wait"
@@ -91,17 +122,17 @@ class JukeboxStateMachine:
                     
                 elif self.current_state == "Play":
                     print(f"{self.prefix} : Playing CD")
-                    time.sleep(3)
+                    time.sleep(2)
                     self.current_state = "Wait"
                 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
-                    time.sleep(3)
+                    time.sleep(2)
                     self.current_state = "Wait"
                 
                 elif self.current_state == "Stop":
                     print(f"{self.prefix} : Stopping CD...")
-                    time.sleep(3)
+                    time.sleep(2)
                     self.current_state = "Wait"                
                 
                 elif self.current_state == "Wait":

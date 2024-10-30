@@ -17,14 +17,14 @@ const iconSync = new URL('../../assets/icons/sync_white.png', import.meta.url).h
         <div class="div-overflow-list mt-2" @drop="onDrop(0, $event)" @dragover="onAllowDrop($event)"
         @dragend="onDragEnd()" @dragleave="onDragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
-            <div v-for="cd in filteredList" class="div-cd-list ma-2 d-flex flex-column align-end" @click="openCd(cd)"
+            <div v-for="cd in filteredList" class="div-cd-list" @click="openCd(cd)"
                 draggable="true" @dragstart="onDrag(cd)">
-                <v-row class="my-0 mx-2">
+                <div class="my-0 mx-2">
                     <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
-                </v-row>
-                <v-row class="my-0 mx-2">
+                </div>
+                <div class="my-0 mx-2">
                     <p class="text-subtitle-2">{{ cd.artiste }}</p>
-                </v-row>
+                </div>
             </div>
         </div>
     </div>
@@ -32,7 +32,6 @@ const iconSync = new URL('../../assets/icons/sync_white.png', import.meta.url).h
   
 <script>
 import { eventBus } from '../../plugins/eventBus';
-import axios from 'axios';
 import { drag, drop, allowDrop } from '../../plugins/dragNdrop';
 
 export default {
@@ -174,6 +173,10 @@ export default {
 /* Liste des cd */
 .div-cd-list {
     height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 .div-cd-list:hover {
@@ -182,10 +185,6 @@ export default {
     border-radius: 5px;
 }
 
-.div-cd-list:-moz-drag-over {
-    background-color: red;
-    color: red;
-}
 
 .div-overflow-list {
     /* Scroll bar */

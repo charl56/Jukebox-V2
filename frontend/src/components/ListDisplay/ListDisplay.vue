@@ -14,9 +14,11 @@ const iconSync = new URL('../../assets/icons/sync_white.png', import.meta.url).h
             <input type="text" name="searchBar" placeholder="Rechercher" class="pa-2 input-search-bar" v-model="search" @keyup="filtereList">
         </div>
         <!-- List des CD en rab, v-for -->
-        <div class="div-overflow-list mt-2" @drop="onDrop(0, $event)" @dragover="allowDrop($event)">
+        <div class="div-overflow-list mt-2" @drop="onDrop(0, $event)" @dragover="onAllowDrop($event)"
+        @dragend="onDragEnd()" @dragleave="onDragLeaveMe()"
+        :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
             <div v-for="cd in filteredList" class="div-cd-list ma-2 d-flex flex-column align-end" @click="openCd(cd)"
-                draggable="true" @dragstart="drag(cd)">
+                draggable="true" @dragstart="onDrag(cd)">
                 <v-row class="my-0 mx-2">
                     <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
                 </v-row>
@@ -47,11 +49,16 @@ export default {
     },
     created() {
         this.filteredList = this.list
+        eventBus.on('updateDropPlaces', (bool) => {
+            this.isDraggingOver = bool
+        })
     },
     data() {
         return {
             search: '',
-            filteredList: []
+            filteredList: [],
+            isDraggingOver: false,
+            isDraggingOverMine: false
         }
     },
     methods: {
@@ -73,8 +80,18 @@ export default {
                     "function": "Edit"
                 });
         },
-      
+        onDrag(cd){
+            drag(cd)
+        },
+        onAllowDrop(event) {
+            eventBus.emit('updateDropPlaces',true)
+            this.isDraggingOverMine = true
+            allowDrop(event)
+        },
         onDrop(pos) {
+            eventBus.emit('updateDropPlaces', false)
+            this.isDraggingOverMine = false
+
             // On recupère le cd déplacé dans la liste, avec sa position en 0
             let newCd = drop()
             // On recupre la liste de tous les albums
@@ -87,6 +104,13 @@ export default {
             localStorage.dataList = JSON.stringify(listCds, null, 2) // On met a jour la liste
             // On actualise la liste dans l'app
             eventBus.emit('updateLists')
+        },
+        onDragEnd() {
+            eventBus.emit('updateDropPlaces', false)
+            this.isDraggingOverMine = false
+        },
+        onDragLeaveMe() {
+            this.isDraggingOverMine = false
         },
         filtereList() {
             if(this.search == ''){
@@ -207,4 +231,20 @@ export default {
     100% {
         transform: rotate(360deg);
     }
-}</style>
+}
+
+/* Drag and drop effects */
+/* Css effect when can drop here */
+.drag-over {
+    border-radius: 5px;
+    border: 2px dashed #ff9800; /* Bordure en pointillé orange */
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.5); /* Ombre portée pour effet de profondeur */
+    transition: background-color 0.6s ease, transform 0.2s ease; /* Transition douce pour les changements de couleur et d'effet */
+    transform: scale(1.02); /* Légère mise à l'échelle pour attirer l'attention */
+    z-index: 10; /* Assurez-vous que l'élément est au-dessus des autres éléments */
+}
+
+.drag-over-me{
+    background-color: rgba(255, 223, 186, 0.8); /* Couleur de fond douce */
+}
+</style>

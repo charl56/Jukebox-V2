@@ -1,8 +1,11 @@
 <script setup>
-    const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url).href
+const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url).href
 </script>
 <template>
-    <div v-if="cd != undefined" class="div-cd-wall d-flex flex-column justify-space-between align-center" @click="openCdOnWall()" draggable="true" @dragstart="drag(cd)" @drop="onDrop(position, $event)" @dragover="allowDrop($event)">
+    <div v-if="cd != undefined" class="div-cd-wall d-flex flex-column justify-space-between align-center"
+        @click="openCdOnWall()" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
+        @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
+        :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
         <div class="cube-container d-flex align-center justify-center pt-2">
             <div class="cube d-flex align-center justify-center">
                 <!-- Les 2 images du cube qui pivote -->
@@ -24,11 +27,13 @@
             </div>
         </div>
     </div>
-    <div v-else class="div-cd-wall" @drop="onDrop(position, $event)" @dragover="allowDrop($event)">
+    <div v-else class="div-cd-wall" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
+    @dragend="dragEnd()" @dragleave="dragLeaveMe()"
+    :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
     </div>
 
 </template>
-  
+
 <script>
 import { eventBus } from '../../../plugins/eventBus'
 import axios from 'axios';
@@ -40,42 +45,55 @@ export default {
         cd: Object,
         position: Number
     },
-    created(){
+    created() {
         try {
-            this.imageSrc = this.$backendPort + "images/albums/"+this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         } catch (error) {
-            
         }
+        eventBus.on('updateDropPlaces', (bool) => {
+            this.isDraggingOver = bool
+        })
     },
-    data () {
+    data() {
         return {
-            imageSrc: ''
+            imageSrc: '',
+            isDraggingOver: false,
+            isDraggingOverMine: false
         }
     },
-    methods:{
-        openCdOnWall(){
+    methods: {
+        openCdOnWall() {
             eventBus.emit('openCdCu',   // On créer un cd, on envoie un modèle vide pour le remplir
-                {"data":
-                    this.cd,
-                "function": "Edit"
-            }); 
+                {
+                    "data":
+                        this.cd,
+                    "function": "Edit"
+                });
         },
-        imgSrcNotFound(){       // Si image album pas trouvée
+        imgSrcNotFound() {       // Si image album pas trouvée
             this.imageSrc = new URL('../../../assets/albums/default.jpg', import.meta.url).href
         },
-        playThisAlbum(){        // C'est le nom de la fonction
+        playThisAlbum() {        // C'est le nom de la fonction
             // let confirm = window.confirm("Lancer ce cd ?")
             // if(confirm){
-                eventBus.emit("waitCdPause", {"bool" : true, "name": this.cd.albumName, "movement": "Chargement"})      // Active animation du chargemeent de la pause
-                axios.post(this.$backendPort + "playThisCd", {"data": this.cd.position})
-                    .then(() => {
-                        eventBus.emit("waitCdPause", {"bool": false, "name": ''})     // Arrête animation de la pause
-                        eventBus.emit("displayPlayer", {"bool": true, "name": this.cd.albumName, "artist": this.cd.artiste})     // Affichage du lecteur cd 
-                    })
-                    .catch((err) => console.log(err))
+            eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
+            axios.post(this.$backendPort + "playThisCd", { "data": this.cd.position })
+                .then(() => {
+                    eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                    eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
+                })
+                .catch((err) => console.log(err))
             // }
         },
-        onDrop(pos){
+        onAllowDrop(event) {
+            eventBus.emit('updateDropPlaces',true)
+            this.isDraggingOverMine = true
+            allowDrop(event)
+        },
+        onDrop(pos, event) {
+            eventBus.emit('updateDropPlaces', false)
+            this.isDraggingOverMine = false
+
             // On recupere le cd drag
             let newCd = drop()
             // On recupre la liste de tous les albums
@@ -83,7 +101,7 @@ export default {
             // On check si CD sur cette position
             let index = listCds.findIndex((cd) => cd.position == pos)
             // Si pas de cd à la position, le cd drag prend la position
-            if(index == -1){
+            if (index == -1) {
                 let index2 = listCds.findIndex((cd) => cd.albumName == newCd.albumName)
                 listCds[index2].position = pos
             } else { // On inverse la position du cd drag, et celui à la place
@@ -100,66 +118,102 @@ export default {
             localStorage.dataList = JSON.stringify(listCds, null, 2) // On met a jour la liste
             // On actualise la liste dans l'app
             eventBus.emit('updateLists')
+        },
+        dragEnd() {
+            eventBus.emit('updateDropPlaces', false)
+            this.isDraggingOverMine = false
+        },
+        dragLeaveMe() {
+            this.isDraggingOverMine = false
         }
     },
 }
 </script>
-  
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.div-cd-wall{
+.div-cd-wall {
     background-color: var(--div-cd-color);
     border-radius: 5px;
     height: 28vh;
-}.div-cd-wall:hover{
+}
+
+.row-display-cd-data {
+    width: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.row-display-cd-data:hover {
     cursor: pointer;
     background-color: var(--div-cd-color-hover);
+    p{
+        transform: scale(1.03);
+    }
 }
-.row-display-cd-data{
-    width: auto;
-}
+
 /* Affichage album */
-.album-class, .img-play-btn{
-    border-radius: 3px;
+.album-class {
+    border-radius: 5px;
     width: 100%;
     height: 100%;
 }
 
+.img-play-btn {
+    height: 60% !important;
+}
+
+
 /* Effet rotation d'un cube */
 .cube-container {
-  perspective: 1000px;
-  height: 100%;
-  width: 100%;
+    perspective: 1000px;
+    height: 100%;
+    width: 100%;
 }
 
 .cube {
-  position: relative;
-  width: 100%; /* Ajustez la taille du cube en fonction de vos besoins */
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.5s;
+    position: relative;
+    width: 80%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
 }
 
-.div-cd-wall:hover .cube {
-  transform: rotateY(180deg);
+.cube-container:hover .cube {
+    transform: rotateY(180deg);
+    cursor: pointer;
 }
 
 .cube div {
-  position: absolute;
-  width: 95%;
-  height: 95%;
-  backface-visibility: hidden;
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    backface-visibility: hidden;
 }
 
 .display-cd-img {
-  transform: translateZ(100px);
-  border-radius: 5px;
+    transform: translateZ(100px);
+    border-radius: 5px;
+
 }
 
 .div-btn-play {
-  transform: rotateY(180deg) translateZ(100px);
-  height: 100px;
-  width: 100px;
+    transform: rotateY(180deg) translateZ(100px);
+    height: 100px;
+    width: 100px;
+}
+
+/* Css effect when can drop here */
+.drag-over {
+    border: 2px dashed #ff9800; /* Bordure en pointillé orange */
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.5); /* Ombre portée pour effet de profondeur */
+    transition: background-color 0.6s ease, transform 0.2s ease; /* Transition douce pour les changements de couleur et d'effet */
+    transform: scale(1.02); /* Légère mise à l'échelle pour attirer l'attention */
+    z-index: 10; /* Assurez-vous que l'élément est au-dessus des autres éléments */
+}
+
+.drag-over-me{
+    background-color: rgba(255, 223, 186, 0.8); /* Couleur de fond douce */
 }
 
 </style>

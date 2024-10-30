@@ -28,8 +28,8 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
         </div>
     </div>
     <div v-else class="div-cd-wall" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
-    @dragend="dragEnd()" @dragleave="dragLeaveMe()"
-    :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
+        @dragend="dragEnd()" @dragleave="dragLeaveMe()"
+        :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
     </div>
 
 </template>
@@ -86,7 +86,7 @@ export default {
             // }
         },
         onAllowDrop(event) {
-            eventBus.emit('updateDropPlaces',true)
+            eventBus.emit('updateDropPlaces', true)
             this.isDraggingOverMine = true
             allowDrop(event)
         },
@@ -147,7 +147,8 @@ export default {
 .row-display-cd-data:hover {
     cursor: pointer;
     background-color: var(--div-cd-color-hover);
-    p{
+
+    p {
         transform: scale(1.03);
     }
 }
@@ -205,15 +206,20 @@ export default {
 
 /* Css effect when can drop here */
 .drag-over {
-    border: 2px dashed #ff9800; /* Bordure en pointillé orange */
-    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.5); /* Ombre portée pour effet de profondeur */
-    transition: background-color 0.6s ease, transform 0.2s ease; /* Transition douce pour les changements de couleur et d'effet */
-    transform: scale(1.02); /* Légère mise à l'échelle pour attirer l'attention */
-    z-index: 10; /* Assurez-vous que l'élément est au-dessus des autres éléments */
+    border: 2px dashed #ff9800;
+    /* Bordure en pointillé orange */
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.5);
+    /* Ombre portée pour effet de profondeur */
+    transition: background-color 0.6s ease, transform 0.2s ease;
+    /* Transition douce pour les changements de couleur et d'effet */
+    transform: scale(1.02);
+    /* Légère mise à l'échelle pour attirer l'attention */
+    z-index: 10;
+    /* Assurez-vous que l'élément est au-dessus des autres éléments */
 }
 
-.drag-over-me{
-    background-color: rgba(255, 223, 186, 0.8); /* Couleur de fond douce */
+.drag-over-me {
+    background-color: rgba(255, 223, 186, 0.8);
+    /* Couleur de fond douce */
 }
-
 </style>

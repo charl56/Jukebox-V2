@@ -20,7 +20,7 @@ STEPZ = 24     # ventouse
 DIRX = 15      # gauche
 DIRY = 27      # droite               
 DIRZ = 23      # ventouse
-vitesse = 0.001	# Mieux que 0.0005
+vitesse = 0.0004	# Vitesse optimale rotation moteurs
 
 GPIO.setmode(GPIO.BCM)         # Paramétrage de la numérotation des GPIO en mode BCM
 GPIO.setwarnings(False)        # Ne pas tenir comte des alertes

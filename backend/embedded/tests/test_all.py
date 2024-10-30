@@ -15,7 +15,7 @@ STEPZ_MOVE_X = 24     # Moteur branché en Z, déplace en Z
 DIRX_MOVE_Y = 15      # Moteur branché en X, mais déplace en Y
 DIRY_MOVE_Y = 27      # Moteur branché en Y, déplace en Y
 DIRZ_MOVE_X = 23      # Moteur branché en Z, déplace en Z           
-vitesse = 0.001	# Mieux que 0.0005
+vitesse = 0.0004	# Vitesse optimale rotation moteurs
 # Pin de l'eletroaimant
 ELECTRO_MAGNET = 26
 ENTER_KEY = False

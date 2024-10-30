@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-from movestepmotor import moveX, moveXToEnd, moveXToOrigin, moveY, moveYToEnd, moveYToOrigin
-from moveservomotor import moveZToAngle
-from electromagnet import electro_magnet_on, electro_magnet_off
+# from movestepmotor import moveX, moveXToEnd, moveXToOrigin, moveY, moveYToEnd, moveYToOrigin
+# from moveservomotor import moveZToAngle
+# from electromagnet import electro_magnet_on, electro_magnet_off
 import threading
 import time
 
@@ -88,55 +88,55 @@ class JukeboxStateMachine:
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}, then go to position {self.positionSecond}")
 
                     ## Move X and Y to the first position
-                    moveX(self.positionFirst['x'], "cw")
-                    moveY(self.positionFirst['y'], "cw")
+                    # moveX(self.positionFirst['x'], "cw")
+                    # moveY(self.positionFirst['y'], "cw")
                     
                     ## Move forward electromagnet
-                    moveZToAngle(self.locationZ[0])
+                    # moveZToAngle(self.locationZ[0])
                     
                     ## Activer aimant
-                    electro_magnet_on()
+                    # electro_magnet_on()
                     
                     ## Move back electromagnet
-                    moveZToAngle(self.locationZ[1])
+                    # moveZToAngle(self.locationZ[1])
                     
                     ## Move X and Y to the second position, from the first position
-                    moveX(abs(self.positionSecond['x'] - self.positionFirst['x']), "cw" if self.positionSecond['x'] - self.positionFirst['x'] > 0 else "ccw")
-                    moveY(abs(self.positionSecond['y'] - self.positionFirst['y']), "cw" if self.positionSecond['y'] - self.positionFirst['y'] > 0 else "ccw")
+                    # moveX(abs(self.positionSecond['x'] - self.positionFirst['x']), "cw" if self.positionSecond['x'] - self.positionFirst['x'] > 0 else "ccw")
+                    # moveY(abs(self.positionSecond['y'] - self.positionFirst['y']), "cw" if self.positionSecond['y'] - self.positionFirst['y'] > 0 else "ccw")
 
                     ## Move forward electromagnet
-                    moveZToAngle(self.locationZ[0])
+                    # moveZToAngle(self.locationZ[0])
                     
                     ## Activer aimant
-                    electro_magnet_off()
+                    # electro_magnet_off()
                     
                     ## Move back electromagnet
-                    moveZToAngle(self.locationZ[1]) 
+                    # moveZToAngle(self.locationZ[1]) 
                     
                     
                     ## Simulate moving
-                    time.sleep(5)                    
+                    time.sleep(1)                    
                     
                     self.next_state = "Wait"
                     self.current_state = "GoToOrigin"
                     
                 elif self.current_state == "Play":
                     print(f"{self.prefix} : Playing CD")
-                    time.sleep(2)
+                    time.sleep(1)
                     self.current_state = "Wait"
                 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
-                    time.sleep(2)
+                    time.sleep(1)
                     self.current_state = "Wait"
                 
                 elif self.current_state == "Stop":
                     print(f"{self.prefix} : Stopping CD...")
-                    time.sleep(2)
+                    time.sleep(1)
                     self.current_state = "Wait"                
                 
                 elif self.current_state == "Wait":
-                    print(f"{self.prefix} : Waiting for action...")
+                    # print(f"{self.prefix} : Waiting for action...")
                     # Instead of sleeping inside the lock, release it and sleep outside
                     self.should_sleep = True
                     self.state_complete_event.set()  # Signal that the state is complete

@@ -12,28 +12,35 @@
         <!-- Popup CD -->
         <CdPopUp />
     </div>
+    <div v-else-if="serverUnreachable">
+        <ServerUnreachable />
+    </div>
 </template>
 
 <script>
 import WallDisplay from './components/WallDisplay/WallDisplay.vue';
 import ListDisplay from './components/ListDisplay/ListDisplay.vue';
 import CdPopUp from './components/CdPopUp/CdPopUp.vue';
+import ServerUnreachable from './components/ServerUnreachable/ServerUnreachable.vue';
 
 import { eventBus } from './plugins/eventBus';
 import axios from 'axios';
+import { SyncronizeCdWithBack } from './plugins/syncronization';
 
 export default {
     name: 'App',
     components: {
       WallDisplay,
       ListDisplay,
-      CdPopUp
+      CdPopUp,
+      ServerUnreachable
     },
     created(){   
         // On récupère les données du JSON dans le back 
         axios.get(this.$backendPort + "getData")
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)
+                this.dataList = []
                 // On commence par mettre les données du JS dans une liste, pour mieux manipuler
                 // Pour recupe l'index des object dans le JS
                 const keys = Object.keys(Data.cd);
@@ -43,11 +50,13 @@ export default {
                     this.dataList.push(cd)
                 }
                 localStorage.dataList = JSON.stringify(this.dataList, null, 2)
+                this.serverUnreachable = false
                 this.dataLoad = true
                 // Puis on trie ente les 2 listes : cd en rab ou sur le mur
                 this.setLists()
             })
             .catch((err) => {
+                this.serverUnreachable = true
                 console.log(err)
             })
       // Permet de mettre à jour les listes
@@ -56,6 +65,7 @@ export default {
         this.wallCds = []              // On vide les listes
         this.listCds = []                 
         this.setLists()
+        SyncronizeCdWithBack(this.$backendPort)
       });
     },
     data () {
@@ -64,6 +74,7 @@ export default {
           wallCds: [],
           listCds: [],
           dataLoad: false,
+          serverUnreachable: true,
         }
     },
     methods:{

@@ -1,5 +1,0 @@
-onDrop : tous les cd clignotent
-Animation au DragNDrop : jsp a quoi je pensais. Peut être eclairer les zone où on peut déposer
-Quand edit cd, si on change une valeur, ça change dans l'affichage derriere : blc car c'est pour moi
-
-

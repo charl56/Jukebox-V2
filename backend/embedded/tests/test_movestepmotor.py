@@ -3,9 +3,9 @@
 # Installer keyboard avec la commande:  install keyboard
 # Executer le programme depuis la raspberry, avec clavier branché dessus
 
+from time import sleep         # Importer la bibliotheque de gestion du temps 
 import RPi.GPIO as GPIO        # Importer la bibliotheque de gestion des GPIO
 import keyboard                # Importer la bibliotheque de gestion du clavier
-from time import sleep         # Importer la bibliotheque de gestion du temps 
 
 # Commandes de pas, reliées aux GPIOs 14, 17, 24
 STEPX_MOVE_Y = 14     # Moteur branché en X, mais déplace en Y
@@ -15,11 +15,8 @@ STEPZ_MOVE_X = 24     # Moteur branché en Z, déplace en Z
 DIRX_MOVE_Y = 15      # Moteur branché en X, mais déplace en Y
 DIRY_MOVE_Y = 27      # Moteur branché en Y, déplace en Y
 DIRZ_MOVE_X = 23      # Moteur branché en Z, déplace en Z           
-vitesse = 0.001	# Mieux que 0.0005
-
-# Variables pour calculer nb de step pour aller à un CD
-stepX = 0
-stepY = 0
+VITESSE_X = 0.0005
+VITESSE_Y = 0.0004
 
 GPIO.setmode(GPIO.BCM)         # Paramétrage de la numérotation des GPIO en mode BCM
 GPIO.setwarnings(False)        # Ne pas tenir comte des alertes
@@ -55,9 +52,9 @@ def moveX(step, direction):
         
         for _ in range(step):
             GPIO.output(STEPZ_MOVE_X, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_X)
             GPIO.output(STEPZ_MOVE_X, GPIO.LOW)
-            sleep(vitesse)	
+            sleep(VITESSE_X)	
     
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -90,14 +87,14 @@ def moveY(step, direction):
 
         for _ in range(step):
             GPIO.output(STEPY_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPY_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             
             GPIO.output(STEPX_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPX_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
         
 
     except Exception as e:
@@ -106,7 +103,6 @@ def moveY(step, direction):
 
 # Garder le programme en exécution pour écouter les événements de clavier
 print("Appuyez sur les flèches haut et bas pour déplacer le moteur. Appuyez sur 'q' pour quitter.")
-print("Appuyez sur 'espace' pour remettre a 0 les steps.")
 while True:
     if keyboard.is_pressed("q"):
         print("Quitter le programme.")
@@ -114,22 +110,11 @@ while True:
         break
 	
     if keyboard.is_pressed("up"):
-        moveY(1, "cw")
-        stepY += 1
+        moveY(20, "cw")
     if keyboard.is_pressed("down"):
-        moveY(1, "ccw")
-        stepY -= 1
+        moveY(20, "ccw")
 
     if keyboard.is_pressed("left"):
-        moveX(1, "cw")
-        stepX += 1	
+        moveX(20, "cw")	
     if keyboard.is_pressed("right"):
-        stepX -=1
-        moveX(1, "ccw")
-        
-    if keyboard.is_pressed("space"):
-        stepX = 0
-        stepY = 0
-        print("Steps remis à 0.")
-        
-    print(f"Step X: {stepX}, Step Y: {stepY}")
+        moveX(20, "ccw")

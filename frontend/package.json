@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 8080",
-    "build": "vite build --outDir ../backend/templates",
+    "clean:windows": "rmdir /S /Q ..\\backend\\templates || exit 0",
+    "clean:unix": "rm -rf ../backend/templates || true",
+    "clean": "npm run clean:windows || npm run clean:unix",
+    "build": "npm run clean && vite build --outDir ../backend/templates",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "4.2.3",
+    "cross-env": "7.0.3",
     "vite": "4.4.5"
   }
 }

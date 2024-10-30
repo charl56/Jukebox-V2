@@ -2,12 +2,13 @@ from config import STEPX_MOVE_Y, DIRX_MOVE_Y, STEPY_MOVE_Y, DIRY_MOVE_Y, STEPZ_M
 import RPi.GPIO as GPIO
 from time import sleep
 
-vitesse = 0.001	# Mieux que 0.0005
+VITESSE_X = 0.0005                  # Vitesse optimale rotation moteurs
+VITESSE_Y = 0.0004	                # Vitesse optimale rotation moteurs
 
-GPIO.setmode(GPIO.BCM)         # Paramétrage de la numérotation des GPIO en mode BCM
-GPIO.setwarnings(False)        # Ne pas tenir comte des alertes
-GPIO.setup(STEPX_MOVE_Y, GPIO.OUT)     # GPIO STEP configuré en sortie
-GPIO.setup(DIRX_MOVE_Y, GPIO.OUT)      # GPIO DIR configuré en sortie
+GPIO.setmode(GPIO.BCM)              # Paramétrage de la numérotation des GPIO en mode BCM
+GPIO.setwarnings(False)             # Ne pas tenir comte des alertes
+GPIO.setup(STEPX_MOVE_Y, GPIO.OUT)  # GPIO STEP configuré en sortie
+GPIO.setup(DIRX_MOVE_Y, GPIO.OUT)   # GPIO DIR configuré en sortie
 GPIO.setup(STEPY_MOVE_Y, GPIO.OUT)
 GPIO.setup(DIRY_MOVE_Y, GPIO.OUT)
 GPIO.setup(STEPZ_MOVE_X, GPIO.OUT)
@@ -42,9 +43,9 @@ def moveX(step, direction):
         
         for _ in range(step):
             GPIO.output(STEPZ_MOVE_X, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_X)
             GPIO.output(STEPZ_MOVE_X, GPIO.LOW)
-            sleep(vitesse)	
+            sleep(VITESSE_X)	
         sleep(0.1)
     
     except Exception as e:
@@ -65,9 +66,9 @@ def moveXToEnd():
         while GPIO.input(SWITCH_1):	
             
             GPIO.output(STEPZ_MOVE_X, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_X)
             GPIO.output(STEPZ_MOVE_X, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_X)
             
             stepToEndX += 1
         
@@ -87,9 +88,9 @@ def moveXToOrigin():
         
         while GPIO.input(SWITCH_2):	
             GPIO.output(STEPZ_MOVE_X, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_X)
             GPIO.output(STEPZ_MOVE_X, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_X)
             
     
     except Exception as e:
@@ -122,14 +123,14 @@ def moveY(step, direction):
 
         for _ in range(step):
             GPIO.output(STEPY_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPY_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             
             GPIO.output(STEPX_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPX_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
         
         sleep(0.1)
 
@@ -152,13 +153,13 @@ def moveYToEnd():
         while GPIO.input(SWITCH_3):	
             
             GPIO.output(STEPY_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPY_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPX_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPX_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             
             stepToEndY += 1
         
@@ -179,13 +180,13 @@ def moveYToOrigin():
         
         while GPIO.input(SWITCH_4):	
             GPIO.output(STEPY_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPY_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPX_MOVE_Y, GPIO.HIGH)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
             GPIO.output(STEPX_MOVE_Y, GPIO.LOW)
-            sleep(vitesse)
+            sleep(VITESSE_Y)
     
     except Exception as e:
         print(f"An error occurred: {e}")

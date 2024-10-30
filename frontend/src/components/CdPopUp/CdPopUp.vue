@@ -13,7 +13,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                 <v-col cols="6" class="py-0">
                     <!-- <p class="text-h5 text-start font-weight-bold" v-if="this.function == 'Edit'"> </p> -->
                     <input v-if="functionType == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
-                        class="input-cd-popup-title" v-model="cd.albumName">
+                        class="input-cd-popup-title" v-model="cd.albumName" @input="edit">
                     <p class="text-h5 text-start" v-if="functionType == 'Add'">Ajouter un nouveau cd</p>
                 </v-col>
                 <v-col cols="5"></v-col>
@@ -22,8 +22,8 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                 </v-col>
             </v-row>
             <v-row class="row-log mx-0 form-row" justify="center">
-                <!-- Form lié avec la fonction 'valideCd'. Permet d'utiliser un form. Ensuite dans la fonction choix entre edit et add -->
-                <v-form v-on:submit.prevent="valideCd" class="s-s-form d-flex flex-column" justify="center">
+                <!-- Form lié avec la fonction 'create'. Permet d'utiliser un form pour créer. Les modifs se font en direct -->
+                <v-form v-on:submit.prevent="create" class="s-s-form d-flex flex-column" justify="center">
                     <v-row>
                         <v-col cols="7" class="px-0">
                             <!-- Nom de l'album -->
@@ -33,17 +33,18 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                             </v-row>
                             <!-- Nom de l'artiste -->
                             <v-row class="d-flex justify-space-between mx-6">
-                                <input type="text" name="artisteName" placeholder="Nom de l'artiste" class="input-cd-popup"
-                                    v-model="cd.artiste">
+                                <input type="text" name="artisteName" placeholder="Nom de l'artiste"
+                                    class="input-cd-popup" v-model="cd.artiste" @input="edit">
                             </v-row>
                             <!-- Nombre de tracks -->
                             <v-row class="d-flex justify-space-between mx-6">
                                 <input type="text" name="trackNb" placeholder="Nombre de tracks" class="input-cd-popup"
-                                    v-model="cd.trackNb">
+                                    v-model="cd.trackNb" @input="edit">
                             </v-row>
                             <!-- Date de sortie -->
                             <v-row class="d-flex justify-start mx-6">
-                                <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate">
+                                <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate"
+                                    @input="edit">
                             </v-row>
                         </v-col>
                         <v-col cols="5" class="d-flex flex-column align-center justify-center px-0">
@@ -52,14 +53,16 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                                 <input type="file" accept="image/jpeg" @change="handleFileUpload" />
                             </div>
                             <div v-else class="display-cd-img-popup d-flex align-center justify-center mb-5">
-                                <v-img :src="imageSrc" class="elevation-10" id="album-img-popup" @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
+                                <v-img :src="imageSrc" class="elevation-10" id="album-img-popup"
+                                    @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
                             </div>
                         </v-col>
                     </v-row>
                     <!-- Boutons de validation et annulation -->
                     <v-row class="mt-0 mb-1 my-0 px-5 d-flex align-center justify-space-between">
                         <v-col cols="6">
-                            <v-img :src="iconSave" type="submit" class="icon-close" @click="valideCd()"></v-img>
+                            <v-img v-if="functionType == 'Add'" :src="iconSave" type="submit" class="icon-close"
+                                @click="create()"></v-img>
                         </v-col>
                         <v-col v-if="functionType == 'Edit'" cols="1" class="d-flex justify-end">
                             <v-img :src="iconDelete" class="icon-close" @click="deleteCd()"></v-img>
@@ -75,6 +78,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
 import { eventBus } from '../../plugins/eventBus';
 import ColorThief from 'colorthief';
 import axios from 'axios';
+import { SyncronizeCdWithBack } from '../../plugins/syncronization';
 
 export default {
     created() {
@@ -84,7 +88,7 @@ export default {
             this.cd = data.data
             this.cdName = this.cd.albumName
             this.functionType = data.function       // Type de fonction
-            if(this.functionType == 'Add') {
+            if (this.functionType == 'Add') {
                 document.documentElement.style.setProperty('--border-color-cd-popup', 'white');
             }
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
@@ -126,21 +130,17 @@ export default {
             this.open = false
             this.selectedFile = null
         },
-        valideCd() {
-            if (this.functionType == 'Edit') {
-                this.edit()
-            } else if (this.functionType == 'Add') {
-                this.create()
-            }
-        },
         edit() {
             let indexCd = this.cdList.findIndex((cd) => cd.albumName == this.cdName) // On recupère la position dans la liste, du cd actuel
             this.cdList[indexCd] = this.cd                         // On modifie l'emplacement du cd avec les nouvelles données
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
-            this.closeModal()                               // On ferme le popup
-            eventBus.emit('updateLists')                    // On actualise l'app
+            SyncronizeCdWithBack(this.$backendPort)             // Sync des données dans le back
         },
         create() {
+            if (!this.selectedFile) {
+                alert("Il faut ajouter la pochette de l'album");
+                return;
+            }
             this.cdList.push(this.cd)                            // On ajoute cd à la list
             localStorage.dataList = JSON.stringify(this.cdList, null, 2) // On met a jour la liste
             this.uploadFile()
@@ -148,35 +148,30 @@ export default {
             eventBus.emit('updateLists')                    // On actualise l'app
         },
         uploadFile() {
-            if (!this.selectedFile) {
-                alert("Il faut ajouter la pochette de l'album");
-                return;
-            }
-
             const formData = new FormData();
-            const albumName = this.cd.albumName.replaceAll(" ","_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            const albumName = this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
             formData.append("fileName", albumName);
             formData.append("file", this.selectedFile);
 
-            
+
             axios.post(this.$backendPort + "upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
+
                 }
             })
-                .then(response => {
-                    console.log(response.data);
-                    // Handle success
-                })
-                .catch(error => {
-                    console.error(error);
-                    // Handle error
-                });
+                .catch(e => console.error(e));
         },
         deleteCd() {
             let indexCd = this.cdList.findIndex((cd) => cd.albumName == this.cdName) // On recupère la position dans la liste, du cd actuel
             this.cdList.splice(indexCd, 1)                          // On supprimer avec l'index
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
+
+            // Delete image
+            axios.delete(this.$backendPort + this.cdName, {
+            })
+                .catch(e => console.error(e));
+
             this.closeModal()                               // On ferme le popup
             eventBus.emit('updateLists')                    // On actualise l'app
         },
@@ -321,6 +316,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .div-input-file {
     width: 20vw;
 }
-
-
 </style>

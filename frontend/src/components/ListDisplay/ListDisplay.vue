@@ -7,7 +7,7 @@ const iconSync = new URL('../../assets/icons/sync_white.png', import.meta.url).h
         <!-- Btn ajout cd -->
         <div class="div-btn-add ma-1 pb-4 d-flex justify-center">
             <v-img title="Ajouter un cd" :src="iconAdd" class="list-icons" @click="addCd()"></v-img>
-            <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img>
+            <!-- <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img> -->
         </div>
         <!-- Search bar -->
         <div class="div-search-bar ma-1 pb-3 d-flex justify-center">
@@ -73,18 +73,7 @@ export default {
                     "function": "Edit"
                 });
         },
-        Sync() {
-            // Creation du json qui sera save dans le fichier
-            let data = {
-                "cd": JSON.parse(localStorage.dataList)
-            }
-            // Requete vers le back pour save les données du JSON
-            axios.post(this.$backendPort + "syncData", { data: JSON.stringify(data) })
-                .then((resp) => {})
-                .catch((err) => {
-                    console.log(err)
-                })
-        },
+      
         onDrop(pos) {
             // On recupère le cd déplacé dans la liste, avec sa position en 0
             let newCd = drop()

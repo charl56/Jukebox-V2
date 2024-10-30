@@ -86,7 +86,22 @@ def upload_file():
    
    # Sauvegardez le fichier avec le nom donné
    file.save(os.path.join('./static/albums/', picture_name))
-   return 200
+   resp = {"success": True}
+   return jsonify(resp), 200 
+
+@app.route('/<filename>', methods=['DELETE'])
+def delete_file(filename):
+   
+   filePath = './static/albums/' + filename + '.jpg'
+   if os.path.exists(filePath):
+      try:
+            os.remove(filePath)
+            resp = {"success": True}
+            return jsonify(resp), 200    
+      except Exception as e:
+         return 'Error: ' + str(e), 500
+
+   return 'File not found', 404
 
 ###
 ### Action pour intéragir avec la jukebox
@@ -194,10 +209,11 @@ if __name__ == '__main__':
    # except subprocess.CalledProcessError as e:
    #    print("Error build frontend:", e)
 
+   # Thread for electronic part
    jukebox_thread = threading.Thread(target=jukebox.transition)
    jukebox_thread.daemon = True
    jukebox_thread.start()
 
 
-   # Adresse ip pour lancer en local
+   # Start app
    app.run(host='127.0.0.1', port=5025, debug=True, use_reloader=False)

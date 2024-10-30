@@ -131,6 +131,7 @@ export default {
             this.selectedFile = null
         },
         edit() {
+            if(this.functionType == 'Add') return
             let indexCd = this.cdList.findIndex((cd) => cd.albumName == this.cdName) // On recupère la position dans la liste, du cd actuel
             this.cdList[indexCd] = this.cd                         // On modifie l'emplacement du cd avec les nouvelles données
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
@@ -163,6 +164,10 @@ export default {
                 .catch(e => console.error(e));
         },
         deleteCd() {
+            if(!confirm("Voulez-vous vraiment supprimer cet album ?")){
+                return
+            }
+
             let indexCd = this.cdList.findIndex((cd) => cd.albumName == this.cdName) // On recupère la position dans la liste, du cd actuel
             this.cdList.splice(indexCd, 1)                          // On supprimer avec l'index
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste

@@ -53,7 +53,7 @@ Pour la préparation de la raspberry, référez-vous au fichier **Jukebox.xlsx**
 2. **Déploiement du Frontend**
    - En local, exécutez :
      ```bash
-     npm run build
+     npm run build:raspberry
      ```
    - **Copie initiale** : copiez le dossier `backend` en entier sur la Raspberry Pi.
    - **Mises à jour** : après chaque mise à jour, seul le dossier `templates` (situé dans `backend/templates`) doit être transféré.

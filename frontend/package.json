@@ -8,7 +8,8 @@
     "clean:windows": "rmdir /S /Q ..\\backend\\templates || exit 0",
     "clean:unix": "rm -rf ../backend/templates || true",
     "clean": "npm run clean:windows || npm run clean:unix",
-    "build": "npm run clean && vite build --outDir ../backend/templates",
+    "build:raspberry": "npm run clean && vite build --outDir ../backend/templates",
+    "build:server": "npm run clean && vite build --mode buildserver --outDir ../backend/templates",
     "preview": "vite preview"
   },
   "dependencies": {

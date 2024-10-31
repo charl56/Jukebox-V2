@@ -52,6 +52,12 @@ export default {
     },
     methods:{
         play(){
+            // Don't execut if on web server
+            if (import.meta.env.VITE_CUSTOM_MODE) {
+                this.setAnimation(true)
+                return 
+            }
+
             if(this.cdInPlayer){
                 axios.post(this.$backendPort + "playMusic")
                 .then((resp) => {
@@ -61,6 +67,12 @@ export default {
             }
         },
         pause(){    // Mettre en pause le cd actuel
+            // Don't execut if on web server
+            if (import.meta.env.VITE_CUSTOM_MODE) {
+                this.setAnimation(false)
+                return 
+            }
+
             if(this.cdInPlayer){
                 axios.post(this.$backendPort + "pauseMusic")
                 .then((resp) => {
@@ -70,6 +82,15 @@ export default {
             }
         },
         stop(){
+            // Don't execut if on web server
+            if (import.meta.env.VITE_CUSTOM_MODE) {
+                eventBus.emit("waitCdPause", {"bool" : true, "name": this.albumName, "movement": "Enlèvement" })      // Active animation du chargemeent de la pause
+                this.imageSrc = ''      // On enleve la src de l'image
+                this.cdInPlayer = false;    // Plus de cd dans le lecteur
+                eventBus.emit("waitCdPause", {"bool" : false, "name": '' })      // Desactive animation du chargemeent de la pause
+                return 
+            }
+
             if(this.cdInPlayer){
                 eventBus.emit("waitCdPause", {"bool" : true, "name": this.albumName, "movement": "Enlèvement" })      // Active animation du chargemeent de la pause
                 axios.post(this.$backendPort + "removeFromPlayer")

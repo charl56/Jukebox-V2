@@ -16,7 +16,6 @@ const vuetify = createVuetify({
 
 const app = createApp(App)
 
-app.config.globalProperties.$backendPort = "http://127.0.0.1:5025/"
-
+app.config.globalProperties.$backendPort = import.meta.env.VITE_BACK_URL || "http://127.0.0.1:5025/"
 
 app.use(vuetify).mount('#app')

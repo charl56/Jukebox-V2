@@ -5,12 +5,12 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Copier les fichiers de l'application dans le conteneur
-COPY backend/requirements.txt .
-COPY backend/app.py .
-COPY backend/routes ./routes
-COPY backend/templates ./templates
-COPY backend/static ./static
-COPY backend/utils.py .
+COPY requirements.txt .
+COPY app.py .
+COPY routes ./routes
+COPY templates ./templates
+COPY static ./static
+COPY utils.py .
 
 # Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt

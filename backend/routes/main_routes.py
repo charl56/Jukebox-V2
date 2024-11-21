@@ -12,5 +12,5 @@ def serve_static(filename):
     return send_from_directory('templates/assets', filename)
 
 @main_bp.route('/images/<path:filename>', methods=['GET'])
-def return_image(filename):
+def return_image(filename): 
     return send_from_directory('static/', filename)

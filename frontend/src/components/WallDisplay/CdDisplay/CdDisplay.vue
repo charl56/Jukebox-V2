@@ -3,29 +3,29 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
 </script>
 <template>
     <div v-if="cd != undefined" class="div-cd-wall d-flex flex-column justify-space-between align-center"
-        @click="openCdOnWall()" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
+        draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
         <div class="cube-container d-flex align-center justify-center pt-2">
             <div class="cube d-flex align-center justify-center">
                 <!-- Les 2 images du cube qui pivote -->
-                <div class="display-cd-img d-flex align-center justify-center px-2">
-                    <v-img :src="imageSrc" class="album-class rounded" @error="imgSrcNotFound()"></v-img>
+                <div class="display-cd-img d-flex align-center justify-center" @click="openCdOnWall()">
+                    <img :src="imageSrc" class="album-class rounded" @error="imgSrcNotFound()">
                 </div>
                 <div class="div-btn-play d-flex align-center justify-center">
-                    <v-img :src="iconPlay" class="img-play-btn" @click.stop="playThisAlbum()"></v-img>
+                    <img :src="iconPlay" class="img-play-btn" @click.stop="playThisAlbum()">
                 </div>
             </div>
         </div>
         <!-- Affichage du nom de l'album et l'artiste -->
-        <div class="row-display-cd-data">
+        <!-- <div class="row-display-cd-data">
             <div>
                 <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }}</p>
             </div>
             <div>
                 <p class="text-subtitle-2">{{ cd.artiste }}</p>
             </div>
-        </div>
+        </div> -->
     </div>
     <div v-else class="div-cd-wall" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
@@ -139,7 +139,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .div-cd-wall {
-    background-color: var(--div-cd-color);
+    /* background-color: var(--div-cd-color); */
     border-radius: 5px;
     height: 28vh;
 }
@@ -162,8 +162,8 @@ export default {
 /* Affichage album */
 .album-class {
     border-radius: 5px;
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 200px;
 }
 
 .img-play-btn {
@@ -173,41 +173,37 @@ export default {
 
 /* Effet rotation d'un cube */
 .cube-container {
-    perspective: 1000px;
     height: 100%;
     width: 100%;
 }
 
 .cube {
-    position: relative;
-    width: 80%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-}
-
-.cube-container:hover .cube {
-    transform: rotateY(180deg);
-    cursor: pointer;
 }
 
 .cube div {
     position: absolute;
-    width: 95%;
-    height: 95%;
     backface-visibility: hidden;
 }
+
+
 
 .display-cd-img {
     transform: translateZ(100px);
     border-radius: 5px;
+    transition: transform  0.2s;
 
 }
+.display-cd-img:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+
 
 .div-btn-play {
-    transform: rotateY(180deg) translateZ(100px);
     height: 100px;
     width: 100px;
+    pointer-events: none;
 }
 
 /* Css effect when can drop here */

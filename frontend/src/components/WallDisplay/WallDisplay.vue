@@ -13,8 +13,7 @@
                 <CdDisplay :cd="list.find(cd => cd.position == (3*n - 2))" :position="(3*n - 2)" :key="keyUpdate"/>
             </v-col>
             <v-col>
-                <PlayerDisplay v-if="(3*n - 1 == 5)" />
-                <CdDisplay v-else :cd="list.find(cd => cd.position == (3*n - 1))" :position="(3*n - 1)" :key="keyUpdate"/>
+                <CdDisplay :cd="list.find(cd => cd.position == (3*n - 1))" :position="(3*n - 1)" :key="keyUpdate"/>
             </v-col>
             <v-col>
                 <CdDisplay :cd="list.find(cd => cd.position == (3*n))" :position="(3*n)" :key="keyUpdate"/>

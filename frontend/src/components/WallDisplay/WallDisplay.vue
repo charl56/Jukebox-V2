@@ -1,27 +1,21 @@
 <template>
-    <div class="div-wall-display d-flex flex-column pa-3 ma-1">
+    <div class="div-wall-display">
         <div v-if="waitCdPause" class="waiting-screen d-flex align-center justify-center">
             <div class="lds-dual-ring">
                 <div class="d-flex align-center justify-center">
                     <p class="text-subtitle-1">{{ movement }} de {{ albumNameLoad }}</p>
                 </div>
-            </div>        
+            </div>
         </div>
         <!-- Afficha grille avec CDs et lecteur -->
-        <v-row v-for="n in 3">
-            <v-col>
-                <CdDisplay :cd="list.find(cd => cd.position == (3*n - 2))" :position="(3*n - 2)" :key="keyUpdate"/>
-            </v-col>
-            <v-col>
-                <CdDisplay :cd="list.find(cd => cd.position == (3*n - 1))" :position="(3*n - 1)" :key="keyUpdate"/>
-            </v-col>
-            <v-col>
-                <CdDisplay :cd="list.find(cd => cd.position == (3*n))" :position="(3*n)" :key="keyUpdate"/>
-            </v-col>
-        </v-row>
+        <div class="col-display" v-for="n in 3">
+            <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" />
+            <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" />
+            <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" />
+        </div>
     </div>
 </template>
-  
+
 <script>
 import CdDisplay from './CdDisplay/CdDisplay.vue';
 import PlayerDisplay from './PlayerDisplay/PlayerDisplay.vue'
@@ -36,14 +30,14 @@ export default {
     props: {
         list: Array,
     },
-    watch: { 
-        list: function() { // watch it
-            this.keyUpdate ++
+    watch: {
+        list: function () { // watch it
+            this.keyUpdate++
         }
     },
-    created(){
+    created() {
         eventBus.on('waitCdPause', (data) => {
-            if(data.bool){
+            if (data.bool) {
                 this.waitCdPause = data.bool
                 this.movement = data.movement
                 this.albumNameLoad = data.name
@@ -53,7 +47,7 @@ export default {
             }
         })
     },
-    data () {
+    data() {
         return {
             keyUpdate: 0,
             waitCdPause: false,
@@ -61,22 +55,26 @@ export default {
             movement: '',
         }
     },
-    methods:{
-        
+    methods: {
+
     },
 }
 </script>
-  
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 /* Div component */
-.div-wall-display{
-    height: 96vh;
+.div-wall-display {
+    display: flex;
+
+
+    height: 98vh;
     background-color: var(--background-color-black-2);
     border-radius: 5px;
 }
+
 /* Ecran de chargement */
-.waiting-screen{
+.waiting-screen {
     z-index: 999;
     border-radius: 5px;
     backdrop-filter: blur(2px) invert(80%);
@@ -84,48 +82,57 @@ export default {
     height: 93vh;
     position: absolute;
 }
+
 /* Rond de chargement en attendant les photos */
 .lds-dual-ring {
-  display: inline-block;
-  width: 150px;
-  height: 150px;
-  animation: change-size 2.5s linear infinite;
-}@keyframes change-size {
-  0% {
+    display: inline-block;
     width: 150px;
     height: 150px;
-  }
-  50% {
-    width: 185px;
-    height: 185px;
-  }
-  100% {
-    width: 150px;
-    height: 150px;
-  }
+    animation: change-size 2.5s linear infinite;
+}
+
+@keyframes change-size {
+    0% {
+        width: 150px;
+        height: 150px;
+    }
+
+    50% {
+        width: 185px;
+        height: 185px;
+    }
+
+    100% {
+        width: 150px;
+        height: 150px;
+    }
 }
 
 .lds-dual-ring div {
-  content: "";
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: 6px solid #fff;
-  border-radius: 50%;
-  border-color: var(--background-color-black-4) transparent var(--background-color-black-4) transparent;
-  color: var(--background-color-black-4);
-  animation: lds-dual-ring 4s linear infinite;
-}@keyframes lds-dual-ring {
-  0% {
-    transform: rotate(0deg);
+    content: "";
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border: 6px solid #fff;
     border-radius: 50%;
-  }
-  50%{
-    border-radius: 0px;
-  }
-  100% {
-    transform: rotate(360deg);
-    border-radius: 50%;
-  }
+    border-color: var(--background-color-black-4) transparent var(--background-color-black-4) transparent;
+    color: var(--background-color-black-4);
+    animation: lds-dual-ring 4s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+        border-radius: 50%;
+    }
+
+    50% {
+        border-radius: 0px;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        border-radius: 50%;
+    }
 }
 </style>

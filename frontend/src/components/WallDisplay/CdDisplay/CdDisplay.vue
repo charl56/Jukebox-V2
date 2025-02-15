@@ -2,30 +2,13 @@
 const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url).href
 </script>
 <template>
-    <div v-if="cd != undefined" class="div-cd-wall d-flex flex-column justify-space-between align-center"
-        draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
+    <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
-        <div class="cube-container d-flex align-center justify-center pt-2">
-            <div class="cube d-flex align-center justify-center">
-                <!-- Les 2 images du cube qui pivote -->
-                <div class="display-cd-img d-flex align-center justify-center" @click="openCdOnWall()">
-                    <img :src="imageSrc" class="album-class rounded" @error="imgSrcNotFound()">
-                </div>
-                <div class="div-btn-play d-flex align-center justify-center">
-                    <img :src="iconPlay" class="img-play-btn" @click.stop="playThisAlbum()">
-                </div>
-            </div>
-        </div>
-        <!-- Affichage du nom de l'album et l'artiste -->
-        <!-- <div class="row-display-cd-data">
-            <div>
-                <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }}</p>
-            </div>
-            <div>
-                <p class="text-subtitle-2">{{ cd.artiste }}</p>
-            </div>
-        </div> -->
+        <!-- Img album -->
+        <img :src="imageSrc" class="album-class" @error="imgSrcNotFound()" @click.stop="playThisAlbum()">
+        <!-- Btn play  -->
+        <img :src="iconPlay" class="img-play-btn">
     </div>
     <div v-else class="div-cd-wall" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
@@ -78,10 +61,10 @@ export default {
                 eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
                 eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
                 eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
-                return 
+                return
             }
 
-        
+
             eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
             axios.post(this.$backendPort + "playThisCd", { "data": this.cd.position })
                 .then(() => {
@@ -139,72 +122,41 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .div-cd-wall {
-    /* background-color: var(--div-cd-color); */
-    border-radius: 5px;
-    height: 28vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: fit-content;
+    height: fit-content;
 }
 
-.row-display-cd-data {
-    width: 100%;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.row-display-cd-data:hover {
+.div-cd-wall:hover .album-class {
+    transform: scale(1.03);
     cursor: pointer;
-    background-color: var(--div-cd-color-hover);
+}
 
-    p {
-        transform: scale(1.03);
-    }
+.div-cd-wall:hover .img-play-btn {
+    visibility: visible;
 }
 
 /* Affichage album */
 .album-class {
-    border-radius: 5px;
-    width: 200px;
-    height: 200px;
+    border-radius: 50%;
+    width: 225px;
+    height: 225px;
+    transition: 0.2s;
 }
+
 
 .img-play-btn {
-    height: 60% !important;
-}
-
-
-/* Effet rotation d'un cube */
-.cube-container {
-    height: 100%;
-    width: 100%;
-}
-
-.cube {
-}
-
-.cube div {
-    position: absolute;
-    backface-visibility: hidden;
-}
-
-
-
-.display-cd-img {
-    transform: translateZ(100px);
-    border-radius: 5px;
-    transition: transform  0.2s;
-
-}
-.display-cd-img:hover {
-    transform: scale(1.01);
-    cursor: pointer;
-}
-
-
-
-.div-btn-play {
-    height: 100px;
-    width: 100px;
+    height: 60px;
+    width: 60px;
     pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+    transition: 0.2s;
 }
+
 
 /* Css effect when can drop here */
 .drag-over {

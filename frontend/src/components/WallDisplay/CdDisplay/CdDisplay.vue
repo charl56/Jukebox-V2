@@ -126,25 +126,25 @@ export default {
     justify-content: center;
     align-items: center;
 
-    width: fit-content;
-    height: fit-content;
+    width: 25vh;
+    height: 25vh;
 }
 
-.div-cd-wall:hover .album-class {
-    transform: scale(1.03);
-    cursor: pointer;
-}
 
-.div-cd-wall:hover .img-play-btn {
-    visibility: visible;
-}
+
 
 /* Affichage album */
 .album-class {
     border-radius: 50%;
-    width: 225px;
-    height: 225px;
-    transition: 0.2s;
+    width: 100%;
+    height: 100%;
+    transition: 0.3s;
+}
+
+.album-class:hover{
+    transform: scale(1.03);
+    cursor: pointer;
+
 }
 
 
@@ -156,6 +156,11 @@ export default {
     visibility: hidden;
     transition: 0.2s;
 }
+
+.img-play-btn:hover {
+    visibility: visible;
+}
+
 
 
 /* Css effect when can drop here */

@@ -1,10 +1,8 @@
 <template>
     <div class="div-wall-display">
         <div v-if="waitCdPause" class="waiting-screen d-flex align-center justify-center">
-            <div class="lds-dual-ring">
-                <div class="d-flex align-center justify-center">
-                    <p class="text-subtitle-1">{{ movement }} de {{ albumNameLoad }}</p>
-                </div>
+            <div class="d-flex align-center justify-center">
+                <p class="text-subtitle-1">Chargement de {{ albumNameLoad }}</p>
             </div>
         </div>
         <!-- Afficha grille avec CDs et lecteur -->
@@ -66,11 +64,36 @@ export default {
 /* Div component */
 .div-wall-display {
     display: flex;
+    height: 100%;
+    width: -webkit-fill-available;
 
+    display: flex;
+    justify-content: center;
 
-    height: 98vh;
     background-color: var(--background-color-black-2);
     border-radius: 5px;
+    padding: 10px;
+}
+
+
+
+
+.col-display {
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.col-display:nth-child(even) {
+    padding-bottom: 100px;
+}
+
+.col-display:nth-child(odd) {
+    padding-top: 100px;
 }
 
 /* Ecran de chargement */
@@ -83,7 +106,7 @@ export default {
     position: absolute;
 }
 
-/* Rond de chargement en attendant les photos */
+/* Rond de chargement en attendant les photos
 .lds-dual-ring {
     display: inline-block;
     width: 150px;
@@ -134,5 +157,5 @@ export default {
         transform: rotate(360deg);
         border-radius: 50%;
     }
-}
+} */
 </style>

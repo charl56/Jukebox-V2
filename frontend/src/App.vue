@@ -1,13 +1,7 @@
 <template>
-    <div v-if="dataLoad" class="d-flex">
-        <!-- Col affichage CD en plus -->
-        <v-col cols="3"  class="col-list-display pa-1">
-          <ListDisplay :list="listCds" />
-        </v-col>
-        <!-- Col affichage CD en places -->
-        <v-col cols="9" class="col-wall-display pa-1">
-          <WallDisplay :list="wallCds" />
-        </v-col>
+    <div v-if="dataLoad" class="app-div">
+        <ListDisplay :list="listCds" />
+        <WallDisplay :list="wallCds" />
 
         <!-- Popup CD -->
         <CdPopUp />
@@ -30,12 +24,12 @@ import { SyncronizeCdWithBack } from './plugins/syncronization';
 export default {
     name: 'App',
     components: {
-      WallDisplay,
-      ListDisplay,
-      CdPopUp,
-      ServerUnreachable
+        WallDisplay,
+        ListDisplay,
+        CdPopUp,
+        ServerUnreachable
     },
-    created(){   
+    created() {
         // On récupère les données du JSON dans le back 
         axios.get(this.$backendPort + "getData")
             .then((resp) => {
@@ -59,29 +53,29 @@ export default {
                 this.serverUnreachable = true
                 console.log(err)
             })
-      // Permet de mettre à jour les listes
-      eventBus.on('updateLists', () => {
-        this.dataList = JSON.parse(localStorage.dataList) // On met a jour les données dans la liste
-        this.wallCds = []              // On vide les listes
-        this.listCds = []                 
-        this.setLists()
-        SyncronizeCdWithBack(this.$backendPort)
-      });
+        // Permet de mettre à jour les listes
+        eventBus.on('updateLists', () => {
+            this.dataList = JSON.parse(localStorage.dataList) // On met a jour les données dans la liste
+            this.wallCds = []              // On vide les listes
+            this.listCds = []
+            this.setLists()
+            SyncronizeCdWithBack(this.$backendPort)
+        });
     },
-    data () {
+    data() {
         return {
-          dataList: [],
-          wallCds: [],
-          listCds: [],
-          dataLoad: false,
-          serverUnreachable: true,
+            dataList: [],
+            wallCds: [],
+            listCds: [],
+            dataLoad: false,
+            serverUnreachable: true,
         }
     },
-    methods:{
-        setLists(){
-            this.dataList.forEach((cd) => { 
+    methods: {
+        setLists() {
+            this.dataList.forEach((cd) => {
                 // On trie les cd entre ceux du mur, et ceux de la liste
-                if(cd.position == 0){
+                if (cd.position == 0) {
                     this.listCds.push(cd)
                 } else {
                     this.wallCds.push(cd)
@@ -96,13 +90,13 @@ export default {
 <style>
 /* Equivalent var global mais pour couleurs CSS */
 :root {
-   --background-color-black-1: #000000;
-   --background-color-black-2: #121212;
-   --background-color-black-3: #282828;
-   --background-color-black-4: #484848;
-   --border-color-cd-popup: white;
-   --div-cd-color: #181818;
-   --div-cd-color-hover: #282828;
+    --background-color-black-1: #000000;
+    --background-color-black-2: #121212;
+    --background-color-black-3: #282828;
+    --background-color-black-4: #484848;
+    --border-color-cd-popup: white;
+    --div-cd-color: #181818;
+    --div-cd-color-hover: #282828;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -115,9 +109,12 @@ html {
     height: 100%;
     background-color: var(--background-color-black-1);
     /* Hide scrollbar for IE, Edge and Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
+
 #app {
     font-family: Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -130,18 +127,34 @@ html {
     bottom: 0;
     left: 0;
 }
+
 /* Surlignage du texte */
-::selection{
+::selection {
     background-color: #ebe5dc;
     color: #7eb3e8;
 }
-::-moz-selection{
+
+::-moz-selection {
     background-color: #ebe5dc;
     color: #2c3e50;
 }
-/* Cols affichage */
-.col-list-display, .col-wall-display{
-    width: 100%;
-    height: 100%;
+
+.app-div {
+    height: 100dvh;
+    width: 100vw;
+    display: flex;
+    gap: 10px;
+
+    padding: 10px;
 }
+
+@media (max-width: 800px) {
+    .app-div {
+        flex-direction: column;
+    }
+    
+    
+}
+
+
 </style>

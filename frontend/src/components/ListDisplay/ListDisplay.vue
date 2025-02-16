@@ -1,35 +1,43 @@
 <script setup>
 const iconAdd = new URL('../../assets/icons/add_white.png', import.meta.url).href
-const iconSync = new URL('../../assets/icons/sync_white.png', import.meta.url).href
+const iconClose = new URL('../../assets/icons/close_white.png', import.meta.url).href
+const iconOpen = new URL('../../assets/icons/arrow_right.png', import.meta.url).href
 </script>
 <template>
-    <div class="div-list-display d-flex flex-column pa-3 ma-1">
+    <div class="div-list-display" id="div-list-display">
+        
         <!-- Btn ajout cd -->
-        <div class="div-btn-add ma-1 pb-4 d-flex justify-center">
-            <v-img title="Ajouter un cd" :src="iconAdd" class="list-icons" @click="addCd()"></v-img>
-            <!-- <v-img title="Syncroniser les données" :src="iconSync" class="list-icons" @click="Sync()"></v-img> -->
-        </div>
-        <!-- Search bar -->
-        <div class="div-search-bar ma-1 pb-3 d-flex justify-center">
-            <input type="text" name="searchBar" placeholder="Rechercher" class="pa-2 input-search-bar" v-model="search" @keyup="filtereList">
-        </div>
-        <!-- List des CD en rab, v-for -->
-        <div class="div-overflow-list mt-2" @drop="onDrop(0, $event)" @dragover="onAllowDrop($event)"
-        @dragend="onDragEnd()" @dragleave="onDragLeaveMe()"
-        :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
-            <div v-for="cd in filteredList" class="div-cd-list" @click="openCd(cd)"
-                draggable="true" @dragstart="onDrag(cd)">
-                <div class="my-0 mx-2">
-                    <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
-                </div>
-                <div class="my-0 mx-2">
-                    <p class="text-subtitle-2">{{ cd.artiste }}</p>
+        <div class="div-list-display__container">
+            <img :src="iconOpen" class="icon-close" @click="openSearchBar()">
+
+            <div class="div-btn-add ma-1 pb-2">
+                <img :src="iconClose" class="icon-close" @click="closeSearchBar()">
+                <img title="Ajouter un cd" :src="iconAdd" class="list-icons" @click="addCd()">
+            </div>
+            <!-- Search bar -->
+            <div class="div-search-bar ma-1 pb-3 d-flex justify-center">
+                <input type="text" name="searchBar" placeholder="Rechercher" class="pa-2 input-search-bar"
+                    v-model="search" @keyup="filtereList">
+            </div>
+            <!-- List des CD en rab, v-for -->
+            <div class="div-overflow-list mt-2" @drop="onDrop(0, $event)" @dragover="onAllowDrop($event)"
+                @dragend="onDragEnd()" @dragleave="onDragLeaveMe()"
+                :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
+                <div v-for="cd in filteredList" class="div-cd-list" @click="openCd(cd)" draggable="true"
+                    @dragstart="onDrag(cd)">
+                    <div class="my-0 mx-2">
+                        <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
+                    </div>
+                    <div class="my-0 mx-2">
+                        <p class="text-subtitle-2">{{ cd.artiste }}</p>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
-  
+
 <script>
 import { eventBus } from '../../plugins/eventBus';
 import { drag, drop, allowDrop } from '../../plugins/dragNdrop';
@@ -42,7 +50,7 @@ export default {
         list: Array,
     },
     watch: {
-        list: function(newList, oldList) {
+        list: function (newList, oldList) {
             this.filteredList = newList;
         }
     },
@@ -70,6 +78,14 @@ export default {
                     "function": "Add"
                 });
         },
+        closeSearchBar() {
+            document.getElementById("div-list-display").style.width = "0vw";
+            // document.getElementById("div-list-display").style.display = "none";
+        },
+        openSearchBar(){
+            // document.getElementById("div-list-display").style.display = "flex";
+            document.getElementById("div-list-display").style.width = "35vw";
+        },
         // Ouvrir un CD
         openCd(cd) {
             eventBus.emit('openCdCu',   // On créer un cd, on envoie un modèle vide pour le remplir
@@ -79,11 +95,11 @@ export default {
                     "function": "Edit"
                 });
         },
-        onDrag(cd){
+        onDrag(cd) {
             drag(cd)
         },
         onAllowDrop(event) {
-            eventBus.emit('updateDropPlaces',true)
+            eventBus.emit('updateDropPlaces', true)
             this.isDraggingOverMine = true
             allowDrop(event)
         },
@@ -112,7 +128,7 @@ export default {
             this.isDraggingOverMine = false
         },
         filtereList() {
-            if(this.search == ''){
+            if (this.search == '') {
                 this.filteredList = this.list
             } else {
                 // Computed property that filters the list based on the search term
@@ -126,21 +142,45 @@ export default {
     },
 }
 </script>
-  
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 /* Div du composant */
 .div-list-display {
-    width: 100%;
-    height: 95vh;
+    width: 35vw;
+    height: 100%;
+}
+
+@media (max-width: 800px) {
+    .div-list-display {
+        position: absolute;
+        top: 100vh;
+
+        width: 97vw;
+        height: 100vh;
+
+        margin: 0px;
+    }
+}
+
+.div-list-display__container {
     background-color: var(--background-color-black-2);
+
+    height: inherit;
     border-radius: 5px;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 /* Row btn add */
 .div-btn-add {
     height: fit-content;
     border-bottom: 1px solid var(--background-color-black-4);
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .btn-add:hover {
@@ -217,6 +257,15 @@ export default {
     width: 30px;
 }
 
+.icon-close {
+    height: 30px;
+    width: 30px;
+
+    /* position: absolute;
+    right: -2vw;
+    margin: 4px; */
+}
+
 .list-icons:hover {
     cursor: pointer;
     animation: rotate 1.2s infinite;
@@ -236,14 +285,20 @@ export default {
 /* Css effect when can drop here */
 .drag-over {
     border-radius: 5px;
-    border: 2px dashed #ff9800; /* Bordure en pointillé orange */
-    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.5); /* Ombre portée pour effet de profondeur */
-    transition: background-color 0.6s ease, transform 0.2s ease; /* Transition douce pour les changements de couleur et d'effet */
-    transform: scale(1.02); /* Légère mise à l'échelle pour attirer l'attention */
-    z-index: 10; /* Assurez-vous que l'élément est au-dessus des autres éléments */
+    border: 2px dashed #ff9800;
+    /* Bordure en pointillé orange */
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.5);
+    /* Ombre portée pour effet de profondeur */
+    transition: background-color 0.6s ease, transform 0.2s ease;
+    /* Transition douce pour les changements de couleur et d'effet */
+    transform: scale(1.02);
+    /* Légère mise à l'échelle pour attirer l'attention */
+    z-index: 10;
+    /* Assurez-vous que l'élément est au-dessus des autres éléments */
 }
 
-.drag-over-me{
-    background-color: rgba(255, 223, 186, 0.8); /* Couleur de fond douce */
+.drag-over-me {
+    background-color: rgba(255, 223, 186, 0.8);
+    /* Couleur de fond douce */
 }
 </style>

@@ -8,11 +8,11 @@ const iconOpen = new URL('../../assets/icons/arrow_right.png', import.meta.url).
         
         <!-- Btn ajout cd -->
         <div class="div-list-display__container">
-            <img :src="iconOpen" class="icon-close" @click="openSearchBar()">
+            <img :src="iconOpen" class="icon icon-open" id="icon-open" @click="openSearchBar()">
 
             <div class="div-btn-add ma-1 pb-2">
-                <img :src="iconClose" class="icon-close" @click="closeSearchBar()">
-                <img title="Ajouter un cd" :src="iconAdd" class="list-icons" @click="addCd()">
+                <img :src="iconClose" class="icon" @click="closeSearchBar()">
+                <img title="Ajouter un cd" :src="iconAdd" class="icon icon-list" @click="addCd()">
             </div>
             <!-- Search bar -->
             <div class="div-search-bar ma-1 pb-3 d-flex justify-center">
@@ -79,12 +79,17 @@ export default {
                 });
         },
         closeSearchBar() {
+            document.getElementById("div-list-display").style.left = "-25vw";
             document.getElementById("div-list-display").style.width = "0vw";
-            // document.getElementById("div-list-display").style.display = "none";
+            document.getElementById("div-list-display").style.marginRight = "0";
+            document.getElementById("icon-open").style.display = "block";
         },
         openSearchBar(){
-            // document.getElementById("div-list-display").style.display = "flex";
-            document.getElementById("div-list-display").style.width = "35vw";
+            document.getElementById("div-list-display").style.left = "0vw";
+            document.getElementById("div-list-display").style.width = "25vw";
+            document.getElementById("div-list-display").style.marginRight = "10px";
+            document.getElementById("icon-open").style.display = "none";
+            
         },
         // Ouvrir un CD
         openCd(cd) {
@@ -147,8 +152,10 @@ export default {
 <style>
 /* Div du composant */
 .div-list-display {
-    width: 35vw;
+    width: 25vw;
     height: 100%;
+    position: relative;
+    margin-right: 10px;
 }
 
 @media (max-width: 800px) {
@@ -195,7 +202,7 @@ export default {
 }
 
 .input-search-bar {
-    width: 90%;
+    width: 100%;
     height: 100%;
     color: white;
 }
@@ -252,34 +259,26 @@ export default {
 
 
 /* Icon */
-.list-icons {
+.icon {
     height: 30px;
     width: 30px;
 }
 
-.icon-close {
-    height: 30px;
-    width: 30px;
 
-    /* position: absolute;
-    right: -2vw;
-    margin: 4px; */
+.icon-open {
+    position: absolute;
+    display: none;
+    margin: 5px;
+    left: 25vw;
+    animation: 2s;
 }
 
-.list-icons:hover {
+.icon:hover {
     cursor: pointer;
-    animation: rotate 1.2s infinite;
+    transform: scale(1.1);
+    animation: 0.2s;
 }
 
-@keyframes rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
 
 /* Drag and drop effects */
 /* Css effect when can drop here */

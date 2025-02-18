@@ -63,7 +63,6 @@ export default {
 <style>
 /* Div component */
 .div-wall-display {
-    display: flex;
     height: 100%;
     width: -webkit-fill-available;
 
@@ -89,11 +88,11 @@ export default {
 }
 
 .col-display:nth-child(even) {
-    padding-bottom: 100px;
+    padding-bottom: 12vh;
 }
 
 .col-display:nth-child(odd) {
-    padding-top: 100px;
+    padding-top: 12vh;
 }
 
 /* Ecran de chargement */

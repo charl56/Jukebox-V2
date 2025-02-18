@@ -10,7 +10,7 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
         <!-- Btn play  -->
         <img :src="iconPlay" class="img-play-btn">
     </div>
-    <div v-else class="div-cd-wall" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
+    <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
     </div>
@@ -159,6 +159,11 @@ export default {
 
 .img-play-btn:hover {
     visibility: visible;
+}
+
+.no-cd{
+    background-color: var(--background-color-black-1);
+    border-radius: 50%;
 }
 
 

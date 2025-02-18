@@ -5,7 +5,7 @@ const iconOpen = new URL('../../assets/icons/arrow_right.png', import.meta.url).
 </script>
 <template>
     <div class="div-list-display" id="div-list-display">
-        
+
         <!-- Btn ajout cd -->
         <div class="div-list-display__container">
             <img :src="iconOpen" class="icon icon-open" id="icon-open" @click="openSearchBar()">
@@ -52,10 +52,13 @@ export default {
     watch: {
         list: function (newList, oldList) {
             this.filteredList = newList;
+            this.orderList();
         }
     },
     created() {
-        this.filteredList = this.list
+        this.filteredList = this.list;
+        this.orderList();
+
         eventBus.on('updateDropPlaces', (bool) => {
             this.isDraggingOver = bool
         })
@@ -84,12 +87,12 @@ export default {
             document.getElementById("div-list-display").style.marginRight = "0";
             document.getElementById("icon-open").style.display = "block";
         },
-        openSearchBar(){
+        openSearchBar() {
             document.getElementById("div-list-display").style.left = "0vw";
             document.getElementById("div-list-display").style.width = "25vw";
             document.getElementById("div-list-display").style.marginRight = "10px";
             document.getElementById("icon-open").style.display = "none";
-            
+
         },
         // Ouvrir un CD
         openCd(cd) {
@@ -143,6 +146,12 @@ export default {
                     return albumNameMatch || artisteMatch;
                 });
             }
+        },
+        orderList(){
+            this.filteredList.sort((a, b) => {
+                const artistComparison = a.artiste.localeCompare(b.artiste);
+                return artistComparison !== 0 ? artistComparison : a.albumName.localeCompare(b.albumName);
+            });
         }
     },
 }
@@ -270,7 +279,6 @@ export default {
     display: none;
     margin: 5px;
     left: 25vw;
-    animation: 2s;
 }
 
 .icon:hover {

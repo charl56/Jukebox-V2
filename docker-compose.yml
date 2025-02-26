@@ -4,5 +4,5 @@ services:
     image: ghcr.io/charl56/jukebox:latest
     restart: always
     ports:
-      - "127.0.0.1:5025:5025"
+      - "127.0.0.1:8084:5025"
 

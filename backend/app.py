@@ -5,6 +5,7 @@ from flask import Flask
 from flask_cors import CORS
 from routes.main_routes import main_bp
 from routes.data_routes import data_bp
+from routes.assets_routes import assets_bp
 
 DEBUG = True
 IS_DOCKER = os.getenv("IS_DOCKER", "False") == "True"
@@ -17,14 +18,15 @@ app.config.from_object(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 app.register_blueprint(main_bp)
-app.register_blueprint(data_bp)
+app.register_blueprint(assets_bp, url_prefix='/api')
+app.register_blueprint(data_bp, url_prefix='/api')
 
 # Only import jukebox and start the thread if not running in Docker
 if not IS_DOCKER:
    from jukebox import jukebox
    from routes.jukebox_routes import jukebox_bp
    
-   app.register_blueprint(jukebox_bp)
+   app.register_blueprint(jukebox_bp, url_prefix='/api')
 
    jukebox_thread = threading.Thread(target=jukebox.transition)
    jukebox_thread.daemon = True

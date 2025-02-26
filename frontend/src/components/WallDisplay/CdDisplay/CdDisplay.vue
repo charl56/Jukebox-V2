@@ -6,9 +6,10 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
         <!-- Img album -->
-        <img :src="imageSrc" class="album-class" @error="imgSrcNotFound()" @click.stop="playThisAlbum()">
+        <img :src="imageSrc" class="album-class" :id="'album-id_' + cd.position" @error="imgSrcNotFound()"
+            @click.stop="playThisAlbum()">
         <!-- Btn play  -->
-        <img :src="iconPlay" class="img-play-btn">
+        <!-- <img :src="iconPlay" class="img-play-btn"> -->
     </div>
     <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
@@ -36,12 +37,28 @@ export default {
         eventBus.on('updateDropPlaces', (bool) => {
             this.isDraggingOver = bool
         })
+
+        eventBus.on('playThisCd', (data) => {
+            if (data.cdPos == this.position && this.cdPlaying == 0) this.startTurningCd()
+            else if (data.cdPos == this.position && this.cdPlaying != 0) {
+                eventBus.emit("stopThisCd", { "cdPos": this.cdPlaying })
+                this.startTurningCd()
+            }
+            this.cdPlaying = data.cdPos
+        })
+
+        eventBus.on('stopThisCd', (data) => {
+            if (data.cdPos == this.position) this.stopTurningCd()
+            this.cdPlaying = 0
+        })
     },
     data() {
         return {
             imageSrc: '',
             isDraggingOver: false,
-            isDraggingOverMine: false
+            isDraggingOverMine: false,
+            cdIsPlaying: false,
+            cdPlaying: 0
         }
     },
     methods: {
@@ -53,26 +70,36 @@ export default {
                     "function": "Edit"
                 });
         },
-        imgSrcNotFound() {       // Si image album pas trouvée
+        imgSrcNotFound() {
             this.imageSrc = new URL('../../../assets/albums/default.jpg', import.meta.url).href
         },
-        playThisAlbum() {        // C'est le nom de la fonction
+        playThisAlbum() {
             if (import.meta.env.VITE_CUSTOM_MODE) {
-                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
+                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Lancement" })      // Active animation du chargemeent de la pause
                 eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
-                eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
+                this.cdIsPlaying ? eventBus.emit("playThisCd", { "cdPos": this.cd.position }) : eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
+                // eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
                 return
             }
 
+            else {
+                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
+                axios.post(this.$backendPort + "playThisCd", { "data": this.cd.position })
+                    .then(() => {
+                        eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                        this.cdIsPlaying ? eventBus.emit("playThisCd", { "cdPos": this.cd.position }) : eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
 
-            eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
-            axios.post(this.$backendPort + "playThisCd", { "data": this.cd.position })
-                .then(() => {
-                    eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
-                    eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
-                })
-                .catch((err) => console.log(err))
-            // }
+                        // eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
+                    })
+                    .catch((err) => console.log(err))
+            }
+            this.cdIsPlaying = !this.cdIsPlaying
+        },
+        startTurningCd() {
+            document.getElementById('album-id_' + this.position).classList.add('turning-cd')
+        },
+        stopTurningCd() {
+            document.getElementById('album-id_' + this.position).classList.remove('turning-cd')
         },
         onAllowDrop(event) {
             eventBus.emit('updateDropPlaces', true)
@@ -130,6 +157,13 @@ export default {
     height: 25vh;
 }
 
+@media (max-width: 800px) {
+    .div-cd-wall {
+        width: 12vh;
+        height: 12vh;
+    }
+
+}
 
 
 
@@ -141,10 +175,24 @@ export default {
     transition: 0.3s;
 }
 
-.album-class:hover{
+.album-class:hover {
     transform: scale(1.03);
     cursor: pointer;
 
+}
+
+.turning-cd {
+    animation: turn 10s infinite linear;
+}
+
+@keyframes turn {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 
@@ -161,7 +209,7 @@ export default {
     visibility: visible;
 }
 
-.no-cd{
+.no-cd {
     background-color: var(--background-color-black-1);
     border-radius: 50%;
 }

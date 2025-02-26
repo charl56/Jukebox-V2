@@ -1,14 +1,8 @@
 <template>
-    <div v-if="dataLoad" class="app-div">
-        <ListDisplay :list="listCds" />
-        <WallDisplay :list="wallCds" />
-
-        <!-- Popup CD -->
-        <CdPopUp />
-    </div>
-    <div v-else-if="serverUnreachable">
-        <ServerUnreachable />
-    </div>
+    <ListDisplay v-if="dataLoad" :list="listCds" />
+    <WallDisplay v-if="dataLoad" :list="wallCds" />
+    <ServerUnreachable v-else-if="serverUnreachable"/>
+    <CdPopUp />
 </template>
 
 <script>
@@ -126,6 +120,11 @@ html {
     right: 0;
     bottom: 0;
     left: 0;
+
+    height: 100dvh;
+    width: 100vw;
+    display: flex;
+    padding: 10px;
 }
 
 /* Surlignage du texte */
@@ -139,20 +138,12 @@ html {
     color: #2c3e50;
 }
 
-.app-div {
-    height: 100dvh;
-    width: 100vw;
-    display: flex;
-    padding: 10px;
-}
-
-@media (max-width: 800px) {
-    .app-div {
+/* @media (max-width: 800px) {
+    #app{
         flex-direction: column;
     }
     
-    
-}
+} */
 
 
 </style>

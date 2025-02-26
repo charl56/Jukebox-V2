@@ -1,3 +1,7 @@
+# docker build -t jukebox-app .
+# docker run -p 5025:5025 -d jukebox-app
+
+
 # Utiliser une image Python officielle
 FROM python:3.10-slim
 
@@ -25,5 +29,4 @@ EXPOSE 5025
 CMD ["python", "app.py"]
 
 
-# docker build -t jukebox-app .
-# docker run -p 5025:5025 -d jukebox-app
+

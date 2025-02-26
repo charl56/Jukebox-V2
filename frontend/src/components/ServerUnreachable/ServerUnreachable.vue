@@ -27,15 +27,12 @@ export default {
 .div-server-unreachable p {
     font-size: 1em;
     font-weight: 700;
-    animation: breathing-rotation 5s ease-in-out infinite;
+    animation: breathing-rotation 5s  infinite;
 }
 
 @keyframes breathing-rotation {
     0% {
         transform: scale(1) rotate(0deg);
-    }
-    25% {
-        transform: scale(1.1) rotate(180deg);
     }
     100% {
         transform: scale(1) rotate(360deg);

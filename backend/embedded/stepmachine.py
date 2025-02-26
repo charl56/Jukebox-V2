@@ -115,24 +115,24 @@ class JukeboxStateMachine:
                     
                     
                     ## Simulate moving
-                    time.sleep(1)                    
+                    time.sleep(0.2)                    
                     
                     self.next_state = "Wait"
                     self.current_state = "GoToOrigin"
                     
                 elif self.current_state == "Play":
                     print(f"{self.prefix} : Playing CD")
-                    time.sleep(1)
+                    time.sleep(0.2)
                     self.current_state = "Wait"
                 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
-                    time.sleep(1)
+                    time.sleep(0.2)
                     self.current_state = "Wait"
                 
                 elif self.current_state == "Stop":
                     print(f"{self.prefix} : Stopping CD...")
-                    time.sleep(1)
+                    time.sleep(0.2)
                     self.current_state = "Wait"                
                 
                 elif self.current_state == "Wait":

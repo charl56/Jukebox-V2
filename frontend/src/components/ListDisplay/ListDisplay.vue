@@ -170,12 +170,10 @@ export default {
 @media (max-width: 800px) {
     .div-list-display {
         position: absolute;
-        top: 100vh;
+        top: 51vh;
 
-        width: 97vw;
+        width: -webkit-fill-available;
         height: 100vh;
-
-        margin: 0px;
     }
 }
 
@@ -277,7 +275,7 @@ export default {
 .icon-open {
     position: absolute;
     display: none;
-    margin: 5px;
+    margin: 5px 10px;
     left: 25vw;
 }
 

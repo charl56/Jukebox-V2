@@ -21,7 +21,7 @@ def moveZToAngle(angle):
     duty = 2 + (angle / 18)  # Calcul du cycle de service correspondant à l'angle
     GPIO.output(servo_pin, True)
     pwm.ChangeDutyCycle(duty)
-    time.sleep(1)  # Temps pour laisser le servomoteur atteindre la position
+    time.sleep(0.2)  # Temps pour laisser le servomoteur atteindre la position
     GPIO.output(servo_pin, False)
     pwm.ChangeDutyCycle(0)
 

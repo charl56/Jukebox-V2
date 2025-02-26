@@ -22,6 +22,7 @@ jobs:
       - name: Build and Publish
         run: |
           cd frontend
+          npm install
           npm run build:server
           cd ../backend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}

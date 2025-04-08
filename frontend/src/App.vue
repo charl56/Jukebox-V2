@@ -121,7 +121,7 @@ html {
     bottom: 0;
     left: 0;
 
-    height: 100dvh;
+    height: 100svh;
     width: 100vw;
     display: flex;
     padding: 10px;

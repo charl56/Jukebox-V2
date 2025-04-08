@@ -5,73 +5,68 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
 </script>
 <!-- Popup de création/modification de cd, avec les fonction qui permettent la gestion -->
 <template>
-    <v-dialog v-model="open" v-if="open" transition="dialog-bottom-transition"
-        class="div-item-cu mt-0 d-flex justify-center align-item-center">
-        <v-row class="item-cu mx-1 my-2 pb-4 d-flex justify-center align-item-center">
-            <!-- Header subSection Create/Update -->
-            <v-row class="mx-2 my-2 header-row d-flex justify-center">
-                <v-col cols="6" class="py-0">
-                    <!-- <p class="text-h5 text-start font-weight-bold" v-if="this.function == 'Edit'"> </p> -->
-                    <input v-if="functionType == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
-                        class="input-cd-popup-title" v-model="cd.albumName" @input="edit">
-                    <p class="text-h5 text-start" v-if="functionType == 'Add'">Ajouter un nouveau cd</p>
-                </v-col>
-                <v-col cols="5"></v-col>
-                <v-col cols="1">
-                    <v-img :src="iconClose" class="icon-close" @click="closeModal()"></v-img>
-                </v-col>
-            </v-row>
-            <v-row class="row-log mx-0 form-row" justify="center">
-                <!-- Form lié avec la fonction 'create'. Permet d'utiliser un form pour créer. Les modifs se font en direct -->
-                <v-form v-on:submit.prevent="create" class="s-s-form d-flex flex-column" justify="center">
-                    <v-row>
-                        <v-col cols="7" class="px-0">
-                            <!-- Nom de l'album -->
-                            <v-row v-if="functionType == 'Add'" class="d-flex justify-space-between mx-6">
-                                <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup"
-                                    v-model="cd.albumName">
-                            </v-row>
-                            <!-- Nom de l'artiste -->
-                            <v-row class="d-flex justify-space-between mx-6">
-                                <input type="text" name="artisteName" placeholder="Nom de l'artiste"
-                                    class="input-cd-popup" v-model="cd.artiste" @input="edit">
-                            </v-row>
-                            <!-- Nombre de tracks -->
-                            <v-row class="d-flex justify-space-between mx-6">
-                                <input type="text" name="trackNb" placeholder="Nombre de tracks" class="input-cd-popup"
-                                    v-model="cd.trackNb" @input="edit">
-                            </v-row>
-                            <!-- Date de sortie -->
-                            <v-row class="d-flex justify-start mx-6">
-                                <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate"
-                                    @input="edit">
-                            </v-row>
-                        </v-col>
-                        <v-col cols="5" class="d-flex flex-column align-center justify-center px-0">
-                            <div v-if="functionType == 'Add'"
-                                class="display-cd-img-popup d-flex align-center justify-center mb-5">
-                                <input type="file" accept="image/jpeg" @change="handleFileUpload" />
-                            </div>
-                            <div v-else class="display-cd-img-popup d-flex align-center justify-center mb-5">
-                                <v-img :src="imageSrc" class="elevation-10" id="album-img-popup"
-                                    @error="imgSrcNotFound()" @load="setBackgroundColor()"></v-img>
-                            </div>
-                        </v-col>
-                    </v-row>
-                    <!-- Boutons de validation et annulation -->
-                    <v-row class="mt-0 mb-1 my-0 px-5 d-flex align-center justify-space-between">
-                        <v-col cols="6">
-                            <v-img v-if="functionType == 'Add'" :src="iconSave" type="submit" class="icon-close"
-                                @click="create()"></v-img>
-                        </v-col>
-                        <v-col v-if="functionType == 'Edit'" cols="1" class="d-flex justify-end">
-                            <img :src="iconDelete" class="icon-close" @click="deleteCd()">
-                        </v-col>
-                    </v-row>
-                </v-form>
-            </v-row>
-        </v-row>
-    </v-dialog>
+    <div v-if="open" class="dialog-overlay" @click.self="closeModal()">
+        <div class="dialog-content">
+            <!-- Header -->
+            <div class="dialog-header">
+                <input v-if="functionType == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
+                    class="input-cd-popup-title" v-model="cd.albumName" @input="edit">
+                <h2 v-if="functionType == 'Add'" class="text-h5">Ajouter d'un nouveau cd</h2>
+                <img :src="iconClose" class="icon-close" @click="closeModal()">
+            </div>
+
+            <!-- Form -->
+            <form @submit.prevent="create" class="dialog-form">
+                <div class="form-content">
+                    <div class="form-left">
+                        <!-- Nom de l'album (seulement si Add) -->
+                        <div v-if="functionType == 'Add'" class="form-group">
+                            <input type="text" name="albumName" placeholder="Nom de l'album" class="input-cd-popup"
+                                v-model="cd.albumName">
+                        </div>
+
+                        <!-- Nom de l'artiste -->
+                        <div class="form-group">
+                            <input type="text" name="artisteName" placeholder="Nom de l'artiste" class="input-cd-popup"
+                                v-model="cd.artiste" @input="edit">
+                        </div>
+
+                        <!-- Nombre de tracks -->
+                        <div class="form-group">
+                            <input type="text" name="trackNb" placeholder="Nombre de tracks" class="input-cd-popup"
+                                v-model="cd.trackNb" @input="edit">
+                        </div>
+
+                        <!-- Date de sortie -->
+                        <div class="form-group">
+                            <input type="date" name="releaseDate" class="input-cd-popup" v-model="cd.releaseDate"
+                                @input="edit">
+                        </div>
+                    </div>
+
+                    <div class="form-right">
+                        <div v-if="functionType == 'Add'" class="display-cd-img-popup">
+                            <input type="file" accept="image/jpeg" @change="handleFileUpload" />
+                        </div>
+                        <div v-else class="display-cd-img-popup">
+                            <img :src="imageSrc" class="album-img" id="album-img-popup" @error="imgSrcNotFound()"
+                                @load="setBackgroundColor()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="dialog-actions">
+                    <div>
+                        <img v-if="functionType == 'Add'" :src="iconSave" class="icon-action" @click="create()">
+                    </div>
+                    <div v-if="functionType == 'Edit'">
+                        <img :src="iconDelete" class="icon-action" @click="deleteCd()">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -113,9 +108,6 @@ export default {
             selectedFile: null,
         }
     },
-    beforeMount() {                 // Lance la fonction au chargement de la page
-
-    },
     methods: {
         closeModal() {
             this.cd = {
@@ -131,7 +123,7 @@ export default {
             this.selectedFile = null
         },
         edit() {
-            if(this.functionType == 'Add') return
+            if (this.functionType == 'Add') return
             let indexCd = this.cdList.findIndex((cd) => cd.albumName == this.cdName) // On recupère la position dans la liste, du cd actuel
             this.cdList[indexCd] = this.cd                         // On modifie l'emplacement du cd avec les nouvelles données
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
@@ -154,17 +146,15 @@ export default {
             formData.append("fileName", albumName);
             formData.append("file", this.selectedFile);
 
-
-            axios.post(this.$backendPort + "upload", formData, {
+            axios.post(this.$backendPort + "api/upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
-
                 }
             })
                 .catch(e => console.error(e));
         },
         deleteCd() {
-            if(!confirm("Voulez-vous vraiment supprimer cet album ?")){
+            if (!confirm("Voulez-vous vraiment supprimer cet album ?")) {
                 return
             }
 
@@ -186,16 +176,16 @@ export default {
         setBackgroundColor() {
             try {
                 // Récupérer l'image dont vous voulez extraire les couleurs
-                let image = document.getElementById('album-img-popup').children[1];
+                let image = document.getElementById('album-img-popup');
                 image.crossOrigin = "Anonymous"
                 // Créer une nouvelle instance de ColorThief
                 let colorThief = new ColorThief();
                 // Extraire la couleur dominante de l'image
                 let dominantColor = colorThief.getColor(image, 10);
-                // Maintenant, vous avez les valeurs RGB des couleurs dominantes dans dominantColor ou dominantColors.
-                let background = document.getElementsByClassName("item-cu")
-                background[0].style.background = "linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba(" + dominantColor[0] + "," + dominantColor[1] + "," + dominantColor[2] + ",1) 100%)"
-                document.documentElement.style.setProperty('--border-color-cd-popup', 'rgba(' + dominantColor[0] + ',' + dominantColor[1] + ',' + dominantColor[2] + ',1)');
+                // Appliquer la couleur dominante au background
+                const dialogContent = document.querySelector('.dialog-content');
+                dialogContent.style.background = `linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba(${dominantColor[0]},${dominantColor[1]},${dominantColor[2]},1) 100%)`;
+                document.documentElement.style.setProperty('--border-color-cd-popup', `rgba(${dominantColor[0]},${dominantColor[1]},${dominantColor[2]},1)`);
             } catch (error) {
                 console.log(error)
             }
@@ -208,116 +198,195 @@ export default {
 </script>
 
 <style scoped>
-/* Dimensions du popup responsive */
-@media only screen and (max-width: 900px) {
-    .div-item-cu {
-        width: 85vw !important;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .div-item-cu {
-        width: 95vw !important;
-    }
-}
-
-.div-item-cu {
-    width: 80vw;
-    height: 100vh;
-    border-radius: 5px;
+/* Dialog styles */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.item-cu {
+
+.dialog-content {
     background-color: var(--background-color-black-4);
     color: whitesmoke;
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-}
-
-.item-name {
-    width: 40vw !important;
-}
-
-/* Image */
-.display-cd-img-popup {
     width: 80%;
-    height: 100%;
+    height: auto;
+    border-radius: 10px;
+    padding: 20px;
 }
 
-#album-img-popup {
-    border-radius: 5px;
+/* Header styles */
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+        font-weight: bold;
+        text-align: left;
+    }
 }
 
-#album-img-popup:hover {
-    cursor: pointer;
-    transform: scale(1.01);
-}
-
-/* Icon */
-.icon-close {
-    height: 30px;
-    width: 30px;
-}
-
-.icon-close:hover {
-    cursor: pointer;
-    border-radius: 5px;
-    transform: scale(1.06);
-}
-
-.header-row {
+/* Form styles */
+.dialog-form {
     width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.form-row {
-    width: 100%;
+.form-content {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
-/* Formulaire */
-.s-s-form {
-    width: 100% !important;
+.form-left {
+    flex: 7;
+    padding-right: 20px;
 }
 
+.form-right {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Input styles */
 .input-cd-popup-title {
-    /* color: var(--border-color-cd-popup); */
     color: white;
-    margin: 12px 5px 0px 5px;
+    margin: 0;
     padding: 5px 3px;
-    width: 100%;
+    width: 80%;
     font-size: larger;
     font-weight: bold;
+    background: transparent;
+    border: none;
 }
 
 .input-cd-popup-title:focus-within {
     outline: none;
-    /* Supprimer le contour par défaut (utile pour certains navigateurs) */
-
 }
 
 .input-cd-popup {
-    /* color: var(--border-color-cd-popup); */
     color: white;
+    border: none;
     border-bottom: 1px solid var(--border-color-cd-popup);
     margin: 12px 5px;
     padding: 5px 3px;
     width: 80%;
+    background: transparent;
 }
 
 .input-cd-popup:focus-within {
     outline: none;
 }
 
-/* Cacher l'icon calendrier */
+/* Hide calendar icon */
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 }
 
-/* Ajout image */
-.div-input-file {
-    width: 20vw;
+/* Image container */
+.display-cd-img-popup {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    input {
+        width: 80%;
+    }
+}
+
+.album-img {
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+    height: auto;
+}
+
+.album-img:hover {
+    transform: scale(1.01);
+    transition: transform 0.2s ease;
+}
+
+/* Icon styles */
+.icon-close,
+.icon-action {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.icon-close:hover,
+.icon-action:hover {
+    cursor: pointer;
+    transform: scale(1.06);
+    transition: transform 0.2s ease;
+}
+
+/* Action buttons */
+.dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Responsive design */
+@media only screen and (max-width: 900px) {
+    .dialog-container {
+        width: 85vw;
+    }
+
+    .form-content {
+        flex-direction: column;
+    }
+
+    .form-left,
+    .form-right {
+        width: 100%;
+        padding-right: 0;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .dialog-container {
+        width: 95vw;
+    }
+
+    .dialog-content {
+        height: 90vh !important;
+    }
+
+    .dialog-header {
+
+        h2 {
+            font-size: larger !important;
+        }
+    }
+
 }
 </style>

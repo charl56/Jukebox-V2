@@ -282,7 +282,7 @@ export default {
 .icon:hover {
     cursor: pointer;
     transform: scale(1.1);
-    animation: 0.2s;
+    transition: transform 0.2s ease;
 }
 
 

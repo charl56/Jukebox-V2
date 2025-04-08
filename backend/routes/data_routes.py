@@ -1,5 +1,4 @@
 # routes/data_routes.py
-import json
 import os
 from flask import Blueprint, jsonify, request, send_from_directory
 from utils import load_json_file, save_json_file
@@ -37,14 +36,3 @@ def upload_file():
     file.save(os.path.join('./static/albums/', picture_name))
     return jsonify({"success": True}), 200
 
-@data_bp.route('/<filename>', methods=['DELETE'])
-def delete_file(filename):
-    file_path = f'./static/albums/{filename}.jpg'
-    if os.path.exists(file_path):
-        try:
-            os.remove(file_path)
-            return jsonify({"success": True}), 200
-        except Exception as e:
-            return jsonify({"success": False, "error": str(e)}), 500
-
-    return jsonify({"success": False, "error": "File not found"}), 404

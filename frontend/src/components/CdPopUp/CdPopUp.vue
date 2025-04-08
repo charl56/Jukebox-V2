@@ -65,7 +65,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
                                 @click="create()"></v-img>
                         </v-col>
                         <v-col v-if="functionType == 'Edit'" cols="1" class="d-flex justify-end">
-                            <v-img :src="iconDelete" class="icon-close" @click="deleteCd()"></v-img>
+                            <img :src="iconDelete" class="icon-close" @click="deleteCd()">
                         </v-col>
                     </v-row>
                 </v-form>
@@ -211,7 +211,7 @@ export default {
 /* Dimensions du popup responsive */
 @media only screen and (max-width: 900px) {
     .div-item-cu {
-        width: 80vw !important;
+        width: 85vw !important;
     }
 }
 
@@ -222,8 +222,8 @@ export default {
 }
 
 .div-item-cu {
-    width: 60vw;
-    height: 70vh;
+    width: 80vw;
+    height: 100vh;
     border-radius: 5px;
     z-index: 999;
 }
@@ -263,7 +263,6 @@ export default {
 
 .icon-close:hover {
     cursor: pointer;
-    background-color: rgba(107, 107, 107, 0.4);
     border-radius: 5px;
     transform: scale(1.06);
 }

@@ -10,7 +10,7 @@ export function SyncronizeCdWithBack(backendPort) {
         "cd": JSON.parse(localStorage.dataList)
     }
     // Requete vers le back pour save les données du JSON
-    axios.post(backendPort + "syncData", { data: JSON.stringify(data) })
+    axios.post(backendPort + "api/syncData", { data: JSON.stringify(data) })
         .catch((err) => {
             console.log(err)
         })

@@ -159,8 +159,8 @@ export default {
 
 @media (max-width: 800px) {
     .div-cd-wall {
-        width: 16vh;
-        height: 16vh;
+        width: 14vh;
+        height: 14vh;
     }
 }
 

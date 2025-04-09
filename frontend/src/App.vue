@@ -102,9 +102,6 @@ html::-webkit-scrollbar {
 }
 
 html {
-    margin: 0;
-    height: 100%;
-    background-color: var(--background-color-black-1);
     /* Hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;
     /* IE and Edge */
@@ -125,7 +122,7 @@ html {
     left: 0;
 
     height: 100svh;
-    width: 100vw;
+    width: 100%;
     display: flex;
     padding: 10px;
 }

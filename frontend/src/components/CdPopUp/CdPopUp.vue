@@ -11,7 +11,7 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
             <div class="dialog-header">
                 <input v-if="functionType == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
                     class="input-cd-popup-title" v-model="cd.albumName" @input="edit">
-                <h2 v-if="functionType == 'Add'" class="text-h5">Ajouter d'un nouveau cd</h2>
+                <h2 v-if="functionType == 'Add'" class="text-h5">Ajout d'un nouveau cd</h2>
                 <img :src="iconClose" class="icon-close" @click="closeModal()">
             </div>
 
@@ -163,9 +163,9 @@ export default {
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
 
             // Delete image
-            axios.delete(this.$backendPort + this.cdName, {
-            })
+            axios.delete(this.$backendPort + 'api/images', { "data": this.cdName }) 
                 .catch(e => console.error(e));
+
 
             this.closeModal()                               // On ferme le popup
             eventBus.emit('updateLists')                    // On actualise l'app
@@ -378,7 +378,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     .dialog-content {
-        height: 90vh !important;
+        width: 90%;
     }
 
     .dialog-header {

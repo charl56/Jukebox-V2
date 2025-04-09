@@ -14,6 +14,7 @@ import ServerUnreachable from './components/ServerUnreachable/ServerUnreachable.
 import { eventBus } from './plugins/eventBus';
 import axios from 'axios';
 import { SyncronizeCdWithBack } from './plugins/syncronization';
+// import api from './plugins/api.js';
 
 export default {
     name: 'App',
@@ -25,6 +26,8 @@ export default {
     },
     created() {
         // On récupère les données du JSON dans le back 
+        // const response = await api.get('/getData');
+
         axios.get(this.$backendPort + "api/getData")
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)

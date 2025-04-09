@@ -36,3 +36,19 @@ def upload_file():
     file.save(os.path.join('./static/albums/', picture_name))
     return jsonify({"success": True}), 200
 
+
+@data_bp.route('/images', methods=['DELETE'])
+def delete_file():
+    fileName = request.json['data']
+    print(fileName)
+
+    file_path = os.path.join('./static/albums/', fileName)
+    if not os.path.exists(file_path):
+        return jsonify({"success": False, "error": "File not found"}), 404
+    
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+    return jsonify({"success": True}), 200

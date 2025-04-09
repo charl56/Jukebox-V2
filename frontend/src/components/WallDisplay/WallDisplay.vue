@@ -74,7 +74,8 @@ export default {
 
 @media (max-width: 800px) {
     .div-wall-display {
-        height: 50%;
+        height: auto;
+        margin-top: 41vh;
     }
 }
 

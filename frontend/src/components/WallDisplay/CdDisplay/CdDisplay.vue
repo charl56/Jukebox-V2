@@ -153,16 +153,15 @@ export default {
     justify-content: center;
     align-items: center;
 
-    width: 25vh;
-    height: 25vh;
+    width: 30vh;
+    height: 30vh;
 }
 
 @media (max-width: 800px) {
     .div-cd-wall {
-        width: 14vh;
-        height: 14vh;
+        width: 16vh;
+        height: 16vh;
     }
-
 }
 
 

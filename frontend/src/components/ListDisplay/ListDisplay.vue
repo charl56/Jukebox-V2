@@ -11,7 +11,7 @@ const iconOpen = new URL('../../assets/icons/arrow_right.png', import.meta.url).
             <img :src="iconOpen" class="icon icon-open" id="icon-open" @click="openSearchBar()">
 
             <div class="div-btn-add ma-1 pb-2">
-                <img :src="iconClose" class="icon" @click="closeSearchBar()">
+                <img :src="iconClose" class="icon icon-close-search-bar" @click="closeSearchBar()">
                 <img title="Ajouter un cd" :src="iconAdd" class="icon icon-list" @click="addCd()">
             </div>
             <!-- Search bar -->
@@ -170,10 +170,8 @@ export default {
 @media (max-width: 800px) {
     .div-list-display {
         position: absolute;
-        top: 51vh;
-
         width: -webkit-fill-available;
-        height: 100vh;
+        height: 40vh;
     }
 }
 
@@ -231,6 +229,7 @@ export default {
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
+    text-align: right;
 }
 
 .div-cd-list:hover {
@@ -305,5 +304,15 @@ export default {
 .drag-over-me {
     background-color: rgba(255, 223, 186, 0.8);
     /* Couleur de fond douce */
+}
+
+
+
+@media only screen and (max-width: 800px) {
+    .icon-close-search-bar {
+        visibility: hidden;
+    }
+
+
 }
 </style>

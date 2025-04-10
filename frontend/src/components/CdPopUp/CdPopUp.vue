@@ -184,7 +184,8 @@ export default {
                 let dominantColor = colorThief.getColor(image, 10);
                 // Appliquer la couleur dominante au background
                 const dialogContent = document.querySelector('.dialog-content');
-                dialogContent.style.background = `linear-gradient(90deg, rgba(72,72,72,1) 55%, rgba(${dominantColor[0]},${dominantColor[1]},${dominantColor[2]},1) 100%)`;
+                const angle = window.innerWidth > 800 ? 90 : 225;
+                dialogContent.style.background = `linear-gradient(${angle}deg, rgba(72,72,72,1) 55%, rgba(${dominantColor[0]},${dominantColor[1]},${dominantColor[2]},1) 100%)`;
                 document.documentElement.style.setProperty('--border-color-cd-popup', `rgba(${dominantColor[0]},${dominantColor[1]},${dominantColor[2]},1)`);
             } catch (error) {
                 console.log(error)

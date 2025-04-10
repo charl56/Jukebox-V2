@@ -7,9 +7,7 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
         <!-- Img album -->
         <img :src="imageSrc" class="album-class" :id="'album-id_' + cd.position" @error="imgSrcNotFound()"
-            @click.stop="playThisAlbum()">
-        <!-- Btn play  -->
-        <!-- <img :src="iconPlay" class="img-play-btn"> -->
+            @click.stop="playThisAlbum()" @contextmenu.prevent>
     </div>
     <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"

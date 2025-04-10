@@ -173,10 +173,6 @@ export default {
     transition: 0.3s;
 }
 
-.album-class:hover {
-    transform: scale(1.03);
-    cursor: pointer;
-}
 
 .turning-cd {
     animation: turn 10s infinite linear forwards;

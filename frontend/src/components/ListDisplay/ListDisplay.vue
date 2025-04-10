@@ -180,7 +180,7 @@ export default {
 
     height: inherit;
     border-radius: 5px;
-    padding: 0px 10px;
+    padding: 0px 10px 5px 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

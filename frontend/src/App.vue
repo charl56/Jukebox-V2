@@ -12,9 +12,8 @@ import CdPopUp from './components/CdPopUp/CdPopUp.vue';
 import ServerUnreachable from './components/ServerUnreachable/ServerUnreachable.vue';
 
 import { eventBus } from './plugins/eventBus';
-import axios from 'axios';
 import { SyncronizeCdWithBack } from './plugins/syncronization';
-// import api from './plugins/api.js';
+import api from './plugins/api.js';
 
 export default {
     name: 'App',
@@ -26,9 +25,7 @@ export default {
     },
     created() {
         // On récupère les données du JSON dans le back 
-        // const response = await api.get('/getData');
-
-        axios.get(this.$backendPort + "api/getData")
+        api.getApi('/getData')
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)
                 this.dataList = []

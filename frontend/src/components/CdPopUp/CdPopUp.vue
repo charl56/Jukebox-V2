@@ -74,6 +74,7 @@ import { eventBus } from '../../plugins/eventBus';
 import ColorThief from 'colorthief';
 import axios from 'axios';
 import { SyncronizeCdWithBack } from '../../plugins/syncronization';
+import api from '../../plugins/api.js';
 
 export default {
     created() {
@@ -146,12 +147,25 @@ export default {
             formData.append("fileName", albumName);
             formData.append("file", this.selectedFile);
 
-            axios.post(this.$backendPort + "api/upload", formData, {
+            api.postApi('upload', formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             })
-                .catch(e => console.error(e));
+                .then(() => {
+                    console.log("Image uploaded successfully");
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+
+
+            // axios.post(this.$backendPort + "api/upload", formData, {
+            //     headers: {
+            //         "Content-Type": "multipart/form-data"
+            //     }
+            // })
+            //     .catch(e => console.error(e));
         },
         deleteCd() {
             if (!confirm("Voulez-vous vraiment supprimer cet album ?")) {
@@ -163,7 +177,7 @@ export default {
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
 
             // Delete image
-            axios.delete(this.$backendPort + 'api/images', { "data": this.cdName }) 
+            axios.delete(this.$backendPort + 'api/images', { "data": this.cdName })
                 .catch(e => console.error(e));
 
 

@@ -7,7 +7,7 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
         <!-- Img album -->
         <img :src="imageSrc" class="album-class" :id="'album-id_' + cd.position" @error="imgSrcNotFound()"
-            @click.stop="playThisAlbum()" @contextmenu.prevent>
+            @click.stop="playThisAlbum()">
     </div>
     <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
@@ -156,13 +156,14 @@ export default {
         width: 14vh;
         height: 14vh;
     }
+}
 
+@media (min-width: 800px) {
     .album-class:hover {
         transform: scale(1.03);
         cursor: pointer;
     }
 }
-
 
 
 /* Affichage album */

@@ -1,44 +1,59 @@
-// // src/api.js
-// import axios from 'axios';
+// src/api.js
+import axios from 'axios';
 
-// // Configuration de base pour axios
-// const api = axios.create({
-//     baseURL: this.$backend,
-//     timeout: 10000,
-//     headers: {
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json'
-//     }
-// });
+const backend = import.meta.env.VITE_BACK_URL || "http://127.0.0.1:5025/"
 
-// // Intercepteur pour ajouter automatiquement le token d'authentification si disponible
-// api.interceptors.request.use(config => {
-//     const token = localStorage.getItem('auth_token');
-//     if (token) {
-//         config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-// });
+// Configuration de base pour axios
+const api = axios.create({
+    baseURL: backend,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+});
 
-// // Les 4 types de requêtes de base
-// export default {
-//     // Requête GET
-//     get(url, params = {}) {
-//         return api.get(url, { params });
-//     },
 
-//     // Requête POST
-//     post(url, data = {}) {
-//         return api.post(url, data);
-//     },
+// Intercepteur pour ajouter automatiquement le token d'authentification si disponible
+api.interceptors.request.use(config => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
-//     // Requête PUT
-//     put(url, data = {}) {
-//         return api.put(url, data);
-//     },
+// Les 4 types de requêtes de base
+export default {
+    // Requête GET
+    get(url, params = {}) {
+        return api.get(url, { params });
+    },
 
-//     // Requête DELETE
-//     delete(url) {
-//         return api.delete(url);
-//     }
-// };
+    getApi(url, params = {}) {
+        return api.get('api/' + url, { params });
+    },
+
+    // Requête POST
+    post(url, data = {}) {
+        return api.post(url, data);
+    },
+
+    postApi(url, data = {}) {
+        return api.post('api/' + url, data);
+    },
+
+    // Requête PUT
+    put(url, data = {}) {
+        return api.put(url, data);
+    },
+
+    // Requête DELETE
+    delete(url) {
+        return api.delete(url);
+    },
+
+    deleteApi(url) {
+        return api.delete('api/' + url);
+    }
+};

@@ -32,10 +32,10 @@ export default {
 
 @keyframes breathing-rotation {
     0% {
-        transform: scale(1) rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-        transform: scale(1) rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 </style>

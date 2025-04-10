@@ -147,7 +147,7 @@ export default {
                 });
             }
         },
-        orderList(){
+        orderList() {
             this.filteredList.sort((a, b) => {
                 const artistComparison = a.artiste.localeCompare(b.artiste);
                 return artistComparison !== 0 ? artistComparison : a.albumName.localeCompare(b.albumName);
@@ -171,7 +171,7 @@ export default {
     .div-list-display {
         position: absolute;
         width: -webkit-fill-available;
-        height: 40vh;
+        height: 33vh;
     }
 }
 
@@ -236,6 +236,12 @@ export default {
     cursor: pointer;
     background-color: var(--background-color-black-3);
     border-radius: 5px;
+}
+
+@media (max-width: 800px) {
+    .div-cd-list {
+        height: 8vh;
+    }
 }
 
 

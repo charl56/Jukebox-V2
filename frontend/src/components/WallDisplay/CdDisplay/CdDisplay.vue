@@ -156,6 +156,11 @@ export default {
         width: 14vh;
         height: 14vh;
     }
+
+    .album-class:hover {
+        transform: scale(1.03);
+        cursor: pointer;
+    }
 }
 
 

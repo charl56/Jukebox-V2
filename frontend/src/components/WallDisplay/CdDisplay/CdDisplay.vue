@@ -73,18 +73,18 @@ export default {
         },
         playThisAlbum() {
             if (import.meta.env.VITE_CUSTOM_MODE) {
-                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Lancement" })      // Active animation du chargemeent de la pause
-                eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                // eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Lancement" })      // Active animation du chargemeent de la pause
+                // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
                 this.cdIsPlaying ? eventBus.emit("playThisCd", { "cdPos": this.cd.position }) : eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
                 // eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
                 return
             }
 
             else {
-                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
+                // eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
                 axios.post(this.$backendPort + "playThisCd", { "data": this.cd.position })
                     .then(() => {
-                        eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                        // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
                         this.cdIsPlaying ? eventBus.emit("playThisCd", { "cdPos": this.cd.position }) : eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
 
                         // eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
@@ -170,6 +170,16 @@ export default {
     width: 100%;
     height: 100%;
     transition: 0.3s;
+
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Safari */
+    -khtml-user-select: none;    /* Konqueror HTML */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version */
+    touch-action: none;          /* Empêche les actions tactiles par défaut */
+
 }
 
 .album-class:hover {

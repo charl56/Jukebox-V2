@@ -7,8 +7,8 @@ jukebox_bp = Blueprint('jukebox', __name__)
 @jukebox_bp.route('/playThisCd', methods=['POST'])
 def play_this_cd():
     try:
-        cd_position = int(request.json['data'])
-        jukebox.play_cd(cd_position)
+        # cd_position = int(request.json['data'])
+        # jukebox.play_cd(cd_position)
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500

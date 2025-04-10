@@ -37,6 +37,7 @@ export default {
         })
 
         eventBus.on('playThisCd', (data) => {
+            console.log("play")
             if (data.cdPos == this.position && this.cdPlaying == 0) this.startTurningCd()
             else if (data.cdPos == this.position && this.cdPlaying != 0) {
                 eventBus.emit("stopThisCd", { "cdPos": this.cdPlaying })
@@ -73,25 +74,20 @@ export default {
         },
         playThisAlbum() {
             if (import.meta.env.VITE_CUSTOM_MODE) {
-                // eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Lancement" })      // Active animation du chargemeent de la pause
-                // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
-                this.cdIsPlaying ? eventBus.emit("playThisCd", { "cdPos": this.cd.position }) : eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
-                // eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
-                return
+                this.cdIsPlaying ? eventBus.emit("stopThisCd", { "cdPos": this.cd.position }) : eventBus.emit("playThisCd", { "cdPos": this.cd.position })
+                this.cdIsPlaying = !this.cdIsPlaying
             }
 
             else {
                 // eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
-                axios.post(this.$backendPort + "playThisCd", { "data": this.cd.position })
+                axios.post(this.$backendPort + "api/playThisCd", { "data": this.cd.position })
                     .then(() => {
                         // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
-                        this.cdIsPlaying ? eventBus.emit("playThisCd", { "cdPos": this.cd.position }) : eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
-
-                        // eventBus.emit("displayPlayer", { "bool": true, "name": this.cd.albumName, "artist": this.cd.artiste })     // Affichage du lecteur cd 
+                        this.cdIsPlaying ? eventBus.emit("stopThisCd", { "cdPos": this.cd.position }) : eventBus.emit("playThisCd", { "cdPos": this.cd.position })
+                        this.cdIsPlaying = !this.cdIsPlaying
                     })
                     .catch((err) => console.log(err))
             }
-            this.cdIsPlaying = !this.cdIsPlaying
         },
         startTurningCd() {
             document.getElementById('album-id_' + this.position).classList.add('turning-cd')
@@ -170,33 +166,18 @@ export default {
     width: 100%;
     height: 100%;
     transition: 0.3s;
-
-
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none;   /* Safari */
-    -khtml-user-select: none;    /* Konqueror HTML */
-    -moz-user-select: none;      /* Firefox */
-    -ms-user-select: none;       /* Internet Explorer/Edge */
-    user-select: none;           /* Non-prefixed version */
-    touch-action: none;          /* Empêche les actions tactiles par défaut */
-
 }
 
 .album-class:hover {
     transform: scale(1.03);
     cursor: pointer;
-
 }
 
 .turning-cd {
-    animation: turn 10s infinite linear;
+    animation: turn 10s infinite linear forwards;
 }
 
 @keyframes turn {
-    from {
-        transform: rotate(0deg);
-    }
-
     to {
         transform: rotate(360deg);
     }

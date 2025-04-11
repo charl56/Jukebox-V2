@@ -39,7 +39,6 @@ export default {
         })
 
         eventBus.on('playThisCd', (data) => {
-            console.log("play")
             if (data.cdPos == this.position && this.cdPlaying == 0) this.startTurningCd()
             else if (data.cdPos == this.position && this.cdPlaying != 0) {
                 eventBus.emit("stopThisCd", { "cdPos": this.cdPlaying })
@@ -75,17 +74,17 @@ export default {
             this.imageSrc = new URL('@/assets/albums/default.jpg', import.meta.url).href
         },
         playThisAlbum() {
-            if (import.meta.env.VITE_CUSTOM_MODE) {
-                this.cdIsPlaying ? eventBus.emit("stopThisCd", { "cdPos": this.cd.position }) : eventBus.emit("playThisCd", { "cdPos": this.cd.position })
-                this.cdIsPlaying = !this.cdIsPlaying
-            }
-
-            else {
-                // eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
-                api.postApi('playThisCd', { "data": this.cd.position })
+            if(this.cdIsPlaying) {
+                api.postApiJukebox('pause')
                     .then((res) => {
-                          // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
-                        this.cdIsPlaying ? eventBus.emit("stopThisCd", { "cdPos": this.cd.position }) : eventBus.emit("playThisCd", { "cdPos": this.cd.position })
+                        eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
+                    })
+            } else {
+                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
+                api.postApiJukebox(`play/${this.cd.position}`)
+                    .then((res) => {
+                        eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                        eventBus.emit("playThisCd", { "cdPos": this.cd.position })
                         this.cdIsPlaying = !this.cdIsPlaying
                     })
                     .catch((err) => console.log(err))

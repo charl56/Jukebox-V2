@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 8080",
-    "clean:windows": "rmdir /S /Q ..\\backend\\templates || exit 0",
-    "clean:unix": "rm -rf ../backend/templates || true",
-    "clean": "npm run clean:windows || npm run clean:unix",
-    "build:raspberry": "npm run clean && vite build --outDir ../backend/templates",
     "build:server": "cross-env VITE_FRONT_URI=jukebox VITE_BACK_URL=https://charles.ostudio426.com/jukebox/ vite build --mode buildserver --outDir ../backend/templates",
     "build:serverTestLocal": "cross-env VITE_FRONT_URI= VITE_BACK_URL=http://localhost:5025/ vite build --mode buildserver --outDir ../backend/templates",
-    "preview": "vite preview"
+    "build:raspberry": "npm run clean && vite build --outDir ../backend/templates",
+    "preview": "vite preview",
+    "clean": "npm run clean:windows || npm run clean:unix",
+    "clean:windows": "rmdir /S /Q ..\\backend\\templates || exit 0",
+    "clean:unix": "rm -rf ../backend/templates || true"
   },
   "dependencies": {
     "axios": "1.3.5",

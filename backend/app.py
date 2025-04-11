@@ -24,7 +24,7 @@ if not IS_DOCKER:
    from jukebox import jukebox
    from routes.jukebox_routes import jukebox_bp
    
-   app.register_blueprint(jukebox_bp, url_prefix='/api')
+   app.register_blueprint(jukebox_bp, url_prefix='/api/jukebox')
 
    jukebox_thread = threading.Thread(target=jukebox.transition)
    jukebox_thread.daemon = True

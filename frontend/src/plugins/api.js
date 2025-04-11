@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 const backend = import.meta.env.VITE_BACK_URL || "http://127.0.0.1:5025/"
+const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 
 // Configuration de base pour axios
 const api = axios.create({
@@ -26,34 +27,33 @@ api.interceptors.request.use(config => {
 // Les 4 types de requêtes de base
 export default {
     // Requête GET
-    get(url, params = {}) {
-        return api.get(url, { params });
-    },
-
     getApi(url, params = {}) {
         return api.get('api/' + url, { params });
     },
 
     // Requête POST
-    post(url, data = {}) {
-        return api.post(url, data);
-    },
+    postApi(url, data = {}, config) {
+        if (isOnServer) {
+            return Promise.resolve({
+                status: "info",
+                message: "Certaines fonctionnalités sont limitées pour la version de test",
+                data: null
+            });
+        }
 
-    postApi(url, data = {}) {
-        return api.post('api/' + url, data);
-    },
-
-    // Requête PUT
-    put(url, data = {}) {
-        return api.put(url, data);
+        return api.post('api/' + url, data, config);
     },
 
     // Requête DELETE
-    delete(url) {
-        return api.delete(url);
-    },
-
     deleteApi(url) {
+        if (isOnServer) {
+            return Promise.resolve({
+                status: "info",
+                message: "Certaines fonctionnalités sont limitées pour la version de test",
+                data: null
+            });
+        }
+        
         return api.delete('api/' + url);
     }
 };

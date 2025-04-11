@@ -1,11 +1,11 @@
 # routes/data_routes.py
 import os
-from flask import Blueprint, jsonify, request, send_from_directory
+from flask import Blueprint, jsonify, request
 from utils import load_json_file, save_json_file
 
 data_bp = Blueprint('data', __name__)
 
-@data_bp.route('/getData', methods=['GET'])
+@data_bp.route('/cd', methods=['GET'])
 def get_data():
     try:
         data = load_json_file('./static/data.json')
@@ -13,7 +13,7 @@ def get_data():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@data_bp.route('/syncData', methods=['POST'])
+@data_bp.route('/cd', methods=['POST'])
 def sync_data():
     try:
         data = request.json['data']
@@ -22,7 +22,7 @@ def sync_data():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@data_bp.route('/upload', methods=['POST'])
+@data_bp.route('/image', methods=['POST'])
 def upload_file():
     if 'file' not in request.files or 'fileName' not in request.form:
         return jsonify({"success": False, "error": "No file or picture name part"}), 400
@@ -37,12 +37,11 @@ def upload_file():
     return jsonify({"success": True}), 200
 
 
-@data_bp.route('/images', methods=['DELETE'])
-def delete_file():
-    fileName = request.json['data']
-    print(fileName)
+@data_bp.route('/image/<fileName>', methods=['DELETE'])
+def delete_file(fileName):
 
-    file_path = os.path.join('./static/albums/', fileName)
+    file_path = os.path.join('./static/albums/' + fileName + '.jpg')
+
     if not os.path.exists(file_path):
         return jsonify({"success": False, "error": "File not found"}), 404
     

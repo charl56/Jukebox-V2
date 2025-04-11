@@ -3,6 +3,7 @@
     <WallDisplay v-if="dataLoad" :list="wallCds" />
     <ServerUnreachable v-else-if="serverUnreachable"/>
     <CdPopUp />
+    <Toast />
 </template>
 
 <script>
@@ -10,6 +11,7 @@ import WallDisplay from './components/WallDisplay/WallDisplay.vue';
 import ListDisplay from './components/ListDisplay/ListDisplay.vue';
 import CdPopUp from './components/CdPopUp/CdPopUp.vue';
 import ServerUnreachable from './components/ServerUnreachable/ServerUnreachable.vue';
+import Toast from './components/Toast/Toast.vue';
 
 import { eventBus } from './plugins/eventBus';
 import { SyncronizeCdWithBack } from './plugins/syncronization';
@@ -18,6 +20,7 @@ import api from './plugins/api.js';
 export default {
     name: 'App',
     components: {
+        Toast,
         WallDisplay,
         ListDisplay,
         CdPopUp,
@@ -25,7 +28,7 @@ export default {
     },
     created() {
         // On récupère les données du JSON dans le back 
-        api.getApi('/getData')
+        api.getApi('/cd')
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)
                 this.dataList = []
@@ -53,7 +56,7 @@ export default {
             this.wallCds = []              // On vide les listes
             this.listCds = []
             this.setLists()
-            SyncronizeCdWithBack(this.$backendPort)
+            SyncronizeCdWithBack()
         });
     },
     data() {

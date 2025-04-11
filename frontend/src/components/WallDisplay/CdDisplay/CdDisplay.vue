@@ -18,10 +18,12 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
 
 <script>
 import { eventBus } from '../../../plugins/eventBus'
-import axios from 'axios';
 import { drag, drop, allowDrop } from '../../../plugins/dragNdrop';
+import api from '../../../plugins/api';
 
 export default {
+    watch: {
+    },
     name: 'AppCdDisplay',
     props: {
         cd: Object,
@@ -80,9 +82,9 @@ export default {
 
             else {
                 // eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
-                axios.post(this.$backendPort + "api/playThisCd", { "data": this.cd.position })
-                    .then(() => {
-                        // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                api.postApi('playThisCd', { "data": this.cd.position })
+                    .then((res) => {
+                          // eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
                         this.cdIsPlaying ? eventBus.emit("stopThisCd", { "cdPos": this.cd.position }) : eventBus.emit("playThisCd", { "cdPos": this.cd.position })
                         this.cdIsPlaying = !this.cdIsPlaying
                     })

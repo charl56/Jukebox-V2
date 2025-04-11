@@ -201,6 +201,7 @@ export default {
     height: 100%;
     transition: 0.3s;
 
+    /* Disable event press from smarpthone, for pictures */
     user-select: none !important;
     -webkit-user-drag: none;
     pointer-events: none;

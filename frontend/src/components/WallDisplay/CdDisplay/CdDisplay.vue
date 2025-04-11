@@ -22,8 +22,6 @@ import { drag, drop, allowDrop } from '@/plugins/dragNdrop';
 import api from '@/plugins/api';
 
 export default {
-    watch: {
-    },
     name: 'AppCdDisplay',
     props: {
         cd: Object,
@@ -34,6 +32,7 @@ export default {
             this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         } catch (error) {
         }
+     
         eventBus.on('updateDropPlaces', (bool) => {
             this.isDraggingOver = bool
         })
@@ -56,6 +55,10 @@ export default {
             this.stopTurningCd()
             this.cdPlaying = 0
         })
+    },
+    mounted(){
+        // Permet de garder la rotation du cd en cours, si refresh de la page, dragNdrop...
+        if(localStorage.cdPlaying == this.position) this.startTurningCd()
     },
     data() {
         return {
@@ -80,28 +83,39 @@ export default {
         },
         playThisAlbum() {
             eventBus.emit("stopAllCds")
-            if(this.cdIsPlaying) {
+            if (!this.cdIsPlaying || (localStorage.cdPlaying != this.cd.position)) {
+                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
+                api.postApiJukebox(`play/${this.cd.position}`)
+                    .then((res) => {
+                        this.cdIsPlaying = !this.cdIsPlaying
+                        eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
+                        eventBus.emit("playThisCd", { "cdPos": this.cd.position })
+                        // On sauvegarde l'indice du cd qui tourne, pour quand refresh
+                        localStorage.cdPlaying = this.cd.position
+                    })
+                    .catch((err) => console.log(err))
+            } else {
                 api.postApiJukebox('pause')
                     .then((res) => {
                         eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
                         this.cdIsPlaying = !this.cdIsPlaying
+                        localStorage.cdPlaying = 0
                     })
-            } else {
-                eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
-                api.postApiJukebox(`play/${this.cd.position}`)
-                    .then((res) => {
-                        eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
-                        eventBus.emit("playThisCd", { "cdPos": this.cd.position })
-                        this.cdIsPlaying = !this.cdIsPlaying
-                    })
-                    .catch((err) => console.log(err))
             }
         },
         startTurningCd() {
-            document.getElementById('album-id_' + this.position).classList.add('turning-cd')
+            try {
+                document.getElementById('album-id_' + this.position).classList.add('turning-cd')
+            } catch (error) {
+                
+            }
         },
         stopTurningCd() {
-            document.getElementById('album-id_' + this.position).classList.remove('turning-cd')
+            try {
+                document.getElementById('album-id_' + this.position).classList.remove('turning-cd')
+            } catch (error) {
+
+            }
         },
         onAllowDrop(event) {
             eventBus.emit('updateDropPlaces', true)
@@ -131,6 +145,8 @@ export default {
                 // Ensuite on met a jour dans la liste
                 listCds[indexDrop].position = pos
                 listCds[indexInverse].position = posCdDrag
+                // On stop la rotation
+                if(localStorage.cdPlaying == pos || localStorage.cdPlaying == posCdDrag) localStorage.cdPlaying = 0
             }
             // On remet la liste en localStorage, pour pouvoir refresh
             localStorage.dataList = JSON.stringify(listCds, null, 2) // On met a jour la liste
@@ -188,7 +204,9 @@ export default {
 }
 
 @keyframes turn {
-    to {rotate: 1turn}
+    to {
+        rotate: 1turn
+    }
 }
 
 

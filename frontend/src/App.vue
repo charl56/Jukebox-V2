@@ -1,7 +1,7 @@
 <template>
     <ListDisplay v-if="dataLoad" :list="listCds" />
     <WallDisplay v-if="dataLoad" :list="wallCds" />
-    <ServerUnreachable v-else-if="serverUnreachable"/>
+    <ServerUnreachable v-else-if="serverUnreachable" />
     <CdPopUp />
     <Toast />
 </template>
@@ -57,7 +57,9 @@ export default {
             this.listCds = []
             this.setLists()
             SyncronizeCdWithBack()
+
         });
+
     },
     data() {
         return {
@@ -144,6 +146,4 @@ html {
     }
     
 } */
-
-
 </style>

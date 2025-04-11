@@ -230,11 +230,6 @@ export default {
     align-items: flex-end;
     justify-content: center;
     text-align: right;
-
-    /* Disable event press from smarpthone, for text selection problem */
-    user-select: none !important;
-    -webkit-user-drag: none;
-    pointer-events: none;
 }
 
 .div-cd-list:hover {

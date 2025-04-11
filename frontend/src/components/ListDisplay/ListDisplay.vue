@@ -242,14 +242,15 @@ export default {
     .div-cd-list {
         height: 8vh;
     }
+    
+    .disable-text-selection {
+        /* Disable text selection on smarpthone, to drag n drop */
+        user-select: none !important;
+        -webkit-user-drag: none;
+        pointer-events: none;
+    }
 }
 
-.disable-text-selection {
-    /* Disable text selection on smarpthone, to drag n drop */
-    user-select: none !important;
-    -webkit-user-drag: none;
-    pointer-events: none;
-}
 
 
 .div-overflow-list {

@@ -20,7 +20,8 @@ COPY utils.py .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Définir la variable d'environnement pour Docker
-ENV IS_DOCKER=True
+ENV IS_ON_SERVER=True
+ENV IS_ON_RASPBERRY=False
 
 # Exposer le port 5025
 EXPOSE 5025

@@ -7,7 +7,7 @@
     "dev": "vite --port 8080",
     "build:server": "cross-env VITE_FRONT_URI=jukebox VITE_BACK_URL=https://charles.ostudio426.com/jukebox/ vite build --mode buildserver --outDir ../backend/templates",
     "build:serverTestLocal": "cross-env VITE_FRONT_URI= VITE_BACK_URL=http://localhost:5025/ vite build --mode buildserver --outDir ../backend/templates",
-    "build:raspberry": "npm run clean && vite build --outDir ../backend/templates",
+    "build:raspberry": "cross-env VITE_FRONT_URI= VITE_BACK_URL=http://127.0.0.1:5025/ vite build --mode buildraspberry",
     "preview": "vite preview",
     "clean": "npm run clean:windows || npm run clean:unix",
     "clean:windows": "rmdir /S /Q ..\\backend\\templates || exit 0",

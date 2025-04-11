@@ -1,0 +1,63 @@
+# docker build -t jukebox-app .
+# docker run -p 5025:5025 -d jukebox-app
+
+
+# Étape 1 : Build du frontend
+FROM node:lts-alpine AS frontend-builder
+
+# Définir le répertoire de travail pour le frontend
+WORKDIR /app/frontend
+
+# Copier les fichiers du frontend dans l'image
+COPY ../frontend/vite.config.js ./
+COPY ../frontend/package.json ./
+COPY ../frontend/index.html ./
+COPY ../frontend/src ./src
+
+# Installer les dépendances et construire le frontend
+RUN npm install && npm run build:raspberry
+
+
+
+# Étape 2 : Installation des dépendances backend
+FROM python:3.10-slim AS backend-installer
+
+# Définir le répertoire de travail pour le backend
+WORKDIR /app/backend
+
+# Copier les fichiers nécessaires pour le backend
+COPY ../backend/requirements.txt ./
+
+# Installer les dépendances Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+
+
+# Étape 3 : Image finale pour exécuter l'application
+FROM python:3.10-slim AS final
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers construits du frontend depuis l'étape précédente
+COPY --from=frontend-builder /app/frontend/dist ./templates
+
+# Copier les fichiers backend depuis l'étape d'installation des dépendances
+COPY --from=backend-installer /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+
+# Copier les fichiers source du backend dans l'image finale
+COPY ../backend/app.py .
+COPY ../backend/jukebox.py .
+COPY ../backend/utils.py .
+COPY ../backend/routes ./routes
+COPY ../backend/static ./static
+
+ENV IS_ON_RASPBERRY=True
+ENV IS_ON_SERVER=False
+
+# Exposer le port 5025
+EXPOSE 5025
+
+# Commande pour démarrer l'application Flask
+CMD ["python", "app.py"]

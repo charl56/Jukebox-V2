@@ -26,10 +26,10 @@ const iconOpen = new URL('@/assets/icons/arrow_right.png', import.meta.url).href
                 <div v-for="cd in filteredList" class="div-cd-list" @click="openCd(cd)" draggable="true"
                     @dragstart="onDrag(cd)">
                     <div class="my-0 mx-2">
-                        <p class="text-subtitle-1 font-weight-bold">{{ cd.albumName }} </p>
+                        <p class="text-subtitle-1 font-weight-bold disable-text-selection">{{ cd.albumName }} </p>
                     </div>
                     <div class="my-0 mx-2">
-                        <p class="text-subtitle-2">{{ cd.artiste }}</p>
+                        <p class="text-subtitle-2 disable-text-selection">{{ cd.artiste }}</p>
                     </div>
                 </div>
             </div>
@@ -242,6 +242,13 @@ export default {
     .div-cd-list {
         height: 8vh;
     }
+}
+
+.disable-text-selection {
+    /* Disable text selection on smarpthone, to drag n drop */
+    user-select: none !important;
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 

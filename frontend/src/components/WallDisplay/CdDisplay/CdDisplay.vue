@@ -1,13 +1,10 @@
-<script setup>
-const iconPlay = new URL('@/assets/icons/play_white.png', import.meta.url).href
-</script>
 <template>
     <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
         <!-- Img album -->
         <img :src="imageSrc" class="album-class" :id="'album-id_' + cd.position" @error="imgSrcNotFound()"
-            @click.stop="playThisAlbum()" draggable="false">
+            @click.stop="playThisAlbum()">
     </div>
     <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
@@ -200,11 +197,7 @@ export default {
     /* disable download option for smartphones */
     user-select: none !important;
     -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    -ms-user-drag: none;
-
+    pointer-events: none;
 }
 
 

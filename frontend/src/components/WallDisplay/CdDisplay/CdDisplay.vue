@@ -198,6 +198,12 @@ export default {
         transform: scale(1.03);
         cursor: pointer;
     }
+
+    .album-class {
+        /* Disable event press from smarpthone, for pictures */
+        user-select: none !important;
+        -webkit-user-drag: none;
+    }
 }
 
 

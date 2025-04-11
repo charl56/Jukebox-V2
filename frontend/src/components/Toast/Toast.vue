@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { eventBus } from '../../plugins/eventBus.js'
+import { eventBus } from '@/plugins/eventBus.js'
 
 export default {
     name: 'Toast',

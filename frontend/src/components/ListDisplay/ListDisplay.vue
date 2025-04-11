@@ -1,7 +1,7 @@
 <script setup>
-const iconAdd = new URL('../../assets/icons/add_white.png', import.meta.url).href
-const iconClose = new URL('../../assets/icons/close_white.png', import.meta.url).href
-const iconOpen = new URL('../../assets/icons/arrow_right.png', import.meta.url).href
+const iconAdd = new URL('@/assets/icons/add_white.png', import.meta.url).href
+const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).href
+const iconOpen = new URL('@/assets/icons/arrow_right.png', import.meta.url).href
 </script>
 <template>
     <div class="div-list-display" id="div-list-display">
@@ -39,8 +39,8 @@ const iconOpen = new URL('../../assets/icons/arrow_right.png', import.meta.url).
 </template>
 
 <script>
-import { eventBus } from '../../plugins/eventBus';
-import { drag, drop, allowDrop } from '../../plugins/dragNdrop';
+import { eventBus } from '@/plugins/eventBus';
+import { drag, drop, allowDrop } from '@/plugins/dragNdrop';
 
 export default {
     name: 'AppListDisplay',

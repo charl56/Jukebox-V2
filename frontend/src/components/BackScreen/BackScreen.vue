@@ -13,7 +13,7 @@ backScreen(){
 
 <!-- Popup -->
 <script setup>
-const iconClose = new URL('../../../../assets/icons/close_white.png', import.meta.url).href
+const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).href
 </script>
 <template>
     <div v-if="open" class="div-back-screen d-flex justify-center align-item-center" @keyup="keyup" @mousemove="mouseMove" tabindex="0" v-focus :class="{ 'show-mouse': showCloseIcon }">
@@ -30,7 +30,7 @@ const iconClose = new URL('../../../../assets/icons/close_white.png', import.met
 </template>
 
 <script>
-import { eventBus } from '../../../../plugins/eventBus';
+import { eventBus } from '@/plugins/eventBus';
 
 export default {
     directives: {

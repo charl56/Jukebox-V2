@@ -2,4 +2,4 @@ env/
 nodes_modules
 __pycache__/
 
-templates/assets
+backend/templates/assets

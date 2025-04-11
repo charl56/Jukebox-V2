@@ -1,5 +1,5 @@
 <script setup>
-const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url).href
+const iconPlay = new URL('@/assets/icons/play_white.png', import.meta.url).href
 </script>
 <template>
     <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
@@ -17,9 +17,9 @@ const iconPlay = new URL('../../../assets/icons/play_white.png', import.meta.url
 </template>
 
 <script>
-import { eventBus } from '../../../plugins/eventBus'
-import { drag, drop, allowDrop } from '../../../plugins/dragNdrop';
-import api from '../../../plugins/api';
+import { eventBus } from '@/plugins/eventBus'
+import { drag, drop, allowDrop } from '@/plugins/dragNdrop';
+import api from '@/plugins/api';
 
 export default {
     watch: {
@@ -72,7 +72,7 @@ export default {
                 });
         },
         imgSrcNotFound() {
-            this.imageSrc = new URL('../../../assets/albums/default.jpg', import.meta.url).href
+            this.imageSrc = new URL('@/assets/albums/default.jpg', import.meta.url).href
         },
         playThisAlbum() {
             if (import.meta.env.VITE_CUSTOM_MODE) {

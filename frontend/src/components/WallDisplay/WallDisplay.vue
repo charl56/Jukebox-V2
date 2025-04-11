@@ -16,7 +16,7 @@
 
 <script>
 import CdDisplay from './CdDisplay/CdDisplay.vue';
-import { eventBus } from '../../plugins/eventBus';
+import { eventBus } from '@/plugins/eventBus';
 
 export default {
     name: 'AppWallDisplay',

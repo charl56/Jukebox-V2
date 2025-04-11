@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import WallDisplay from './components/WallDisplay/WallDisplay.vue';
-import ListDisplay from './components/ListDisplay/ListDisplay.vue';
-import CdPopUp from './components/CdPopUp/CdPopUp.vue';
-import ServerUnreachable from './components/ServerUnreachable/ServerUnreachable.vue';
-import Toast from './components/Toast/Toast.vue';
+import WallDisplay from '@/components/WallDisplay/WallDisplay.vue';
+import ListDisplay from '@/components/ListDisplay/ListDisplay.vue';
+import CdPopUp from '@/components/CdPopUp/CdPopUp.vue';
+import ServerUnreachable from '@/components/ServerUnreachable/ServerUnreachable.vue';
+import Toast from '@/components/Toast/Toast.vue';
 
 import { eventBus } from './plugins/eventBus';
 import { SyncronizeCdWithBack } from './plugins/syncronization';

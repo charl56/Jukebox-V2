@@ -1,4 +1,3 @@
-// src/api.js
 import axios from 'axios';
 
 const backend = import.meta.env.VITE_BACK_URL || "http://127.0.0.1:5025/"

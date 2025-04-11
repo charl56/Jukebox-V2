@@ -1,7 +1,7 @@
 <script setup>
-const iconSave = new URL('../../assets/icons/save_white.png', import.meta.url).href
-const iconClose = new URL('../../assets/icons/close_white.png', import.meta.url).href
-const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.url).href
+const iconSave = new URL('@/assets/icons/save_white.png', import.meta.url).href
+const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).href
+const iconDelete = new URL('@/assets/icons/delete_white.png', import.meta.url).href
 </script>
 <!-- Popup de création/modification de cd, avec les fonction qui permettent la gestion -->
 <template>
@@ -70,10 +70,10 @@ const iconDelete = new URL('../../assets/icons/delete_white.png', import.meta.ur
 </template>
 
 <script>
-import { eventBus } from '../../plugins/eventBus';
+import { eventBus } from '@/plugins/eventBus';
 import ColorThief from 'colorthief';
-import { SyncronizeCdWithBack } from '../../plugins/syncronization';
-import api from '../../plugins/api.js';
+import { SyncronizeCdWithBack } from '@/plugins/syncronization';
+import api from '@/plugins/api.js';
 
 export default {
     created() {
@@ -195,7 +195,7 @@ export default {
             eventBus.emit('updateLists')                    // On actualise l'app
         },
         imgSrcNotFound() {
-            this.imageSrc = new URL('../../assets/albums/default.jpg', import.meta.url).href
+            this.imageSrc = new URL('@/assets/albums/default.jpg', import.meta.url).href
         },
         setBackgroundColor() {
             try {

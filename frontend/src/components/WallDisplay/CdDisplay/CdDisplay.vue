@@ -221,19 +221,6 @@ export default {
 }
 
 
-.img-play-btn {
-    height: 60px;
-    width: 60px;
-    pointer-events: none;
-    position: absolute;
-    visibility: hidden;
-    transition: 0.2s;
-}
-
-.img-play-btn:hover {
-    visibility: visible;
-}
-
 .no-cd {
     background-color: var(--background-color-black-1);
     border-radius: 50%;

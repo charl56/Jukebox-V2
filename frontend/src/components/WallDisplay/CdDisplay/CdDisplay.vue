@@ -32,7 +32,7 @@ export default {
             this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
         } catch (error) {
         }
-     
+
         eventBus.on('updateDropPlaces', (bool) => {
             this.isDraggingOver = bool
         })
@@ -56,9 +56,9 @@ export default {
             this.cdPlaying = 0
         })
     },
-    mounted(){
+    mounted() {
         // Permet de garder la rotation du cd en cours, si refresh de la page, dragNdrop...
-        if(localStorage.cdPlaying == this.position) this.startTurningCd()
+        if (localStorage.cdPlaying == this.position) this.startTurningCd()
     },
     data() {
         return {
@@ -107,7 +107,7 @@ export default {
             try {
                 document.getElementById('album-id_' + this.position).classList.add('turning-cd')
             } catch (error) {
-                
+
             }
         },
         stopTurningCd() {
@@ -146,7 +146,7 @@ export default {
                 listCds[indexDrop].position = pos
                 listCds[indexInverse].position = posCdDrag
                 // On stop la rotation
-                if(localStorage.cdPlaying == pos || localStorage.cdPlaying == posCdDrag) localStorage.cdPlaying = 0
+                if (localStorage.cdPlaying == pos || localStorage.cdPlaying == posCdDrag) localStorage.cdPlaying = 0
             }
             // On remet la liste en localStorage, pour pouvoir refresh
             localStorage.dataList = JSON.stringify(listCds, null, 2) // On met a jour la liste
@@ -196,6 +196,11 @@ export default {
     width: 100%;
     height: 100%;
     transition: 0.3s;
+
+    /* disable download option for smartphones */
+    user-select: none !important;
+    -webkit-user-drag: none;
+
 }
 
 

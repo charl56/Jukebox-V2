@@ -1,3 +1,6 @@
+<script setup>// Pq quand je l'enleève j'ai une erreur : la fonction drag n'existe plus ? Plus importé ?
+const iconPlay = new URL('@/assets/icons/play_white.png', import.meta.url).href
+</script>
 <template>
     <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
@@ -52,10 +55,14 @@ export default {
             this.stopTurningCd()
             this.cdPlaying = 0
         })
+
     },
     mounted() {
         // Permet de garder la rotation du cd en cours, si refresh de la page, dragNdrop...
         if (localStorage.cdPlaying == this.position) this.startTurningCd()
+
+        const img = document.querySelector(".album-class");
+        img.ondragstart = () => false;
     },
     data() {
         return {
@@ -193,11 +200,6 @@ export default {
     width: 100%;
     height: 100%;
     transition: 0.3s;
-
-    /* disable download option for smartphones */
-    user-select: none !important;
-    -webkit-user-drag: none;
-    pointer-events: none;
 }
 
 

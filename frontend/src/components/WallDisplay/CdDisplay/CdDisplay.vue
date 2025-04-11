@@ -51,6 +51,11 @@ export default {
             if (data.cdPos == this.position) this.stopTurningCd()
             this.cdPlaying = 0
         })
+
+        eventBus.on('stopAllCds', () => {
+            this.stopTurningCd()
+            this.cdPlaying = 0
+        })
     },
     data() {
         return {
@@ -74,10 +79,12 @@ export default {
             this.imageSrc = new URL('@/assets/albums/default.jpg', import.meta.url).href
         },
         playThisAlbum() {
+            eventBus.emit("stopAllCds")
             if(this.cdIsPlaying) {
                 api.postApiJukebox('pause')
                     .then((res) => {
                         eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
+                        this.cdIsPlaying = !this.cdIsPlaying
                     })
             } else {
                 eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
@@ -181,9 +188,7 @@ export default {
 }
 
 @keyframes turn {
-    to {
-        transform: rotate(360deg);
-    }
+    to {rotate: 1turn}
 }
 
 

@@ -55,6 +55,19 @@ export default {
         return api.post('api/jukebox/' + url, data, config);
     },
 
+    // Requête PUT
+    putApi(url, data = {}, config) {
+        if (isOnServer) {
+            return Promise.resolve({
+                status: "info",
+                message: "Certaines fonctionnalités sont limitées pour la version de test",
+                data: null
+            });
+        }
+
+        return api.put('api/' + url, data, config);
+    },
+
     // Requête DELETE
     deleteApi(url) {
         if (isOnServer) {

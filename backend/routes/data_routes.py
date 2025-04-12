@@ -37,6 +37,30 @@ def upload_file():
     return jsonify({"success": True}), 200
 
 
+
+@data_bp.route('/image/<fileName>', methods=['PUT'])
+def rename_file(fileName):
+    newFileName = request.json['newFileName']
+    file_path = os.path.join('./static/albums/' + fileName + '.jpg')
+    new_file_path = os.path.join('./static/albums/' + newFileName + '.jpg')
+    
+    # Vérifier si le fichier source existe
+    if not os.path.exists(file_path):
+        return jsonify({"error": "Le fichier source n'existe pas"}), 404
+    
+    # Vérifier si le nouveau nom de fichier existe déjà
+    if os.path.exists(new_file_path):
+        return jsonify({"error": "Un fichier avec ce nom existe déjà"}), 409
+    
+    try:
+        # Renommer le fichier
+        os.rename(file_path, new_file_path)
+        return jsonify({"success": True, "newPath": new_file_path}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 @data_bp.route('/image/<fileName>', methods=['DELETE'])
 def delete_file(fileName):
 

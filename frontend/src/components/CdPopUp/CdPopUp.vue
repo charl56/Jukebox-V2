@@ -88,6 +88,7 @@ export default {
             }
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
             this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            this.albumNameBeforeEdit = this.cd.albumName;
         });
     },
     data() {
@@ -100,6 +101,7 @@ export default {
                 'position': 0
             },
             albumImage: [],
+            albumNameBeforeEdit: '',
             cdName: '',
             functionType: '',
             imageSrc: '',
@@ -129,6 +131,14 @@ export default {
             let indexCd = this.cdList.findIndex((cd) => cd.albumName == this.cdName) // On recupère la position dans la liste, du cd actuel
             this.cdList[indexCd] = this.cd                         // On modifie l'emplacement du cd avec les nouvelles données
             localStorage.dataList = JSON.stringify(this.cdList, null, 2)  // On met a jour la liste
+
+            if (this.albumNameBeforeEdit != this.cd.albumName) {
+                api.putApi(`image/${this.cdName}`, { newFileName: this.cd.albumName })
+                    .catch((error) => {
+                        console.error("Error updating image name:", error);
+                    });
+            }
+
             SyncronizeCdWithBack()             // Sync des données dans le back
         },
         create() {
@@ -164,9 +174,6 @@ export default {
                 .catch((err) => {
                     console.error(err);
                 });
-
-
-
         },
         deleteCd() {
             if (!confirm("Voulez-vous vraiment supprimer cet album ?")) {

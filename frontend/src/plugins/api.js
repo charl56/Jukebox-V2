@@ -54,6 +54,7 @@ export default {
 
         return api.post('api/jukebox/' + url, data, config);
     },
+    
 
     // Requête PUT
     putApi(url, data = {}, config) {

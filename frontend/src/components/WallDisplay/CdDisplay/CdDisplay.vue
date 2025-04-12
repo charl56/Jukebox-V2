@@ -4,10 +4,10 @@ const iconPlay = new URL('@/assets/icons/play_white.png', import.meta.url).href
 <template>
     <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
-        :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
+        :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }" @click.stop="playThisAlbum()">
         <!-- Img album -->
         <img :src="imageSrc" class="album-class" :id="'album-id_' + cd.position" @error="imgSrcNotFound()"
-            @click.stop="playThisAlbum()">
+           >
     </div>
     <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
@@ -74,6 +74,9 @@ export default {
         }
     },
     methods: {
+        onClickHere(){
+            console.log("ouaielcd")
+        },
         openCdOnWall() {
             eventBus.emit('openCdCu',   // On créer un cd, on envoie un modèle vide pour le remplir
                 {
@@ -188,7 +191,6 @@ export default {
     .album-class {
         /* Disable event press from smarpthone, for pictures */
         user-select: none !important;
-        -webkit-user-drag: none;
         pointer-events: none;
     }
 }
@@ -197,12 +199,6 @@ export default {
     .album-class:hover {
         transform: scale(1.03);
         cursor: pointer;
-    }
-
-    .album-class {
-        /* Disable event press from smarpthone, for pictures */
-        user-select: none !important;
-        -webkit-user-drag: none;
     }
 }
 
@@ -213,6 +209,7 @@ export default {
     width: 100%;
     height: 100%;
     transition: 0.3s;
+    -webkit-user-drag: none;
 }
 
 

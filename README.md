@@ -50,6 +50,10 @@ Pour la préparation de la raspberry, référez-vous au fichier **Jukebox.xlsx**
 1. **Connexion à la Raspberry Pi en SSH**  
    Suivez les instructions dans le fichier `ssh_raspberry.md` pour établir la connexion SSH.
 
+
+Créer un dossier srv/jukebox/static, puis lancer le docker compose 
+
+-- 
 2. **Déploiement du Frontend**
    - En local, exécutez :
      ```bash

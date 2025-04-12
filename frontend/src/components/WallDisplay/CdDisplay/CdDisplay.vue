@@ -59,9 +59,6 @@ export default {
     mounted() {
         // Permet de garder la rotation du cd en cours, si refresh de la page, dragNdrop...
         if (localStorage.cdPlaying == this.position) this.startTurningCd()
-
-        // const img = document.querySelector(".album-class");
-        // img.ondragstart = () => false;
     },
     data() {
         return {

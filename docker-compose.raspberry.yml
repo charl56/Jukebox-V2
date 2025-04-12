@@ -10,4 +10,15 @@ services:
     restart: always
     ports:
       - "127.0.0.1:5025:5025"
+    volumes:
+      - uploads:/app/static
 
+
+volumes:
+  uploads:    # Dossier qui contient les photos, données de l'application en json...
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: C:/426/Raspberry/Jukebox-V2/backend/static
+      # device: srv/jukebox/static

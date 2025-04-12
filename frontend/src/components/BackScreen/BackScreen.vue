@@ -1,22 +1,10 @@
-<!-- Utilisation du composant : 
-
-On l'importe dans le composant d'ou on l'appelle, puis une fonction qui se declenche au click par exemple
-
-backScreen(){
-    let data = {"artist": this.artist}
-    eventBus.emit("backScreen", data)
-} -->
-
-
-
-
-
-<!-- Popup -->
 <script setup>
 const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).href
+const iconOpen = new URL('@/assets/icons/full_screen_white.png', import.meta.url).href
 </script>
 <template>
-    <div v-if="open" class="div-back-screen d-flex justify-center align-item-center" @keyup="keyup" @mousemove="mouseMove" tabindex="0" v-focus :class="{ 'show-mouse': showCloseIcon }">
+    <div v-if="open" class="div-back-screen d-flex justify-center align-item-center" @keyup="keyup"
+        @mousemove="mouseMove" tabindex="0" v-focus :class="{ 'show-mouse': showCloseIcon }">
         <div class="div-image-back pulse-filter">
             <v-img :src="imageBackSrc" cover class="image-back"></v-img>
         </div>
@@ -24,8 +12,11 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
             <div class="trail-box"></div>
         </div>
         <div class="div-close-icon" :class="{ 'show-close-icon': showCloseIcon }">
-            <v-img :src="iconClose" class="img-close-icon" @click="closeModal()"></v-img>
+            <v-img :src="iconClose" class="icon" @click="closeModal()"></v-img>
         </div>
+    </div>
+    <div v-else-if="artiste != ''" class="div-back-btn">
+        <img :src="iconOpen" cover class="icon" @click="backScreen()" />
     </div>
 </template>
 
@@ -41,9 +32,11 @@ export default {
         }
     },
     created() {
+        this.artiste = localStorage.artiste
+
         eventBus.on('backScreen', (data) => {
-            this.open = true
-            this.imageBackSrc = this.$backendPort + "images/artists/" + data.artist.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            this.artiste = data.artiste
+            localStorage.artiste = this.artiste
         });
     },
     data() {
@@ -51,12 +44,14 @@ export default {
             open: false,
             imageBackSrc: '',
             showCloseIcon: true,
+            artiste: '',
         }
     },
-    beforeMount() {                 // Lance la fonction au chargement de la page
-
-    },
     methods: {
+        backScreen() {
+            this.open = true
+            this.imageBackSrc = this.$backendPort + "images/artists/" + localStorage.artiste.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".webp"
+        },
         closeModal() {
             this.open = false
             this.imageBackSrc = ''
@@ -68,6 +63,8 @@ export default {
         },
         mouseMove() {
             this.showCloseIcon = true;
+
+            if (window.innerWidth < 800) return;
 
             // Clear existing timer (if any)
             clearTimeout(this.hideCloseIconTimer);
@@ -91,9 +88,25 @@ export default {
     width: 100vw;
     height: 100vh;
     cursor: none;
-}.show-mouse{
+}
+
+.show-mouse {
     cursor: default;
 }
+
+.div-back-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 99;
+}
+
+@media (max-width: 800px) {
+    .div-back-btn {
+        top: 36vh;
+    }
+}
+
 
 /* Image de fond */
 .div-image-back {
@@ -109,16 +122,6 @@ export default {
     height: 100%;
 }
 
-.album-back {
-    width: 100px;
-    height: 100px;
-    border-radius: 5px;
-}
-
-.album-back:hover {
-    transform: scale(1.1);
-    cursor: none;
-}
 
 /* Filtre de 'gris' */
 .back-filter {
@@ -132,7 +135,6 @@ export default {
 
 .trail-box {
     position: absolute;
-    /* top: 50%; */
     right: 0;
     width: 30px;
     height: 100%;
@@ -166,72 +168,17 @@ export default {
     }
 }
 
-/* Image album */
-.col-image-back {
-    width: 10vw;
-    height: 17vh;
-}
-
-/* Affichage des données */
-.back-display {
-    position: absolute;
-    width: auto;
-    height: auto;
-    bottom: -3vh;
-    left: 20vw;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-}
-
-.col-display-data {
-    width: 100%;
-}
-
-.max-content {
-    width: max-content;
-}
-
-/* Texts */
-.text-album {
-    font-size: 5vh;
-    font-weight: 600;
-}
-
-.text-album:hover {
-    transform: scale(1.1);
-    cursor: none;
-}
-
-.text-artist {
-    font-size: 4vh;
-    font-weight: 600;
-}
-
-.text-artist:hover {
-    transform: scale(1.1);
-    cursor: none;
-}
-
 /* Icon close  */
 .div-close-icon {
-    top: 30px;
-    right: 30px;
+    top: 20px;
+    right: 20px;
     position: absolute;
     z-index: 100;
     opacity: 0;
 }
+
 .show-close-icon {
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
-}
-.img-close-icon {
-    width: 30px;
-    height: 30px;
-}
-
-.img-close-icon:hover {
-    cursor: pointer;
-    transform: scale(1.1);
 }
 </style>

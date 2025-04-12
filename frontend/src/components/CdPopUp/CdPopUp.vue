@@ -12,7 +12,7 @@ const iconDelete = new URL('@/assets/icons/delete_white.png', import.meta.url).h
                 <input v-if="functionType == 'Edit'" type="text" name="albumName" placeholder="Nom de l'album"
                     class="input-cd-popup-title" v-model="cd.albumName" @input="edit">
                 <h2 v-if="functionType == 'Add'" class="text-h5">Ajout d'un nouveau cd</h2>
-                <img :src="iconClose" class="icon-close" @click="closeModal()">
+                <img :src="iconClose" class="icon" @click="closeModal()">
             </div>
 
             <!-- Form -->
@@ -58,10 +58,10 @@ const iconDelete = new URL('@/assets/icons/delete_white.png', import.meta.url).h
                 <!-- Boutons -->
                 <div class="dialog-actions">
                     <div>
-                        <img v-if="functionType == 'Add'" :src="iconSave" class="icon-action" @click="create()">
+                        <img v-if="functionType == 'Add'" :src="iconSave" class="icon" @click="create()">
                     </div>
                     <div v-if="functionType == 'Edit'">
-                        <img :src="iconDelete" class="icon-action" @click="deleteCd()">
+                        <img :src="iconDelete" class="icon" @click="deleteCd()">
                     </div>
                 </div>
             </form>
@@ -87,7 +87,7 @@ export default {
                 document.documentElement.style.setProperty('--border-color-cd-popup', 'white');
             }
             this.cdList = JSON.parse(localStorage.dataList)  // On recupère la liste des cds
-            this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".webp"
             this.albumNameBeforeEdit = this.cd.albumName;
         });
     },
@@ -154,7 +154,7 @@ export default {
         },
         uploadFile() {
             const formData = new FormData();
-            const albumName = this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            const albumName = this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".webp"
             formData.append("fileName", albumName);
             formData.append("file", this.selectedFile);
 
@@ -202,7 +202,7 @@ export default {
             eventBus.emit('updateLists')                    // On actualise l'app
         },
         imgSrcNotFound() {
-            this.imageSrc = new URL('@/assets/albums/default.jpg', import.meta.url).href
+            this.imageSrc = new URL('@/assets/albums/default.webp', import.meta.url).href
         },
         setBackgroundColor() {
             try {
@@ -364,20 +364,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transition: transform 0.2s ease;
 }
 
-/* Icon styles */
-.icon-close,
-.icon-action {
-    height: 30px;
-    width: 30px;
-    cursor: pointer;
-}
-
-.icon-close:hover,
-.icon-action:hover {
-    cursor: pointer;
-    transform: scale(1.06);
-    transition: transform 0.2s ease;
-}
 
 /* Action buttons */
 .dialog-actions {

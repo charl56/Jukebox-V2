@@ -11,17 +11,21 @@
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" />
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" />
         </div>
+        <BackScreen />
     </div>
 </template>
 
 <script>
 import CdDisplay from './CdDisplay/CdDisplay.vue';
+import BackScreen from '@/components/BackScreen/BackScreen.vue';
+
 import { eventBus } from '@/plugins/eventBus';
 
 export default {
     name: 'AppWallDisplay',
     components: {
         CdDisplay,
+        BackScreen
     },
     props: {
         list: Array,

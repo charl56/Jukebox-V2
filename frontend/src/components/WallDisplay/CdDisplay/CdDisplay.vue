@@ -1,5 +1,4 @@
-<script setup>// Pq quand je l'enleève j'ai une erreur : la fonction drag n'existe plus ? Plus importé ?
-const iconPlay = new URL('@/assets/icons/play_white.png', import.meta.url).href
+<script setup>// Quand je l'enlève j'ai une erreur : la fonction drag ne fonctionne plus, elle n'est plus trouvée
 </script>
 <template>
     <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
@@ -28,7 +27,7 @@ export default {
     },
     created() {
         try {
-            this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".jpg"
+            this.imageSrc = this.$backendPort + "images/albums/" + this.cd.albumName.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".webp"
         } catch (error) {
         }
 
@@ -58,7 +57,10 @@ export default {
     },
     mounted() {
         // Permet de garder la rotation du cd en cours, si refresh de la page, dragNdrop...
-        if (localStorage.cdPlaying == this.position) this.startTurningCd()
+        if (localStorage.cdPlaying == this.position) {
+            this.startTurningCd()
+            this.cdIsPlaying = true
+        }
     },
     data() {
         return {
@@ -82,7 +84,7 @@ export default {
                 });
         },
         imgSrcNotFound() {
-            this.imageSrc = new URL('@/assets/albums/default.jpg', import.meta.url).href
+            this.imageSrc = new URL('@/assets/albums/default.webp', import.meta.url).href
         },
         playThisAlbum() {
             eventBus.emit("stopAllCds")
@@ -95,6 +97,7 @@ export default {
                         eventBus.emit("playThisCd", { "cdPos": this.cd.position })
                         // On sauvegarde l'indice du cd qui tourne, pour quand refresh
                         localStorage.cdPlaying = this.cd.position
+                        eventBus.emit('backScreen', { "artiste": this.cd.artiste }) // On met à jour l'artiste sur le backScreen
                     })
                     .catch((err) => console.log(err))
             } else {
@@ -103,6 +106,7 @@ export default {
                         eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
                         this.cdIsPlaying = !this.cdIsPlaying
                         localStorage.cdPlaying = 0
+                        eventBus.emit('backScreen', { "artiste": '' }) // On met à jour l'artiste sur le backScreen
                     })
             }
         },

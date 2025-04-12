@@ -197,11 +197,6 @@ export default {
     justify-content: space-between;
 }
 
-.btn-add:hover {
-    color: var(--background-color-black-2);
-    background-color: white;
-}
-
 /* Search barr */
 .div-search-bar {
     height: fit-content;
@@ -280,11 +275,6 @@ export default {
 }
 
 
-/* Icon */
-.icon {
-    height: 30px;
-    width: 30px;
-}
 
 
 .icon-open {
@@ -292,12 +282,6 @@ export default {
     display: none;
     margin: 5px 10px;
     left: 25vw;
-}
-
-.icon:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
 }
 
 

@@ -41,8 +41,8 @@ def upload_file():
 @data_bp.route('/image/<fileName>', methods=['PUT'])
 def rename_file(fileName):
     newFileName = request.json['newFileName']
-    file_path = os.path.join('./static/albums/' + fileName + '.jpg')
-    new_file_path = os.path.join('./static/albums/' + newFileName + '.jpg')
+    file_path = os.path.join('./static/albums/' + fileName + '.webp')
+    new_file_path = os.path.join('./static/albums/' + newFileName + '.webp')
     
     # Vérifier si le fichier source existe
     if not os.path.exists(file_path):
@@ -64,7 +64,7 @@ def rename_file(fileName):
 @data_bp.route('/image/<fileName>', methods=['DELETE'])
 def delete_file(fileName):
 
-    file_path = os.path.join('./static/albums/' + fileName + '.jpg')
+    file_path = os.path.join('./static/albums/' + fileName + '.webp')
 
     if not os.path.exists(file_path):
         return jsonify({"success": False, "error": "File not found"}), 404

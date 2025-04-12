@@ -24,7 +24,7 @@ export default {
         WallDisplay,
         ListDisplay,
         CdPopUp,
-        ServerUnreachable
+        ServerUnreachable,
     },
     created() {
         // On récupère les données du JSON dans le back 
@@ -140,10 +140,15 @@ html {
     color: #2c3e50;
 }
 
-/* @media (max-width: 800px) {
-    #app{
-        flex-direction: column;
-    }
-    
-} */
+.icon {
+    height: 30px;
+    width: 30px;
+}
+
+.icon:hover {
+    cursor: pointer;
+    transform: scale(1.06);
+    transition: transform 0.2s ease;
+}
+
 </style>

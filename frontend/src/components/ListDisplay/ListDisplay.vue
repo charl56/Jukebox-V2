@@ -121,12 +121,14 @@ export default {
             let listCds = JSON.parse(localStorage.dataList) // On met a jour la liste
             // Puis l'index du cd changé
             let index = listCds.findIndex((cd) => cd.albumName == newCd.albumName)
+            if(listCds[index].position == localStorage.cdPlaying) localStorage.cdPlaying = 0;        // On reset le cd en cours de lecture
             // On le modifie dans la liste
             listCds[index].position = 0
             // On remet la liste en localStorage, pour pouvoir refresh
             localStorage.dataList = JSON.stringify(listCds, null, 2) // On met a jour la liste
             // On actualise la liste dans l'app
             eventBus.emit('updateLists')
+
         },
         onDragEnd() {
             eventBus.emit('updateDropPlaces', false)

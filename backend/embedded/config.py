@@ -18,4 +18,4 @@ DIRZ_MOVE_X = 23      # Motor plug in Z, move Z axe
 SERVO_MOTOR = 18
 
 # Electro magnet GPIO pin connected to the electromagnet
-ELECTRO_MAGNET = 26         
+ELECTRO_MAGNET = 26

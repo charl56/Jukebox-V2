@@ -1,11 +1,13 @@
 <template>
     <div class="div-wall-display">
-        <div v-if="waitCdPause" :class="{ active: waitCdPause }" class="waiting-screen d-flex align-center justify-center">
+        <div v-if="waitingScreen" :class="{ active: waitingScreen }" class="waiting-screen d-flex align-center justify-center">
             <!-- Animation from : https://codepen.io/ashamallah/pen/YzXdpJy -->
             <div class="loading-animation"></div>
         </div>
+
+        <CdPlayer v-if="cdPlayingPosition != 0" :cd="list.find(cd => cd.position == cdPlayingPosition)"/>
         <!-- Affiche grille avec CDs et lecteur -->
-        <div class="col-display" v-for="n in 3">
+        <div v-else class="col-display" v-for="n in 3">
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" />
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" />
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" />
@@ -15,7 +17,8 @@
 </template>
 
 <script>
-import CdDisplay from './CdDisplay/CdDisplay.vue';
+import CdDisplay from './CdDisplay.vue';
+import CdPlayer from './CdPlayer.vue';
 import BackScreen from '@/components/BackScreen/BackScreen.vue';
 
 import { eventBus } from '@/plugins/eventBus';
@@ -24,6 +27,7 @@ export default {
     name: 'AppWallDisplay',
     components: {
         CdDisplay,
+        CdPlayer,
         BackScreen
     },
     props: {
@@ -35,18 +39,24 @@ export default {
         }
     },
     created() {
-        eventBus.on('waitCdPause', (data) => {
+        if (localStorage.cdPlaying != 0) {
+            this.cdPlayingPosition = localStorage.cdPlaying
+        }
+
+        eventBus.on('waitingScreen', (data) => {
             if (data.bool) {
-                this.waitCdPause = data.bool
+                this.waitingScreen = data.bool
             } else {
-                this.waitCdPause = data.bool
+                this.waitingScreen = data.bool
             }
+            this.cdPlayingPosition = localStorage.cdPlaying
         })
     },
     data() {
         return {
             keyUpdate: 0,
-            waitCdPause: false,
+            waitingScreen: false,
+            cdPlayingPosition: 0,
         }
     },
 }
@@ -100,7 +110,7 @@ export default {
 }
 
 .waiting-screen.active {
-    backdrop-filter: blur(20px) saturate(0%) brightness(110%);
+    backdrop-filter: blur(15px);
     transition: backdrop-filter 1s ease;
 }
 

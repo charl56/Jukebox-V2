@@ -1,6 +1,6 @@
 <template>
     <div class="div-wall-display">
-        <div v-if="waitCdPause" class="waiting-screen d-flex align-center justify-center">
+        <div v-if="waitCdPause" :class="{ active: waitCdPause }" class="waiting-screen d-flex align-center justify-center">
             <!-- Animation from : https://codepen.io/ashamallah/pen/YzXdpJy -->
             <div class="loading-animation"></div>
         </div>
@@ -96,7 +96,12 @@ export default {
     height: 100%;
 
     z-index: 999;
-    backdrop-filter: blur(2px) invert(80%);
+    backdrop-filter: blur(0px) saturate(100%) brightness(100%);
+}
+
+.waiting-screen.active {
+    backdrop-filter: blur(20px) saturate(0%) brightness(110%);
+    transition: backdrop-filter 1s ease;
 }
 
 .loading-animation {

@@ -2,7 +2,7 @@
     <div class="div-wall-display">
         <div v-if="waitCdPause" class="waiting-screen d-flex align-center justify-center">
             <div class="d-flex align-center justify-center">
-                <p class="text-subtitle-1">Chargement de {{ albumNameLoad }}</p>
+                <p class="text-subtitle-1">{{ movement }} de {{ albumNameLoad }}</p>
             </div>
         </div>
         <!-- Afficha grille avec CDs et lecteur -->

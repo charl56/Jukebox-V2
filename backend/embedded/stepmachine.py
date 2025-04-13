@@ -15,7 +15,6 @@ class JukeboxStateMachine:
         self.nextCD = None
         # Movements
         self.positionFirst = None
-        self.positionSecond = None
         # Coord of each positions
         self.locationsPos = []
         for _ in range(10):
@@ -35,15 +34,11 @@ class JukeboxStateMachine:
         # Event for state completion
         self.state_complete_event = threading.Event()
 
-        # self.previousCd = None
-        # self.cdInPlayer = False
-
-
 
     def get_state(self):
         with self.lock:
             return self.current_state
-    
+
     def set_state(self, state):
         with self.lock:
             self.current_state = state
@@ -55,92 +50,72 @@ class JukeboxStateMachine:
                 if self.current_state == "Init":
                     print(f"{self.prefix} : Initializing...")
                     self.current_state = "GoToOrigin"
-                
+
                 elif self.current_state == "GoToOrigin":
                     print(f"{self.prefix} : going to origin...")
                     ## Etre sur que la fonction est terminée avant de passer à la suite
                     # moveXToOrigin()
                     # moveYToOrigin()
                     # moveZToAngle(0)
-                    
+
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
                         self.current_state = self.next_state
                         self.next_state = None
                     else:
                         self.current_state = "GoToEnd"
-                
+
                 elif self.current_state == "GoToEnd":
                     print(f"{self.prefix} : going to end...")
                     # self.maxStepX = moveXToEnd()
                     # self.maxStepY = moveYToEnd()
-                    
+
                     self.current_state = "GoToOrigin"
                     self.next_state = "CalculCoords"
-                
+
                 elif self.current_state == "CalculCoords":
                     print(f"{self.prefix} : Calcul of steps for each cd... Step to X : {self.maxStepX} and Step to Y : {self.maxStepY}")
                     self.calculateCoords()
                     print(f"{self.prefix} : Locations : {self.locationsPos}")
                     self.current_state = "Wait"
-                    
+
                 elif self.current_state == "GoToPos":
-                    print(f"{self.prefix} : Go from origin to position {self.positionFirst}, then go to position {self.positionSecond}")
+                    print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
 
                     ## Move X and Y to the first position
                     # moveX(self.positionFirst['x'], "cw")
                     # moveY(self.positionFirst['y'], "cw")
-                    
-                    ## Move forward electromagnet
-                    # moveZToAngle(self.locationZ[0])
-                    
-                    ## Activer aimant
-                    # electro_magnet_on()
-                    
-                    ## Move back electromagnet
-                    # moveZToAngle(self.locationZ[1])
-                    
-                    ## Move X and Y to the second position, from the first position
-                    # moveX(abs(self.positionSecond['x'] - self.positionFirst['x']), "cw" if self.positionSecond['x'] - self.positionFirst['x'] > 0 else "ccw")
-                    # moveY(abs(self.positionSecond['y'] - self.positionFirst['y']), "cw" if self.positionSecond['y'] - self.positionFirst['y'] > 0 else "ccw")
 
                     ## Move forward electromagnet
                     # moveZToAngle(self.locationZ[0])
-                    
-                    ## Activer aimant
-                    # electro_magnet_off()
-                    
-                    ## Move back electromagnet
-                    # moveZToAngle(self.locationZ[1]) 
-                    
-                    
+
                     ## Simulate moving
-                    time.sleep(0.2)                    
-                    
-                    self.next_state = "Wait"
-                    self.current_state = "GoToOrigin"
-                    
+                    time.sleep(0.2)
+
+                    self.current_state = "Wait"
+
                 elif self.current_state == "Play":
+                    ## Start player rotation
+
                     print(f"{self.prefix} : Playing CD")
                     time.sleep(0.2)
                     self.current_state = "Wait"
-                
+
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
                     time.sleep(0.2)
                     self.current_state = "Wait"
-                
+
                 elif self.current_state == "Stop":
                     print(f"{self.prefix} : Stopping CD...")
                     time.sleep(0.2)
-                    self.current_state = "Wait"                
-                
+                    self.current_state = "Wait"
+
                 elif self.current_state == "Wait":
-                    # print(f"{self.prefix} : Waiting for action...")
                     # Instead of sleeping inside the lock, release it and sleep outside
                     self.should_sleep = True
                     self.state_complete_event.set()  # Signal that the state is complete
-                
+
                 elif self.current_state == "Close":
                     print(f"{self.prefix} : Closing the machine...")
                     self.stepMachineActive = False
@@ -154,27 +129,26 @@ class JukeboxStateMachine:
         ## Origin, permet ensuite d'avoir le cd n°1 dans la liste self.locationsPos[1]...
         self.locationsPos[0]['x'] = 00
         self.locationsPos[0]['y'] = 00
-        
+
         self.locationsPos[1]['x'] = 11
         self.locationsPos[1]['y'] = 11
         self.locationsPos[2]['x'] = 22
         self.locationsPos[2]['y'] = 22
         self.locationsPos[3]['x'] = 33
         self.locationsPos[3]['y'] = 33
-        
+
         self.locationsPos[4]['x'] = 44
         self.locationsPos[4]['y'] = 44
         self.locationsPos[5]['x'] = 55
         self.locationsPos[5]['y'] = 55
         self.locationsPos[6]['x'] = 66
         self.locationsPos[6]['y'] = 66
-                        
+
         self.locationsPos[7]['x'] = 77
         self.locationsPos[7]['y'] = 77
         self.locationsPos[8]['x'] = 88
         self.locationsPos[8]['y'] = 88
         self.locationsPos[9]['x'] = 99
         self.locationsPos[9]['y'] = 99
-    
-    
-    
+
+

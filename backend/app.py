@@ -21,14 +21,14 @@ app.register_blueprint(data_bp, url_prefix='/api')
 
 # Only import jukebox and start the thread if not running in Docker
 if not IS_ON_SERVER:
-   # from jukebox import jukebox
+   from jukebox import jukebox
    from routes.jukebox_routes import jukebox_bp
    
    app.register_blueprint(jukebox_bp, url_prefix='/api/jukebox')
 
-   # jukebox_thread = threading.Thread(target=jukebox.transition)
-   # jukebox_thread.daemon = True
-   # jukebox_thread.start()
+   jukebox_thread = threading.Thread(target=jukebox.transition)
+   jukebox_thread.daemon = True
+   jukebox_thread.start()
 
 
 if __name__ == '__main__':

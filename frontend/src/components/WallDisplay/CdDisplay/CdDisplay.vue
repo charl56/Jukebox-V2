@@ -87,27 +87,27 @@ export default {
             this.imageSrc = new URL('@/assets/albums/default.webp', import.meta.url).href
         },
         playThisAlbum() {
-            // eventBus.emit("stopAllCds")
+            eventBus.emit("stopAllCds")
             if (!this.cdIsPlaying || (localStorage.cdPlaying != this.cd.position)) {
                 eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Chargement" })      // Active animation du chargemeent de la pause
                 api.postApiJukebox(`play/${this.cd.position}`)
                     .then((res) => {
+                        this.cdIsPlaying = !this.cdIsPlaying
+                        localStorage.cdPlaying = this.cd.position
                         eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
                         eventBus.emit("playThisCd", { "cdPos": this.cd.position })
                         eventBus.emit('backScreen', { "artiste": this.cd.artiste }) // On met à jour l'artiste sur le backScreen
-                        this.cdIsPlaying = !this.cdIsPlaying
-                        localStorage.cdPlaying = this.cd.position
                     })
                     .catch((err) => console.log(err))
             } else {
                 eventBus.emit("waitCdPause", { "bool": true, "name": this.cd.albumName, "movement": "Pause" })      // Active animation du chargemeent de la pause
                 api.postApiJukebox('pause')
                     .then((res) => {
+                        this.cdIsPlaying = !this.cdIsPlaying
+                        localStorage.cdPlaying = 0
                         eventBus.emit("waitCdPause", { "bool": false, "name": '' })     // Arrête animation de la pause
                         eventBus.emit("stopThisCd", { "cdPos": this.cd.position })
                         eventBus.emit('backScreen', { "artiste": '' }) // On met à jour l'artiste sur le backScreen
-                        this.cdIsPlaying = !this.cdIsPlaying
-                        localStorage.cdPlaying = 0
                     })
             }
         },

@@ -1,11 +1,10 @@
 <template>
     <div class="div-wall-display">
         <div v-if="waitCdPause" class="waiting-screen d-flex align-center justify-center">
-            <div class="d-flex align-center justify-center">
-                <p class="text-subtitle-1">{{ movement }} de {{ albumNameLoad }}</p>
-            </div>
+            <!-- Animation from : https://codepen.io/ashamallah/pen/YzXdpJy -->
+            <div class="loading-animation"></div>
         </div>
-        <!-- Afficha grille avec CDs et lecteur -->
+        <!-- Affiche grille avec CDs et lecteur -->
         <div class="col-display" v-for="n in 3">
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" />
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" />
@@ -39,11 +38,8 @@ export default {
         eventBus.on('waitCdPause', (data) => {
             if (data.bool) {
                 this.waitCdPause = data.bool
-                this.movement = data.movement
-                this.albumNameLoad = data.name
             } else {
                 this.waitCdPause = data.bool
-                this.movement = data.movement
             }
         })
     },
@@ -51,12 +47,7 @@ export default {
         return {
             keyUpdate: 0,
             waitCdPause: false,
-            albumNameLoad: '',
-            movement: '',
         }
-    },
-    methods: {
-
     },
 }
 </script>
@@ -97,13 +88,21 @@ export default {
 
 /* Ecran de chargement */
 .waiting-screen {
-    z-index: 999;
-    border-radius: 5px;
-    backdrop-filter: blur(2px) invert(80%);
-    width: 100%;
-    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 999;
+    backdrop-filter: blur(2px) invert(80%);
+}
+
+.loading-animation {
+    width: 150px;
+    height: 150px;
+
+    background: url('@/assets/gifs/loader.gif') center no-repeat;
 }
 </style>

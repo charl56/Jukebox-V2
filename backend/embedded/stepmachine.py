@@ -90,7 +90,7 @@ class JukeboxStateMachine:
                     # moveZToAngle(self.locationZ[0])
 
                     ## Simulate moving
-                    time.sleep(0.1)
+                    # time.sleep(0.1)
 
                     self.current_state = "Wait"
 
@@ -98,17 +98,17 @@ class JukeboxStateMachine:
                     ## Start player rotation
 
                     print(f"{self.prefix} : Playing CD")
-                    time.sleep(0.1)
+                    # time.sleep(0.1)
                     self.current_state = "Wait"
 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
-                    time.sleep(0.1)
+                    # time.sleep(0.1)
                     self.current_state = "Wait"
 
                 elif self.current_state == "Stop":
                     print(f"{self.prefix} : Stopping CD...")
-                    time.sleep(0.1)
+                    # time.sleep(0.1)
                     self.current_state = "Wait"
 
                 elif self.current_state == "Wait":

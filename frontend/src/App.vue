@@ -27,7 +27,8 @@ export default {
         ServerUnreachable,
     },
     created() {
-        if(localStorage.firstVisit == undefined) {
+        console.log(localStorage.firstVisit)
+        if(localStorage.firstVisit == undefined || !localStorage.firstVisit) {
             localStorage.firstVisit = true
             localStorage.dataList = null
             localStorage.cdPlaying = 0

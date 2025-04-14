@@ -227,7 +227,7 @@ export default {
     align-items: flex-end;
     justify-content: center;
     text-align: right;
-    background-color: var(--background-color-black-3);
+    background-color: var(--background-color-black-2-1);
     margin: 5px;
     border-radius: 5px;
 }
@@ -262,7 +262,7 @@ export default {
 .div-overflow-list::-webkit-scrollbar {
     /* Fond de la barre de scroll */
     width: 10px;
-    background-color: var(--background-color-black-2);
+    background-color: var(--background-color-black-2-1);
     border-radius: 5px;
 }
 

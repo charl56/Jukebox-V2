@@ -99,6 +99,7 @@ export default {
 :root {
     --background-color-black-1: #000000;
     --background-color-black-2: #121212;
+    --background-color-black-2-1: #1D1D1D;
     --background-color-black-3: #282828;
     --background-color-black-4: #484848;
     --border-color-cd-popup: white;

@@ -221,18 +221,21 @@ export default {
 
 /* Liste des cd */
 .div-cd-list {
-    height: 10vh;
+    height: 9vh;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
     text-align: right;
+    background-color: var(--background-color-black-3);
+    margin: 5px;
+    border-radius: 5px;
 }
 
 .div-cd-list:hover {
     cursor: pointer;
-    background-color: var(--background-color-black-3);
-    border-radius: 5px;
+    transform: scale(1.02);
+    transition: transform 0.2s ease-in-out;
 }
 
 @media (max-width: 800px) {
@@ -259,7 +262,7 @@ export default {
 .div-overflow-list::-webkit-scrollbar {
     /* Fond de la barre de scroll */
     width: 10px;
-    background-color: var(--background-color-black-3);
+    background-color: var(--background-color-black-2);
     border-radius: 5px;
 }
 
@@ -270,7 +273,7 @@ export default {
 
 .div-overflow-list::-webkit-scrollbar-thumb {
     /* Bouton de la barre de scroll */
-    background-color: var(--background-color-black-4);
+    background-color: var(--background-color-black-3);
     border-radius: 5px;
 }
 

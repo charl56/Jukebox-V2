@@ -52,7 +52,6 @@ export default {
             api.postApiJukebox('pause')
                 .then((res) => {
                     localStorage.cdPlaying = 0
-                    // this.stop();
                     eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
                     eventBus.emit('backScreen', { "artiste": '' }) // On met à jour l'artiste sur le backScreen
                 })

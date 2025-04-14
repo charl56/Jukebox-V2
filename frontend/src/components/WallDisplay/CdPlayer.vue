@@ -14,8 +14,8 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
             <img v-if="isPlaying" :src="iconPause" class="icon icon-player" @click="pause()" draggable="false">
             <img v-else :src="iconPlay" class="icon icon-player" @click="play()" draggable="false">
             <img :src="iconNext" class="icon icon-player" @click="next()" draggable="false">
+            <!-- <button>Barre niveau de son</button> -->
         </div>
-        <button>Barre niveau de son</button>
         <img :src="iconClose" class="icon icon-close" @click="stop()" draggable="false">
     </div>
     <BackScreen />
@@ -41,13 +41,15 @@ export default {
         } catch (error) {
             // Fermer, et ouvrir le toast avec message erreur
         }
-
+        
+        // Permet de lancer la rotation si le cd était joué
         this.isPlaying = localStorage.isPlaying == undefined ? false : localStorage.isPlaying == 'true' ? true : false
-
-        if (this.isPlaying) this.startTurningCd()
-
+        
+        if (this.isPlaying || localStorage.previousCd != localStorage.cdPlaying) this.startTurningCd()
+        localStorage.previousCd = localStorage.cdPlaying
+        
         eventBus.emit('backScreen', { "artiste": this.cd.artiste }) // On met à jour l'artiste sur le backScreen
-
+        
     },
     data() {
         return {
@@ -78,8 +80,6 @@ export default {
                 .catch((err) => console.log(err))
         },
         pause() {
-            console.log("plause")
-
             api.postApiJukebox('pause')
                 .then((res) => this.stopTurningCd())
                 .catch((err) => console.log(err))
@@ -140,12 +140,14 @@ export default {
 
 @media (max-width: 800px) {
     .div-cd-player {
-        height: 100vh;
-        width: 100vw;
         position: absolute;
-        background-color: var(--background-color-black-2);
         top: 0;
         left: 0;
+
+        height: 100vh;
+        width: 100vw;
+
+        background-color: var(--background-color-black-2);
     }
 
     .album-class_img {
@@ -178,6 +180,8 @@ export default {
 .div-cd-player-icons {
     width: max-content;
     margin: 25px 0px;
+    margin-top: 100px;
+
 }
 
 .icon-player {

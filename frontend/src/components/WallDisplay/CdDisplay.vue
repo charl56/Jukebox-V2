@@ -11,7 +11,6 @@
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
     </div>
-
 </template>
 
 <script>

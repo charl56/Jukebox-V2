@@ -27,10 +27,11 @@ export default {
         ServerUnreachable,
     },
     created() {
-        if(localStorage.firstVisit == undefined || !localStorage.firstVisit) {
-            localStorage.firstVisit = true
+        if(localStorage.firstVisit == undefined) {
+            localStorage.firstVisit = false
             localStorage.dataList = null
             localStorage.cdPlaying = 0
+            localStorage.localStorage = 0
             localStorage.artiste = ''
         }
 

@@ -248,7 +248,7 @@ export default {
 .dialog-content {
     background-color: var(--background-color-black-4);
     color: whitesmoke;
-    width: 80%;
+    width: 60%;
     height: auto;
     border-radius: 10px;
     padding: 20px;

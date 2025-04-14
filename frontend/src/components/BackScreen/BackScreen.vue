@@ -15,9 +15,6 @@ const iconOpen = new URL('@/assets/icons/full_screen_white.png', import.meta.url
             <v-img :src="iconClose" class="icon" @click="closeModal()"></v-img>
         </div>
     </div>
-    <div v-else-if="artiste != ''" class="div-back-btn">
-        <img :src="iconOpen" cover class="icon" @click="backScreen()" />
-    </div>
 </template>
 
 <script>
@@ -38,6 +35,11 @@ export default {
             this.artiste = data.artiste
             localStorage.artiste = this.artiste
         });
+
+        eventBus.on('backScreenOpen', () => {
+            this.open = true
+            this.imageBackSrc = this.$backendPort + "images/artists/" + localStorage.artiste.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".webp"
+        })
     },
     data() {
         return {
@@ -48,10 +50,6 @@ export default {
         }
     },
     methods: {
-        backScreen() {
-            this.open = true
-            this.imageBackSrc = this.$backendPort + "images/artists/" + localStorage.artiste.replaceAll(" ", "_").replaceAll("é", "e").replaceAll("è", "e").toLowerCase() + ".webp"
-        },
         closeModal() {
             this.open = false
             this.imageBackSrc = ''

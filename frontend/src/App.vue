@@ -27,7 +27,6 @@ export default {
         ServerUnreachable,
     },
     created() {
-        console.log(localStorage.firstVisit)
         if(localStorage.firstVisit == undefined || !localStorage.firstVisit) {
             localStorage.firstVisit = true
             localStorage.dataList = null
@@ -157,6 +156,10 @@ html {
     cursor: pointer;
     transform: scale(1.06);
     transition: transform 0.2s ease;
+}
+
+.icon:active{
+    transform: scale(0.9);
 }
 
 </style>

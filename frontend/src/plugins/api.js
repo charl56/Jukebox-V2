@@ -33,11 +33,7 @@ export default {
     // Requête POST
     postApi(url, data = {}, config) {
         if (isOnServer) {
-            return Promise.resolve({
-                status: "info",
-                message: "Certaines fonctionnalités sont limitées pour la version de test",
-                data: null
-            });
+            return handleServerMode();
         }
 
         return api.post('api/' + url, data, config);
@@ -45,25 +41,17 @@ export default {
 
     postApiJukebox(url, data = {}, config) {
         if (isOnServer) {
-            return Promise.resolve({
-                status: "info",
-                message: "Certaines fonctionnalités sont limitées pour la version de test",
-                data: null
-            });
+            return handleServerMode();
         }
 
         return api.post('api/jukebox/' + url, data, config);
     },
-    
+
 
     // Requête PUT
     putApi(url, data = {}, config) {
         if (isOnServer) {
-            return Promise.resolve({
-                status: "info",
-                message: "Certaines fonctionnalités sont limitées pour la version de test",
-                data: null
-            });
+            return handleServerMode();
         }
 
         return api.put('api/' + url, data, config);
@@ -72,13 +60,22 @@ export default {
     // Requête DELETE
     deleteApi(url) {
         if (isOnServer) {
-            return Promise.resolve({
+            return handleServerMode();
+        }
+
+        return api.delete('api/' + url);
+    }
+};
+
+
+function handleServerMode() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve({
                 status: "info",
                 message: "Certaines fonctionnalités sont limitées pour la version de test",
                 data: null
             });
-        }
-        
-        return api.delete('api/' + url);
-    }
-};
+        }, 800);
+    });
+}

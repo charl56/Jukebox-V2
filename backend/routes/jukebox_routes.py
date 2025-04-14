@@ -6,7 +6,7 @@ import time
 jukebox_bp = Blueprint('jukebox', __name__)
 
 @jukebox_bp.route('/play/<cd_position>', methods=['POST'])
-def play_this_cd(cd_position):
+def music_play(cd_position):
     try:
         jukebox.play_cd(int(cd_position))
         return jsonify({"success": True}), 200
@@ -14,7 +14,7 @@ def play_this_cd(cd_position):
         return jsonify({"success": False, "error": str(e)}), 500
 
 @jukebox_bp.route('/pause', methods=['POST'])
-def pause_music():
+def music_pause():
     try:
         jukebox.set_state("Pause")
         return jsonify({"success": True}), 200
@@ -23,7 +23,7 @@ def pause_music():
     
     
 @jukebox_bp.route('/prev', methods=['POST'])
-def prev_music():
+def music_prev():
     try:
         # jukebox.set_state("Prev")
         return jsonify({"success": True}), 200
@@ -31,9 +31,25 @@ def prev_music():
         return jsonify({"success": False, "error": str(e)}), 500
     
 @jukebox_bp.route('/next', methods=['POST'])
-def next_music():
+def music_next():
     try:
         # jukebox.set_state("Next")
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    
+@jukebox_bp.route('/up', methods=['POST'])
+def sound_up():
+    try:
+
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@jukebox_bp.route('/down', methods=['POST'])
+def sound_down():
+    try:
+
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500

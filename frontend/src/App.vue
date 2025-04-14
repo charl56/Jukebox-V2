@@ -27,6 +27,13 @@ export default {
         ServerUnreachable,
     },
     created() {
+        if(localStorage.firstVisit == undefined) {
+            localStorage.firstVisit = true
+            localStorage.dataList = null
+            localStorage.cdPlaying = 0
+            localStorage.artiste = ''
+        }
+
         // On récupère les données du JSON dans le back 
         api.getApi('/cd')
             .then((resp) => {

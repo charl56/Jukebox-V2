@@ -15,6 +15,9 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
             <img v-else :src="iconPlay" class="icon icon-player" @click="play()" draggable="false">
             <img :src="iconNext" class="icon icon-player" @click="next()" draggable="false">
             <!-- <button>Barre niveau de son</button> -->
+            <div class="volume-slider">
+                <input type="range" min="0" max="100" step="1" v-model="soundValue" @change="updateSoundValue" class="slider" />
+            </div>
         </div>
         <img :src="iconClose" class="icon icon-close" @click="stop()" draggable="false">
     </div>
@@ -41,21 +44,24 @@ export default {
         } catch (error) {
             // Fermer, et ouvrir le toast avec message erreur
         }
-        
+
+        this.soundValue = localStorage.soundValue == undefined ? 30 : localStorage.soundValue
+
         // Permet de lancer la rotation si le cd était joué
         this.isPlaying = localStorage.isPlaying == undefined ? false : localStorage.isPlaying == 'true' ? true : false
-        
+
         if (this.isPlaying || localStorage.previousCd != localStorage.cdPlaying) this.startTurningCd()
         localStorage.previousCd = localStorage.cdPlaying
-        
+
         eventBus.emit('backScreen', { "artiste": this.cd.artiste }) // On met à jour l'artiste sur le backScreen
-        
+
     },
     data() {
         return {
             imageSrc: '',
             cdPlaying: 0,
             isPlaying: true,
+            soundValue: 0
         }
     },
     methods: {
@@ -112,6 +118,12 @@ export default {
 
             }
         },
+        updateSoundValue() {
+            localStorage.soundValue = this.soundValue
+            api.postApiJukebox(`sound_update/${this.soundValue}`)
+                // .then((res) => this.startTurningCd())
+                .catch((err) => console.log(err))
+        }
 
     },
 }
@@ -200,5 +212,10 @@ export default {
     position: absolute;
     top: 20px;
     right: 20px;
+}
+
+
+.slider {
+    accent-color: var(--background-color-black-4);
 }
 </style>

@@ -38,18 +38,10 @@ def music_next():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
     
-@jukebox_bp.route('/up', methods=['POST'])
-def sound_up():
+@jukebox_bp.route('/sound_update/<sound_value>', methods=['POST'])
+def sound_update(sound_value):
     try:
-
-        return jsonify({"success": True}), 200
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
-
-@jukebox_bp.route('/down', methods=['POST'])
-def sound_down():
-    try:
-
+        print("Sound value:", sound_value)
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500

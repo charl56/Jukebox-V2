@@ -1,3 +1,9 @@
+<script setup>
+const iconSettings = new URL('@/assets/icons/settings_white.png', import.meta.url).href
+const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
+
+</script>
+
 <template>
     <div class="div-wall-display">
         <div v-if="waitingScreen" :class="{ active: waitingScreen }" class="waiting-screen d-flex align-center justify-center">
@@ -12,12 +18,18 @@
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" />
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" />
         </div>
+
+        <div v-if="!isOnServer" class="settings">
+            <img :src="iconSettings" class="icon" @click="openSettings()" draggable="false">
+            <Settings />
+        </div>
     </div>
 </template>
 
 <script>
 import CdDisplay from './CdDisplay.vue';
 import CdPlayer from './CdPlayer.vue';
+import Settings from './Settings.vue';
 
 import { eventBus } from '@/plugins/eventBus';
 
@@ -26,6 +38,7 @@ export default {
     components: {
         CdDisplay,
         CdPlayer,
+        Settings
     },
     props: {
         list: Array,
@@ -56,6 +69,11 @@ export default {
             cdPlayingPosition: 0,
         }
     },
+    methods: {
+        openSettings(){
+            eventBus.emit('openSettings')
+        }
+    }
 }
 </script>
 
@@ -72,6 +90,8 @@ export default {
     background-color: var(--background-color-black-2);
     border-radius: 5px;
     padding: 10px;
+
+    z-index: 1;
 }
 
 @media (max-width: 800px) {
@@ -116,5 +136,13 @@ export default {
     height: 150px;
 
     background: url('@/assets/gifs/loader.gif') center no-repeat;
+}
+
+.settings{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    z-index: 1;
 }
 </style>

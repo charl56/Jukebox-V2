@@ -7,7 +7,7 @@ import time
 
 class JukeboxStateMachine:
     def __init__(self):
-        self.states = ["Init", "GoToOrigin", "GoToEnd", "GoToPos", "Wait", "CalculCoords", "Close", "Play", "Pause", "Stop"]
+        self.states = ["Init", "GoToOrigin", "GoToEnd", "GoToPos", "Wait", "CalculCoords", "Close", "Play", "Pause", "Prev", "Next"]
         self.current_state = "Init"
         self.next_state = None
         self.maxStepX = 0
@@ -17,13 +17,13 @@ class JukeboxStateMachine:
         self.positionFirst = None
         # Coord of each positions
         self.locationsPos = []
-        for _ in range(10):
+        for _ in range(9):
             self.locationsPos.append({'x': 0, 'y': 0})
         # Angle of Z, with servo motor
         self.locationZ = [0, 180]
         # Player actions
-        self.playerActions = ["play", "pause", "stop"]
-        self.actualPlayerAction = "stop"
+        self.playerActions = ["play", "pause"]
+        self.actualPlayerAction = ""
         self.stepMachineActive = True
         # Thread
         self.lock = threading.Lock()
@@ -105,12 +105,17 @@ class JukeboxStateMachine:
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
                     # time.sleep(0.1)
                     self.current_state = "Wait"
-
-                elif self.current_state == "Stop":
-                    print(f"{self.prefix} : Stopping CD...")
+                    
+                elif self.current_state == "Prev":
+                    print(f"{self.prefix} Prev sound...")
                     # time.sleep(0.1)
                     self.current_state = "Wait"
 
+                elif self.current_state == "Next":
+                    print(f"{self.prefix} Next sound...")
+                    # time.sleep(0.1)
+                    self.current_state = "Wait"
+                    
                 elif self.current_state == "Wait":
                     # Instead of sleeping inside the lock, release it and sleep outside
                     self.should_sleep = True
@@ -129,26 +134,24 @@ class JukeboxStateMachine:
         ## Origin, permet ensuite d'avoir le cd n°1 dans la liste self.locationsPos[1]...
         self.locationsPos[0]['x'] = 00
         self.locationsPos[0]['y'] = 00
-
         self.locationsPos[1]['x'] = 11
         self.locationsPos[1]['y'] = 11
         self.locationsPos[2]['x'] = 22
         self.locationsPos[2]['y'] = 22
+        
         self.locationsPos[3]['x'] = 33
         self.locationsPos[3]['y'] = 33
-
         self.locationsPos[4]['x'] = 44
         self.locationsPos[4]['y'] = 44
         self.locationsPos[5]['x'] = 55
         self.locationsPos[5]['y'] = 55
+
         self.locationsPos[6]['x'] = 66
         self.locationsPos[6]['y'] = 66
-
         self.locationsPos[7]['x'] = 77
         self.locationsPos[7]['y'] = 77
         self.locationsPos[8]['x'] = 88
         self.locationsPos[8]['y'] = 88
-        self.locationsPos[9]['x'] = 99
-        self.locationsPos[9]['y'] = 99
+ 
 
 

@@ -62,16 +62,15 @@ jobs:
         run: |
           echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       
-      - name: Build frontend
-        run: |
-          cd frontend
-          npm install
-          npm run build:raspberry
+      # - name: Build frontend
+      #   run: |
+      #     cd frontend
+      #     npm install
+      #     npm run build:raspberry
       
       - name: Build and Publish
         run: |
-          cd docker
-          docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          docker build -f docker/Dockerfile.raspberry -t jukebox-app .
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       
       - name: Make image public

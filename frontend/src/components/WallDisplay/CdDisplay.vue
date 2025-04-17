@@ -52,7 +52,7 @@ export default {
             api.postApiJukebox(`play/${this.cd.position}`)
                 .then((res) => {
                     localStorage.cdPlaying = this.cd.position
-                    eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
+                    // eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
                 })
                 .catch((err) => console.log(err))
         },
@@ -142,17 +142,6 @@ export default {
     height: 100%;
     transition: 0.3s;
     -webkit-user-drag: none;
-}
-
-
-.turning-cd {
-    animation: turn 10s infinite linear forwards;
-}
-
-@keyframes turn {
-    to {
-        rotate: 1turn
-    }
 }
 
 

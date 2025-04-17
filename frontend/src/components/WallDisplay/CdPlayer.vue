@@ -16,7 +16,8 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
             <img :src="iconNext" class="icon icon-player" @click="next()" draggable="false">
             <!-- <button>Barre niveau de son</button> -->
             <div class="volume-slider">
-                <input type="range" min="0" max="100" step="1" v-model="soundValue" @change="updateSoundValue" class="slider" />
+                <input type="range" min="0" max="100" step="1" v-model="soundValue" @change="updateSoundValue"
+                    class="slider" />
             </div>
         </div>
         <img :src="iconClose" class="icon icon-close" @click="stop()" draggable="false">
@@ -103,7 +104,7 @@ export default {
             localStorage.isPlaying = true
 
             try {
-                document.getElementById('album_played').classList.add('turning-cd')
+                document.getElementById('album_played').classList.add('zooming-cd')
             } catch (error) {
 
             }
@@ -113,7 +114,7 @@ export default {
             localStorage.isPlaying = false
 
             try {
-                document.getElementById('album_played').classList.remove('turning-cd')
+                document.getElementById('album_played').classList.remove('zooming-cd')
             } catch (error) {
 
             }
@@ -148,7 +149,8 @@ export default {
     width: 50vh;
     height: 50vh;
 
-    border-radius: 50%;
+    /* border-radius: 50%; */
+    border-radius: 5%;
     transition: 0.3s;
 }
 
@@ -173,6 +175,7 @@ export default {
 
 @media (min-width: 800px) {
     .album-class_img:hover {
+        animation: none;    /* Permet a la transformation au hover de se faire */
         transform: scale(1.03);
         cursor: pointer;
     }
@@ -181,15 +184,22 @@ export default {
 
 
 
-.turning-cd {
-    animation: turn 12s infinite linear forwards;
+.zooming-cd {
+    animation: zoomInOut 3s ease-in-out infinite;
 }
 
-@keyframes turn {
-    to {
-        rotate: 1turn
+@keyframes zoomInOut {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.02);
+    }
+    50% {
+        transform: scale(1);
     }
 }
+
 
 .div-cd-player-icons {
     width: max-content;

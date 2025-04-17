@@ -6,12 +6,13 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 
 <template>
     <div class="div-wall-display">
-        <div v-if="waitingScreen" :class="{ active: waitingScreen }" class="waiting-screen d-flex align-center justify-center">
+        <div v-if="waitingScreen" :class="{ active: waitingScreen }"
+            class="waiting-screen d-flex align-center justify-center">
             <!-- Animation from : https://codepen.io/ashamallah/pen/YzXdpJy -->
             <div class="loading-animation"></div>
         </div>
 
-        <CdPlayer v-if="cdPlayingPosition != 0" :cd="list.find(cd => cd.position == cdPlayingPosition)"/>
+        <CdPlayer v-if="cdPlayingPosition != 0" :cd="list.find(cd => cd.position == cdPlayingPosition)" />
         <!-- Affiche grille avec CDs et lecteur -->
         <div v-else class="col-display" v-for="n in 3">
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" />
@@ -19,10 +20,11 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
             <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" />
         </div>
 
-        <div v-if="!isOnServer" class="settings">
+        <div v-if="!isOnServer && cdPlayingPosition == 0" class="settings">
             <img :src="iconSettings" class="icon" @click="openSettings()" draggable="false">
             <Settings />
         </div>
+
     </div>
 </template>
 
@@ -70,7 +72,7 @@ export default {
         }
     },
     methods: {
-        openSettings(){
+        openSettings() {
             eventBus.emit('openSettings')
         }
     }
@@ -91,7 +93,7 @@ export default {
     border-radius: 5px;
     padding: 10px;
 
-    z-index: 1;
+    z-index: 0;
 }
 
 @media (max-width: 800px) {
@@ -138,11 +140,10 @@ export default {
     background: url('@/assets/gifs/loader.gif') center no-repeat;
 }
 
-.settings{
+.settings {
     position: absolute;
     top: 20px;
     right: 20px;
-
     z-index: 1;
 }
 </style>

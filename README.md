@@ -1,5 +1,26 @@
 # Projet Jukebox
 
+
+
+Lancer le projet en local
+explication de la pipeline pour déployer
+preparer la raspberry
+lancer depuis la raspberry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Technologies
 
 - **Python**: 3.11.1
@@ -40,6 +61,10 @@
 - **Accès à l’application** : [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
 ---
+
+
+
+
 
 ## Démarrage manuel sur la Raspberry Pi
 

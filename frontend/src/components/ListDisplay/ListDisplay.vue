@@ -5,10 +5,12 @@ const iconOpen = new URL('@/assets/icons/arrow_right.png', import.meta.url).href
 </script>
 <template>
     <div class="div-list-display" id="div-list-display">
+        <div v-if="listClose" class="div-icon-open">
+            <img :src="iconOpen" class="icon" @click="openSearchBar()">
+        </div>
 
         <!-- Btn ajout cd -->
         <div class="div-list-display__container">
-            <img :src="iconOpen" class="icon icon-open" id="icon-open" @click="openSearchBar()">
 
             <div class="div-btn-add ma-1 pb-2">
                 <img :src="iconClose" class="icon icon-close-search-bar" @click="closeSearchBar()">
@@ -68,7 +70,8 @@ export default {
             search: '',
             filteredList: [],
             isDraggingOver: false,
-            isDraggingOverMine: false
+            isDraggingOverMine: false,
+            listClose: false
         }
     },
     methods: {
@@ -85,14 +88,13 @@ export default {
             document.getElementById("div-list-display").style.left = "-25vw";
             document.getElementById("div-list-display").style.width = "0vw";
             document.getElementById("div-list-display").style.marginRight = "0";
-            document.getElementById("icon-open").style.display = "block";
+            this.listClose = true;
         },
         openSearchBar() {
             document.getElementById("div-list-display").style.left = "0vw";
             document.getElementById("div-list-display").style.width = "25vw";
             document.getElementById("div-list-display").style.marginRight = "10px";
-            document.getElementById("icon-open").style.display = "none";
-
+            this.listClose = false;
         },
         // Ouvrir un CD
         openCd(cd) {
@@ -121,7 +123,7 @@ export default {
             let listCds = JSON.parse(localStorage.dataList) // On met a jour la liste
             // Puis l'index du cd changé
             let index = listCds.findIndex((cd) => cd.albumName == newCd.albumName)
-            if(listCds[index].position == localStorage.cdPlaying) localStorage.cdPlaying = 0;        // On reset le cd en cours de lecture
+            if (listCds[index].position == localStorage.cdPlaying) localStorage.cdPlaying = 0;        // On reset le cd en cours de lecture
             // On le modifie dans la liste
             listCds[index].position = 0
             // On remet la liste en localStorage, pour pouvoir refresh
@@ -242,7 +244,7 @@ export default {
     .div-cd-list {
         height: 8vh;
     }
-    
+
     .disable-text-selection {
         /* Disable text selection on smarpthone, to drag n drop */
         user-select: none !important;
@@ -279,13 +281,13 @@ export default {
 
 
 
-
-.icon-open {
+.div-icon-open {
     position: absolute;
-    display: none;
-    margin: 5px 10px;
+    top: 20px;
     left: 25vw;
+    z-index: 1;
 }
+
 
 
 /* Drag and drop effects */

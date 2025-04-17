@@ -70,7 +70,7 @@ jobs:
       
       - name: Build and Publish
         run: |
-          cd backend
+          cd docker
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       

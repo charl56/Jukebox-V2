@@ -62,25 +62,8 @@ jobs:
         run: |
           echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       
-      # - name: Build frontend
-      #   run: |
-      #     cd frontend
-      #     npm install
-      #     npm run build:raspberry
-      
       - name: Build and Publish
         run: |
           docker build -f docker/Dockerfile.raspberry -t ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest .
           docker push ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest
-      # - name: Make image public
-      #   uses: actions/github-script@v6
-        # with:
-        #   github-token: ${{ secrets.PAT }}
-        #   script: |
-        #     const package = 'jukebox-public';
-        #     await github.rest.packages.setPackageVisibilityForOrg({
-        #       package_type: 'container',
-        #       package_name: package,
-        #       org: context.repo.owner,
-        #       visibility: 'public'
-        #     });
+

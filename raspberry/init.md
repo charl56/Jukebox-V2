@@ -20,11 +20,11 @@ Prepare the image on the USB key and boot the Raspberry Pi.
 ---
 
 ## 3. Get the Docker image and start the container  
-📄 [Detailed steps](./init_raspberry/3_get_and_run_docker_container.md)
+📄 [Detailed steps](./init_raspberry/3_get_and_run_docker_image.md.md)
 
 ---
 
-## 4. Switch from Wi-Fi mode to Access Point (AP) mode  
+## 4. Connection to Raspberry, to access application
 📄 *(To be completed)*
 
 ---

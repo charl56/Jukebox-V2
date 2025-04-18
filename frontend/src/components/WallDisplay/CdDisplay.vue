@@ -52,7 +52,7 @@ export default {
             api.postApiJukebox(`play/${this.cd.position}`)
                 .then((res) => {
                     localStorage.cdPlaying = this.cd.position
-                    // eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
+                    eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
                 })
                 .catch((err) => console.log(err))
         },

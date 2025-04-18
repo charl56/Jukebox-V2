@@ -8,6 +8,7 @@ preparer la raspberry
 lancer depuis la raspberry
 
 
+build jukebox-pulibc, il faut chjanger depuis github
 
 
 

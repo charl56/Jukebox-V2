@@ -72,8 +72,8 @@ jobs:
         run: |
           docker build -f docker/Dockerfile.raspberry -t ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest .
           docker push ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest
-      - name: Make image public
-        uses: actions/github-script@v6
+      # - name: Make image public
+      #   uses: actions/github-script@v6
         # with:
         #   github-token: ${{ secrets.PAT }}
         #   script: |

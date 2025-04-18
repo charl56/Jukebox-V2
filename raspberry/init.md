@@ -2,5 +2,4 @@ eteindre : poweroff
 
 
 
-
-Mod AP
+4 : passer de mode wifi a AP

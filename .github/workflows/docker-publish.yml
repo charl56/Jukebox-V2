@@ -74,13 +74,13 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest
       - name: Make image public
         uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PAT }}
-          script: |
-            const package = 'jukebox-public';
-            await github.rest.packages.setPackageVisibilityForOrg({
-              package_type: 'container',
-              package_name: package,
-              org: context.repo.owner,
-              visibility: 'public'
-            });
+        # with:
+        #   github-token: ${{ secrets.PAT }}
+        #   script: |
+        #     const package = 'jukebox-public';
+        #     await github.rest.packages.setPackageVisibilityForOrg({
+        #       package_type: 'container',
+        #       package_name: package,
+        #       org: context.repo.owner,
+        #       visibility: 'public'
+        #     });

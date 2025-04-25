@@ -6,7 +6,7 @@ services:
     container_name: jukebox
     build:
       context: .      # Lieu du dossier : même dossier que docker-compose
-      dockerfile: ./docker/Dockerfile.raspberry  # Lieu du dockerfile, par rapport au context
+      dockerfile: ./raspberry/Dockerfile.raspberry  # Lieu du dockerfile, par rapport au context
     restart: always
     ports:
       - "127.0.0.1:5025:5025"

@@ -8,4 +8,6 @@ Go to **Network Options > Wi-Fi** to enter the SSID and password.
 
 Or go to **Advanced Options > Interface Options** to enable Wi-Fi.
 
+Then, connect to a wifi network
+
 Then exit and save the configuration.

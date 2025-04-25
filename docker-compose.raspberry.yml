@@ -21,4 +21,4 @@ volumes:
       o: bind
       type: none
       # device: C:/426/Raspberry/Jukebox-V2/backend/static
-      device: srv/jukebox/static
+      device: home/user/jukebox/data

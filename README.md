@@ -77,7 +77,7 @@ Pour la préparation de la raspberry, référez-vous au fichier **Jukebox.xlsx**
    Suivez les instructions dans le fichier `ssh_raspberry.md` pour établir la connexion SSH.
 
 
-Créer un dossier srv/jukebox/static, puis lancer le docker compose 
+Créer un dossier home/user/jukebox/data, puis lancer le docker compose 
 
 -- 
 2. **Déploiement du Frontend**

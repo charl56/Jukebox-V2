@@ -248,8 +248,19 @@ export default {
     .disable-text-selection {
         /* Disable text selection on smarpthone, to drag n drop */
         user-select: none !important;
+        -webkit-user-select: none !important;
+        -webkit-touch-callout: none !important;
+
         -webkit-user-drag: none;
-        pointer-events: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+        touch-action: pan-y;
+        /* Permet le scroll vertical mais limite d'autres gestes */
+        pointer-events: auto;
+        /* Modifiez à auto pour que les événements restent captés */
+
     }
 }
 

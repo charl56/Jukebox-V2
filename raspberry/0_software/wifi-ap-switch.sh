@@ -2,19 +2,24 @@
 # Script inspiré des solutions GitHub [1][2] et StackExchange [3]
 
 # Configuration
-SSID="RPi-AP"
-PASSWORD="securepassword123"
+SSID="Jukebox"
+PASSWORD="12345678"
 INTERFACE="wlan0"
 SUBNET="192.168.50.1/24"
 
 AP_MODE() {
     # Arrêt des services réseau
-    systemctl stop dhcpcd || true
+    systemctl stop dhcpcd
+    systemctl disable dhcpcd
+
     ifconfig $INTERFACE down
 
     # Configuration IP statique
     ip addr add $SUBNET dev $INTERFACE
     ifconfig $INTERFACE up
+
+    systemctl enable hostapd
+    systemctl enable dnsmasq
 
     # Démarrer hostapd et dnsmasq
     systemctl start hostapd
@@ -26,9 +31,15 @@ CLIENT_MODE() {
     systemctl stop hostapd
     systemctl stop dnsmasq
 
+    systemctl disable hostapd
+    systemctl disable dnsmasq
+
     # Réinitialisation interface
     ip addr flush dev $INTERFACE
     ifconfig $INTERFACE down
+
+    systemctl enable dhcpcd
+
     systemctl restart dhcpcd
 }
 

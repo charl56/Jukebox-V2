@@ -3,7 +3,10 @@
 Raspberry Pi configuration to use the jukebox: boot, Docker installation, and container startup.
 
 ## 0. Boot from USB Key with Raspberry Pi OS Lite (64-bit)  
-If install os with image in folder XXX, on your sd card, don't need to do step 1 and 2
+If install os with image in folder XXX, on your sd card, go to step 4
+
+
+Vraiment melc prend l'image deja faite ce sera plus simple
 
 Else use this raspberr os image https://downloads.raspberrypi.com/raspios_lite_arm64/images/
 

@@ -36,7 +36,7 @@ export default {
         }
 
         // On récupère les données du JSON dans le back 
-        api.getApi('/cd')
+        api.getApi('cd')
             .then((resp) => {
                 let Data = JSON.parse(resp.data.data)
                 this.dataList = []

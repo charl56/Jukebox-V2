@@ -9,8 +9,7 @@ SUBNET="192.168.50.1/24"
 
 AP_MODE() {
     # Arrêt des services réseau
-    systemctl stop dhcpcd
-    systemctl disable dhcpcd
+    systemctl stop dhcpcd wpa_supplicant
 
     ifconfig $INTERFACE down
 
@@ -18,29 +17,25 @@ AP_MODE() {
     ip addr add $SUBNET dev $INTERFACE
     ifconfig $INTERFACE up
 
-    systemctl enable hostapd
-    systemctl enable dnsmasq
-
     # Démarrer hostapd et dnsmasq
-    systemctl start hostapd
-    systemctl start dnsmasq
+    systemctl start hostapd dnsmasq
+
+    echo "Mode AP activé"
 }
 
 CLIENT_MODE() {
     # Arrêt des services AP
-    systemctl stop hostapd
-    systemctl stop dnsmasq
+    systemctl stop hostapd dnsmasq
 
-    systemctl disable hostapd
-    systemctl disable dnsmasq
-
-    # Réinitialisation interface
     ip addr flush dev $INTERFACE
+
     ifconfig $INTERFACE down
+    ifconfig $INTERFACE up
+    systemctl restart wpa_supplicant dhcpcd
 
-    systemctl enable dhcpcd
+    wpa_supplicant -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf -B
 
-    systemctl restart dhcpcd
+    echo "Mode client activé"
 }
 
 case "$1" in

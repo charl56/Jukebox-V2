@@ -1,11 +1,6 @@
 Une fois la carte en Mode AP, voius pouvez vous y connecter pour accéder à lapplication
 
 
-
-
-
-
-
 On se connecte au reseau de la raspb erry : 
 
 ssid : Jukebox

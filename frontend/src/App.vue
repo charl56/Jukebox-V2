@@ -4,14 +4,22 @@
     <ServerUnreachable v-else-if="serverUnreachable" />
     <CdPopUp />
     <Toast />
+    <Settings />
+    <WaitingScreen />
+    <BackScreen />
+
 </template>
 
 <script>
 import WallDisplay from '@/components/WallDisplay/WallDisplay.vue';
+import Settings from '@/components/WallDisplay/Settings.vue';
+import WaitingScreen from '@/components/WallDisplay/WaitingScreen.vue';
+
 import ListDisplay from '@/components/ListDisplay/ListDisplay.vue';
 import CdPopUp from '@/components/CdPopUp/CdPopUp.vue';
 import ServerUnreachable from '@/components/ServerUnreachable/ServerUnreachable.vue';
 import Toast from '@/components/Toast/Toast.vue';
+import BackScreen from '@/components/BackScreen/BackScreen.vue';
 
 import { eventBus } from './plugins/eventBus';
 import { SyncronizeCdWithBack } from './plugins/syncronization';
@@ -25,6 +33,10 @@ export default {
         ListDisplay,
         CdPopUp,
         ServerUnreachable,
+        Settings,
+        WaitingScreen,
+        BackScreen
+
     },
     created() {
         if(localStorage.firstVisit == undefined) {

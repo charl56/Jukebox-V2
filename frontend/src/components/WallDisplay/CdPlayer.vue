@@ -22,19 +22,13 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
         </div>
         <img :src="iconClose" class="icon icon-close" @click="stop()" draggable="false">
     </div>
-    <BackScreen />
 </template>
 
 <script>
-import BackScreen from '@/components/BackScreen/BackScreen.vue';
-
 import { eventBus } from '@/plugins/eventBus'
 import api from '@/plugins/api';
 
 export default {
-    components: {
-        BackScreen
-    },
     name: 'AppCdPlayer',
     props: {
         cd: Object,

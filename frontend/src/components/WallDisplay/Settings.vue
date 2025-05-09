@@ -30,7 +30,6 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
 
 <script>
 import { eventBus } from '@/plugins/eventBus';
-import api from '@/plugins/api';
 
 export default {
     name: 'AppSetting',
@@ -42,8 +41,8 @@ export default {
     data() {
         return {
             open: false,
-            listArtists: ["Zamdane", "Freeze", "Luv Resval", "Gizo Ecoracci", "Dr .Dre", "Bekar", "Bob Marley", "Zuukou Mayzie", "Youv Dee", "Disiz"],
             listBluetoothPeriph: ["Bose", "CR4XBT", "JBL"],
+            listArtists: ["Zamdane", "Freeze", "Luv Resval", "Gizo Ecoracci", "Dr .Dre", "Bekar", "Bob Marley", "Zuukou Mayzie", "Youv Dee", "Disiz"],
         }
     },
     methods: {
@@ -64,6 +63,7 @@ export default {
     width: 100vw;
 
     padding: 10px;
+    z-index: 2;
 }
 
 .div-settings-content {

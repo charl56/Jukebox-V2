@@ -79,12 +79,14 @@ export default {
 <style scoped>
 /* Popup de fond */
 .div-back-screen {
-    z-index: 99;
+    position: fixed;
     top: 0;
-    left: 0;
-    position: absolute;
-    width: 100vw;
+    right: 0;
+
     height: 100vh;
+    width: 100vw;
+    z-index: 10;
+
     cursor: none;
 }
 

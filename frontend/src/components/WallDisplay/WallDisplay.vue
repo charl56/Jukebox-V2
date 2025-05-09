@@ -6,12 +6,6 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 
 <template>
     <div class="div-wall-display">
-        <div v-if="waitingScreen" :class="{ active: waitingScreen }"
-            class="waiting-screen d-flex align-center justify-center">
-            <!-- Animation from : https://codepen.io/ashamallah/pen/YzXdpJy -->
-            <div class="loading-animation"></div>
-        </div>
-
         <CdPlayer v-if="cdPlayingPosition != 0" :cd="list.find(cd => cd.position == cdPlayingPosition)" />
         <!-- Affiche grille avec CDs et lecteur -->
         <div v-else class="col-display" v-for="n in 3">
@@ -22,7 +16,6 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 
         <div v-if="!isOnServer && cdPlayingPosition == 0" class="settings">
             <img :src="iconSettings" class="icon" @click="openSettings()" draggable="false">
-            <Settings />
         </div>
 
     </div>
@@ -31,7 +24,6 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 <script>
 import CdDisplay from './CdDisplay.vue';
 import CdPlayer from './CdPlayer.vue';
-import Settings from './Settings.vue';
 
 import { eventBus } from '@/plugins/eventBus';
 
@@ -40,7 +32,6 @@ export default {
     components: {
         CdDisplay,
         CdPlayer,
-        Settings
     },
     props: {
         list: Array,
@@ -56,18 +47,12 @@ export default {
         }
 
         eventBus.on('waitingScreen', (data) => {
-            if (data.bool) {
-                this.waitingScreen = data.bool
-            } else {
-                this.waitingScreen = data.bool
-            }
             this.cdPlayingPosition = localStorage.cdPlaying
         })
     },
     data() {
         return {
             keyUpdate: 0,
-            waitingScreen: false,
             cdPlayingPosition: 0,
         }
     },
@@ -114,31 +99,6 @@ export default {
     justify-content: center;
 }
 
-
-/* Ecran de chargement */
-.waiting-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    z-index: 999;
-    backdrop-filter: blur(0px) saturate(100%) brightness(100%);
-}
-
-.waiting-screen.active {
-    backdrop-filter: blur(15px);
-    transition: backdrop-filter 1s ease;
-}
-
-.loading-animation {
-    width: 150px;
-    height: 150px;
-
-    background: url('@/assets/gifs/loader.gif') center no-repeat;
-}
 
 .settings {
     position: absolute;

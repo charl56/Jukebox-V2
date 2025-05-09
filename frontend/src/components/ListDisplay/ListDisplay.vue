@@ -12,7 +12,7 @@ const iconOpen = new URL('@/assets/icons/arrow_right.png', import.meta.url).href
         <!-- Btn ajout cd -->
         <div class="div-list-display__container">
 
-            <div class="div-btn-add ma-1 pb-2">
+            <div class="div-btn-add ma-1 pb-2 pt-1">
                 <img :src="iconClose" class="icon icon-close-search-bar" @click="closeSearchBar()">
                 <img title="Ajouter un cd" :src="iconAdd" class="icon icon-list" @click="addCd()">
             </div>
@@ -199,6 +199,13 @@ export default {
     justify-content: space-between;
 }
 
+@media (max-width: 800px) {
+    .div-btn-add {
+        flex-direction: row-reverse;
+    }
+}
+
+
 /* Search barr */
 .div-search-bar {
     height: fit-content;
@@ -293,9 +300,9 @@ export default {
 
 
 .div-icon-open {
-    position: absolute;
+    position: fixed;
     top: 20px;
-    left: 25vw;
+    left: 20px;
     z-index: 1;
 }
 

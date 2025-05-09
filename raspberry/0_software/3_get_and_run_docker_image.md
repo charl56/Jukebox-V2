@@ -1,31 +1,32 @@
-## Pull and Run the Docker Image
-
-Download the latest public Jukebox image:
-
-```bash
-docker pull ghcr.io/charl56/jukebox-public:latest
-```
+Démarrage de base : en mode AP, et donc on peut utiliser directement la version de la jukebox, installé sur la raspberry
+Donc etape 4
 
 
 
 
+Pour mettre à jour l'app ; 
+
+edit file : /etc/wpa_supplicant/wpa_supplicant.conf, for ssid & psk
+
+Mode client, pour pull la dernière image
+sudo ./wifi-ap-switch.sh client
+./pull-jukebox.sh
 
 
-Dans l'exemple j'ai le dossier /home/user/jukebox/data, sur ma Raspberry
+Pour repasser en mode AP, et lancer la nouvelle image
 
-
-
-Run the container in detached mode with port forwarding:
-
-```bash
-docker run --restart=alway -p 5025:5025 -v /home/user/jukebox/data:/app/static -d ghcr.io/charl56/jukebox-public:latest
-```
-
-tests en local
-```bash
-docker run --restart=alway -p 5025:5025 -v C:/426/Raspberry/Jukebox-V2/backend/static -d ghcr.io/charl56/jukebox-public:latest
-```
+sudo ./wifi-ap-switch.sh ap
+./start-jukebox.sh
 
 
 
-The Jukebox service will now be accessible on port **5025** 🎶
+Infos : 
+
+Le scipt fonctionne, mais parfois le mode client ne s'active pas. Alords redemarrer la carte, et init le mode client 
+En vrai vait mieux redemarrer avant de changer de mode
+
+Parfoids si le mode client est activé trop longtemps, il faut redemarrer
+    J'ai eu 1 fois le cas, donc dans le doute
+Mode client pour mettre à jour l'image docker, ou la raspberry elle meme. Sinon mode AP pour utilisation
+
+

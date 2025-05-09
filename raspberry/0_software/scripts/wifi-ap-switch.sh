@@ -1,41 +1,48 @@
 #!/bin/bash
-# Script inspiré des solutions GitHub [1][2] et StackExchange [3]
 
-# Configuration
+# Config
 SSID="Jukebox"
 PASSWORD="12345678"
 INTERFACE="wlan0"
 SUBNET="192.168.50.1/24"
 
 AP_MODE() {
-    # Arrêt des services réseau
-    systemctl stop dhcpcd wpa_supplicant
+    # Stop services for Client mode
+    systemctl stop wpa_supplicant dhcpcd
 
-    ifconfig $INTERFACE down
-
-    # Configuration IP statique
+    # Config to be AP mode
+    ip addr flush dev $INTERFACE
     ip addr add $SUBNET dev $INTERFACE
+
+    # Restart interface
+    ifconfig $INTERFACE down
     ifconfig $INTERFACE up
 
-    # Démarrer hostapd et dnsmasq
+    # Start services for AP mode
     systemctl start hostapd dnsmasq
 
-    echo "Mode AP activé"
+    echo "AP Mode enable"
 }
 
 CLIENT_MODE() {
-    # Arrêt des services AP
+    
+    # Stop services for AP mode
     systemctl stop hostapd dnsmasq
 
+    # Config for Client mode
     ip addr flush dev $INTERFACE
 
+    # Restart interface
     ifconfig $INTERFACE down
     ifconfig $INTERFACE up
+
+    # Restart services for Client mode
     systemctl restart wpa_supplicant dhcpcd
 
+    # To be sure config of wpa will be good and enable
     wpa_supplicant -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf -B
 
-    echo "Mode client activé"
+    echo "Client Mode enable"
 }
 
 case "$1" in

@@ -1,19 +1,26 @@
-Toute la doc par rapport a la raspberry
+# Raspberry Pi Documentation
 
-Raspnberry utilsié : 3B
-On commence par le software : 
-
-📄 [Detailed steps](./0_software/0_initialisation_raspberry.md)
-
-
-Puis le hardware : 
-
-📄 [Detailed steps](./1_hardware/0_components_position.md)
+This guide is based on a **Raspberry Pi 3B**.
 
 
 
-Si besoin y a des commandes : 
+## 1. Software Setup
 
-📄 [Detailed steps](./commands.md)
+Start with the software setup:
+📄 [Step-by-step guide](./0_software/0_initialisation_raspberry.md)
 
+---
 
+## 2. Hardware Setup
+
+Then follow the hardware installation steps:
+📄 [Step-by-step guide](./1_hardware/0_components_position.md)
+
+---
+
+## 3. Useful Commands
+
+If needed, here’s a list of useful commands:
+📄 [Command reference](./commands.md)
+
+---

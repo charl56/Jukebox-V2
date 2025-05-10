@@ -1,41 +1,30 @@
-# Raspberry Pi - USB Key Setup (Raspberry OS Lite 64-bit)
+# Raspberry Pi – USB Key Setup (Raspberry Pi OS Lite 64-bit)
 
-Raspberry Pi configuration to use the jukebox: boot, Docker installation, and container startup.
+## Boot from USB Key with Raspberry Pi OS Lite (64-bit)
 
-## 0. Boot from USB Key with Raspberry Pi OS Lite (64-bit)  
-If install os with image in folder XXX, on your sd card, go to step 4
+Start by install the OS using the image in the `XXX` folder on your SD card.
 
+> The image includes:
+>
+> * Docker pre-installed
+> * Access Point (AP) and Client mode setup
+> * Scripts to pull and run the latest Docker image
 
-Vraiment melc prend l'image deja faite ce sera plus simple
+* **Username:** `user`
+* **Password:** `network!`
 
-User : 'user' with password : 'network!'
+🟢 On first boot, the Raspberry starts in Access Point (AP) mode.
+You can directly access the Jukebox application already installed.
 
+You need to connect to wifi network `Jukebox`, with SSID : `12345678`
 
-
-
-Else use this raspberr os image https://downloads.raspberrypi.com/raspios_lite_arm64/images/
-
-
----
-
-## 1. Enable Wi-Fi  
-📄 [Detailed steps](./1_enable_wifi.md)
-
----
-
-## 2. Install Docker  
-📄 [Detailed steps](./2_install_docker.md)
+Then, go to [http://raspberrypi.local](http://raspberrypi.local)
 
 ---
 
-## 3. Get the Docker image and start the container  
-📄 [Detailed steps](./3_get_and_run_docker_image.md)
 
----
+## Doc : Update Jukebox's application
 
-## 4. Connection to Raspberry, to access application
-📄 [Detailed steps](./4_connection_to_raspberry.md)
-📄 
-
----
+If you need to update the application:
+📄 [Step-by-step guide](./1_update_jukebox.md)
 

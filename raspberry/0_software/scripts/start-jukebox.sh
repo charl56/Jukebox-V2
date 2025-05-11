@@ -30,4 +30,4 @@ if [ -z "$(ls -A $VOLUME_PATH 2>/dev/null)" ]; then
 fi
 
 # Lancer le conteneur final avec le volume
-docker run --restart=always --name $CONTAINER -p $PORT -v $VOLUME_PATH:$CONTAINER_PATH -d $IMAGE
+docker run -d --name $CONTAINER --privileged -p $PORT -v $VOLUME_PATH:$CONTAINER_PATH -v /dev/gpiomem:/dev/gpiomem -d $IMAGE --restart=always 

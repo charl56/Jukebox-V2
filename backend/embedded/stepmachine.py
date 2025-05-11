@@ -4,6 +4,25 @@
 # from electromagnet import electro_magnet_on, electro_magnet_off
 import threading
 import time
+import os
+
+IS_ON_RASPBERRY = os.getenv("IS_ON_SERVER", "True") == "False"
+
+if(IS_ON_RASPBERRY):
+    import RPi.GPIO as GPIO
+
+    LED_PIN = 18  # Vous pouvez changer ce numéro selon votre connexion
+    GPIO.setmode(GPIO.BCM)  # Utilisation de la numérotation BCM
+    GPIO.setup(LED_PIN, GPIO.OUT)
+    GPIO.output(LED_PIN, GPIO.LOW)  # LED éteinte au démarrage
+
+
+def cleanup():
+    GPIO.cleanup()
+# Gestionnaire pour exécuter le nettoyage à la fermeture
+import atexit
+atexit.register(cleanup)
+
 
 class JukeboxStateMachine:
     def __init__(self):
@@ -96,9 +115,13 @@ class JukeboxStateMachine:
 
                 elif self.current_state == "Play":
                     ## Start player rotation
-
                     print(f"{self.prefix} : Playing CD")
-                    # time.sleep(0.1)
+
+                    if(IS_ON_RASPBERRY):
+                        GPIO.output(LED_PIN, GPIO.HIGH)
+                        time.sleep(1)
+                        GPIO.output(LED_PIN, GPIO.LOW)
+
                     self.current_state = "Wait"
 
                 elif self.current_state == "Pause":
@@ -153,5 +176,4 @@ class JukeboxStateMachine:
         self.locationsPos[8]['x'] = 88
         self.locationsPos[8]['y'] = 88
  
-
 

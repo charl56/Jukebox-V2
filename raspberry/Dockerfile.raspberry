@@ -27,10 +27,10 @@ FROM python:3.10-slim AS backend-installer
 WORKDIR /app/backend
 
 # Copier les fichiers nécessaires pour le backend
-COPY ../backend/requirements.txt ./
+COPY ../backend/requirements_raspberry.txt ./
 
 # Installer les dépendances Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements_raspberry.txt
 
 
 
@@ -40,6 +40,11 @@ FROM python:3.10-slim AS final
 
 # Définir le répertoire de travail
 WORKDIR /app
+
+# Pour le controle des pins
+RUN apt-get update && apt-get install -y \
+    python3-rpi.gpio \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copier les fichiers construits du frontend depuis l'étape précédente
 COPY --from=frontend-builder /app/frontend/dist ./templates

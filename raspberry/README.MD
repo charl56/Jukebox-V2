@@ -1,6 +1,6 @@
 # Raspberry Pi Documentation
 
-This guide is based on a **Raspberry Pi 3B**.
+This guide is based for a **Raspberry Pi 3B**.
 
 
 

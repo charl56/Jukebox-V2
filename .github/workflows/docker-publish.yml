@@ -61,7 +61,7 @@ jobs:
     publish_public_image:
       name: build and publish public image
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/raspberry' || github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/raspberry'
 
       steps:
       - name: Checkout code

@@ -31,3 +31,6 @@ If needed, here’s a list of useful commands:
 pipeline, 3 jobs :  deploy and build for private and public image of project
     Public is for deploy app on server, for testing
     Private is for Raspberry application
+
+
+Create raspberry branch, to start puibl and public image for raspberry

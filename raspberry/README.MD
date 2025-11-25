@@ -24,3 +24,10 @@ If needed, here’s a list of useful commands:
 📄 [Command reference](./commands.md)
 
 ---
+
+
+
+
+pipeline, 3 jobs :  deploy and build for private and public image of project
+    Public is for deploy app on server, for testing
+    Private is for Raspberry application

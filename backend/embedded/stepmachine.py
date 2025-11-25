@@ -36,7 +36,7 @@ class JukeboxStateMachine:
         self.positionFirst = None
         # Coord of each positions
         self.locationsPos = []
-        for _ in range(9):
+        for _ in range(4):
             self.locationsPos.append({'x': 0, 'y': 0})
         # Angle of Z, with servo motor
         self.locationZ = [0, 180]

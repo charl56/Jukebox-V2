@@ -7,10 +7,11 @@
         <!-- Img album -->
         <img :src="imageSrc" class="album-class" @error="imgSrcNotFound()">
     </div>
-    <div v-else class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
+    <div v-else-if="active" class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
     </div>
+    <div v-else class="div-cd-wall no-cd"></div>
 </template>
 
 <script>
@@ -22,7 +23,11 @@ export default {
     name: 'AppCdDisplay',
     props: {
         cd: Object,
-        position: Number
+        position: Number,
+        active: {
+            type: Boolean,
+            default: true
+        }
     },
     created() {
         try {

@@ -1,6 +1,6 @@
 # Raspberry Pi Documentation
 
-This guide is based on a **Raspberry Pi 3B**.
+This guide is based for a **Raspberry Pi 3B**.
 
 
 
@@ -24,3 +24,13 @@ If needed, here’s a list of useful commands:
 📄 [Command reference](./commands.md)
 
 ---
+
+
+
+
+pipeline, 3 jobs :  deploy and build for private and public image of project
+    Public is for deploy app on server, for testing
+    Private is for Raspberry application
+
+
+Create raspberry branch, to start puibl and public image for raspberry

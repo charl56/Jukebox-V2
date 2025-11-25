@@ -7,11 +7,19 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 <template>
     <div class="div-wall-display">
         <CdPlayer v-if="cdPlayingPosition != 0" :cd="list.find(cd => cd.position == cdPlayingPosition)" />
+            
+        
+            <!-- <div v-else class="col-display" v-for="n in 3" :key="n"> -->
+            <!-- <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" /> -->
+            <!-- <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" /> -->
+            <!-- <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" /> -->
+        
+        
         <!-- Affiche grille avec CDs et lecteur -->
-        <div v-else class="col-display" v-for="n in 3">
-            <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" />
-            <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" />
-            <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" />
+        <div v-else class="col-display" v-for="n in 2" :key="n">
+            <CdDisplay :cd="list.find(cd => cd.position == (2 * n - 1))" :position="(2 * n - 1)" :key="keyUpdate" />
+            <CdDisplay v-if="(2 * n) != 2" :cd="list.find(cd => cd.position == (2 * n))" :position="(2 * n)" :key="keyUpdate" />
+            <CdDisplay v-else :active="false" />
         </div>
 
         <div v-if="!isOnServer && cdPlayingPosition == 0" class="settings">

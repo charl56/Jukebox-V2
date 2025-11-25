@@ -61,7 +61,7 @@ jobs:
     publish_public_image:
       name: build and publish public image
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/raspberry' || github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/raspberry'
 
       steps:
       - name: Checkout code
@@ -83,7 +83,7 @@ jobs:
           docker buildx create --name multiarch-builder --use
           
           # Construire et pousser l'image multi-architecture
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v8 \
+          docker buildx build --platform linux/amd64,linux/arm64 \
             -f raspberry/Dockerfile.raspberry \
             -t ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest \
             --push .

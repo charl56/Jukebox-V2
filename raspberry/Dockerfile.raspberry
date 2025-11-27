@@ -4,7 +4,7 @@
 # docker pull ghcr.io/charl56/jukebox-public:latest
 
 # Étape 1 : Build du frontend
-FROM node:lts-alpine AS frontend-builder
+FROM node:lts AS frontend-builder
 
 # Définir le répertoire de travail pour le frontend
 WORKDIR /app/frontend

@@ -60,6 +60,7 @@ COPY ../backend/embedded ./embedded
 
 ENV IS_ON_RASPBERRY=True
 ENV IS_ON_SERVER=False
+ENV PYTHONAPP=/app
 
 # Exposer le port 5025
 EXPOSE 5025

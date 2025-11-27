@@ -19,7 +19,8 @@ def getCommand():
     
         # On vérifie le contenu reçu
         parts = command.split("_")
-        if(parts[0] != "MOVE" or parts[0] != "TOGGLE"):
+        print(parts[0])
+        if(parts[0] != "MOVE" and parts[0] != "TOGGLE"):
             return jsonify({"success": False, "error": "Invalid command format"}), 400
         
         # On extrait les paramètres

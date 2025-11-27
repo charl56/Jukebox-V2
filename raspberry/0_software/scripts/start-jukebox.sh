@@ -37,4 +37,5 @@ docker run -d \
     --group-add gpio \
     -v /sys/class/gpio:/sys/class/gpio \
     --restart=always \
+    -- privileged \
     $IMAGE

@@ -47,6 +47,14 @@ export default {
         return api.post('api/jukebox/' + url, data, config);
     },
 
+    postApiManual(url, data = {}, config) {
+        if (isOnServer) {
+            return handleServerMode();
+        }
+
+        return api.post('api/manual/' + url, data, config);
+    },
+
 
     // Requête PUT
     putApi(url, data = {}, config) {

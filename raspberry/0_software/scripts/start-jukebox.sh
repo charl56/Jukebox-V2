@@ -20,7 +20,7 @@ if [ -z "$(ls -A $VOLUME_PATH 2>/dev/null)" ]; then
     echo "Volume is empty, initialing data..."
     
     # Lancer temporairement le conteneur sans volume pour extraire les fichiers
-    docker run --name temp_container -d ghcr.io/charl56/jukebox-public:latest
+    docker run --name temp_container -d $IMAGE
     docker cp temp_container:/app/static/. $VOLUME_PATH
 
     docker stop temp_container
@@ -30,4 +30,11 @@ if [ -z "$(ls -A $VOLUME_PATH 2>/dev/null)" ]; then
 fi
 
 # Lancer le conteneur final avec le volume
-docker run -d --name $CONTAINER --privileged -p $PORT -v $VOLUME_PATH:$CONTAINER_PATH -v /dev/gpiomem:/dev/gpiomem -d $IMAGE --restart=always 
+docker run -d \
+    --name $CONTAINER -p $PORT \
+    -v $VOLUME_PATH:$CONTAINER_PATH \
+    --device /dev/gpiomem:/dev/gpiomem \
+    --group-add gpio \
+    -v /sys/class/gpio:/sys/class/gpio \
+    --restart=always \
+    $IMAGE

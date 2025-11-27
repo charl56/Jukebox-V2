@@ -8,13 +8,11 @@ import keyboard                # Importer la bibliotheque de gestion du clavier
 from time import sleep         # Importer la bibliotheque de gestion du temps 
 
 # Commandes de pas, reliées aux GPIOs 14, 17, 24
-STEPX_MOVE_Y = 14     # Moteur branché en X, mais déplace en Y
-STEPY_MOVE_Y = 17     # Moteur branché en Y, déplace en Y
-STEPZ_MOVE_X = 24     # Moteur branché en Z, déplace en Z
+L_STEP = 14     # Moteur branché en X, mais déplace en Y
+R_STEP = 17     # Moteur branché en Y, déplace en Y
 # Commandes de direction, reliées aux GPIOs 15, 27, 23 
-DIRX_MOVE_Y = 15      # Moteur branché en X, mais déplace en Y
-DIRY_MOVE_Y = 27      # Moteur branché en Y, déplace en Y
-DIRZ_MOVE_X = 23      # Moteur branché en Z, déplace en Z           
+L_DIR = 15      # Moteur branché en X, mais déplace en Y
+R_DIR = 27      # Moteur branché en Y, déplace en Y
 vitesse = 0.0004	# Vitesse optimale rotation moteurs
 # Pin de l'eletroaimant
 ELECTRO_MAGNET = 26
@@ -22,12 +20,10 @@ ENTER_KEY = False
 
 GPIO.setmode(GPIO.BCM)         # Paramétrage de la numérotation des GPIO en mode BCM
 GPIO.setwarnings(False)        # Ne pas tenir comte des alertes
-GPIO.setup(STEPX_MOVE_Y, GPIO.OUT)     # GPIO STEP configuré en sortie
-GPIO.setup(DIRX_MOVE_Y, GPIO.OUT)      # GPIO DIR configuré en sortie
-GPIO.setup(STEPY_MOVE_Y, GPIO.OUT)
-GPIO.setup(DIRY_MOVE_Y, GPIO.OUT)
-GPIO.setup(STEPZ_MOVE_X, GPIO.OUT)
-GPIO.setup(DIRZ_MOVE_X, GPIO.OUT)
+GPIO.setup(L_STEP, GPIO.OUT)     # GPIO STEP configuré en sortie
+GPIO.setup(L_DIR, GPIO.OUT)      # GPIO DIR configuré en sortie
+GPIO.setup(R_STEP, GPIO.OUT)
+GPIO.setup(R_DIR, GPIO.OUT)
 GPIO.setup(ELECTRO_MAGNET, GPIO.OUT)  # Définir le pin comme sortie
 
 def moveX(step, direction):
@@ -50,17 +46,6 @@ def moveX(step, direction):
     if direction not in ["cw", "ccw"]:
         raise ValueError('Direction must be "cw" or "ccw".')
 
-    try:
-        GPIO.output(DIRZ_MOVE_X, GPIO.HIGH if direction == "cw" else GPIO.LOW)
-        
-        for _ in range(step):
-            GPIO.output(STEPZ_MOVE_X, GPIO.HIGH)
-            sleep(vitesse)
-            GPIO.output(STEPZ_MOVE_X, GPIO.LOW)
-            sleep(vitesse)	
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
 
 
 def moveY(step, direction):
@@ -85,18 +70,18 @@ def moveY(step, direction):
 
     try:
         dir_state = GPIO.HIGH if direction == "cw" else GPIO.LOW
-        GPIO.output(DIRY_MOVE_Y, dir_state)
-        GPIO.output(DIRX_MOVE_Y, dir_state)
+        GPIO.output(R_DIR, dir_state)
+        GPIO.output(L_DIR, dir_state)
 
         for _ in range(step):
-            GPIO.output(STEPY_MOVE_Y, GPIO.HIGH)
+            GPIO.output(R_STEP, GPIO.HIGH)
             sleep(vitesse)
-            GPIO.output(STEPY_MOVE_Y, GPIO.LOW)
+            GPIO.output(R_STEP, GPIO.LOW)
             sleep(vitesse)
             
-            GPIO.output(STEPX_MOVE_Y, GPIO.HIGH)
+            GPIO.output(L_STEP, GPIO.HIGH)
             sleep(vitesse)
-            GPIO.output(STEPX_MOVE_Y, GPIO.LOW)
+            GPIO.output(L_STEP, GPIO.LOW)
             sleep(vitesse)
         
 

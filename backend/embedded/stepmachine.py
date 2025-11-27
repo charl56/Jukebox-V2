@@ -164,16 +164,16 @@ class JukeboxStateMachine:
         
         self.locationsPos[3]['x'] = 33
         self.locationsPos[3]['y'] = 33
-        self.locationsPos[4]['x'] = 44
-        self.locationsPos[4]['y'] = 44
-        self.locationsPos[5]['x'] = 55
-        self.locationsPos[5]['y'] = 55
+        # self.locationsPos[4]['x'] = 44
+        # self.locationsPos[4]['y'] = 44
+        # self.locationsPos[5]['x'] = 55
+        # self.locationsPos[5]['y'] = 55
 
-        self.locationsPos[6]['x'] = 66
-        self.locationsPos[6]['y'] = 66
-        self.locationsPos[7]['x'] = 77
-        self.locationsPos[7]['y'] = 77
-        self.locationsPos[8]['x'] = 88
-        self.locationsPos[8]['y'] = 88
+        # self.locationsPos[6]['x'] = 66
+        # self.locationsPos[6]['y'] = 66
+        # self.locationsPos[7]['x'] = 77
+        # self.locationsPos[7]['y'] = 77
+        # self.locationsPos[8]['x'] = 88
+        # self.locationsPos[8]['y'] = 88
  
 

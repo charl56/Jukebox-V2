@@ -34,3 +34,6 @@ pipeline, 3 jobs :  deploy and build for private and public image of project
 
 
 Create raspberry branch, to start puibl and public image for raspberry
+
+
+Prévoir copier le répertoire git pour récupérer les fichier dans le dossier Raspberry

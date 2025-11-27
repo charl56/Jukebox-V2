@@ -34,6 +34,12 @@
    sudo reboot
    ```
 
+6. **Start new version**
+   Run the start script: 
+   ```
+   ./start-jukebox.sh
+   ```
+
 ---
 
 ## Additional Info

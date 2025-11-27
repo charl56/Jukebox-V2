@@ -5,10 +5,11 @@ from flask import Flask
 from flask_cors import CORS
 from routes.main_routes import main_bp
 from routes.data_routes import data_bp
+from routes.manual_routes import manual_bp
+from embedded.config import IS_ON_SERVER, IS_ON_RASPBERRY
+
 
 DEBUG = True
-IS_ON_SERVER = os.getenv("IS_ON_SERVER", "False") == "True"
-IS_ON_RASPBERRY = os.getenv("IS_ON_SERVER", "True") == "False"
 
 # instantiate the app
 app = Flask(__name__)
@@ -18,6 +19,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 app.register_blueprint(main_bp)
 app.register_blueprint(data_bp, url_prefix='/api')
+app.register_blueprint(manual_bp, url_prefix='/api/manual')
 
 # Only import jukebox and start the thread if not running in Docker
 if not IS_ON_SERVER:

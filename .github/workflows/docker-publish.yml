@@ -83,7 +83,7 @@ jobs:
           docker buildx create --name multiarch-builder --use
           
           # Construire et pousser l'image multi-architecture
-          docker buildx build --platform linux/arm64 \
+          docker buildx build --platform linux/arm64,linux/arm/v8,linux/arm/v7 \
             -f raspberry/Dockerfile.raspberry \
             -t ${{ env.REGISTRY }}/${{ github.actor }}/jukebox-public:latest \
             --push .

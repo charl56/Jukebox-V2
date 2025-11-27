@@ -2,8 +2,9 @@ import os
 
 # Determine environment
 IS_ON_SERVER = os.getenv("IS_ON_SERVER", "False") == "True"
-IS_ON_RASPBERRY = os.getenv("IS_ON_RASPBERRY", "True") == "False"
+IS_ON_RASPBERRY = os.getenv("IS_ON_RASPBERRY", "False") == "True"
 
+print(f"IS_ON_SERVER: {IS_ON_SERVER} | IS_ON_RASPBERRY: {IS_ON_RASPBERRY}")
 
 
 # Pins of limit switches 

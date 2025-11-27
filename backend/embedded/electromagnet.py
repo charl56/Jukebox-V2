@@ -1,4 +1,4 @@
-from config import ELECTRO_MAGNET
+from embedded.config import ELECTRO_MAGNET
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)         # Paramétrage de la numérotation des GPIO en mode BCM

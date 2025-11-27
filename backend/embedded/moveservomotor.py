@@ -1,4 +1,4 @@
-from config import SERVO_MOTOR
+from embedded.config import SERVO_MOTOR
 import RPi.GPIO as GPIO
 import time
 

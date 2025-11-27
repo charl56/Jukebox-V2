@@ -3,7 +3,7 @@
 
 
 # Utiliser une image Python officielle
-FROM python:3.10-slim
+FROM python:3.10-slim 
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -14,6 +14,7 @@ COPY app.py .
 COPY routes ./routes
 COPY templates ./templates
 COPY static ./static
+COPY embedded/config.py ./embedded/config.py
 COPY utils.py .
 
 # Installer les dépendances

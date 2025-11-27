@@ -1,4 +1,4 @@
-# docker build -t jukebox-app .
+# docker build -f Dockerfile.raspberry -t jukebox-app .
 # docker run -p 5025:5025 -d jukebox-app
 
 # docker pull ghcr.io/charl56/jukebox-public:latest

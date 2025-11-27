@@ -1,4 +1,4 @@
-from config import L_STEP, L_DIR, R_STEP, R_DIR, SLEEP_TIME, SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4
+from embedded.config import L_STEP, L_DIR, R_STEP, R_DIR, SLEEP_TIME, SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4
 import RPi.GPIO as GPIO
 from time import sleep
 

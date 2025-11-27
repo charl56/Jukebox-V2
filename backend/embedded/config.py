@@ -26,7 +26,7 @@ SLEEP_TIME = 0.002  # Adjust this value to control speed
 
 
 # GPIO pin for the servo motor
-SERVO_MOTOR = 18
+SERVO_MOTOR = 4
 
 # Electro magnet GPIO pin connected to the electromagnet
-ELECTRO_MAGNET = 26
+ELECTRO_MAGNET = 18

@@ -5,6 +5,9 @@ from embedded.config import IS_ON_RASPBERRY
 
 if IS_ON_RASPBERRY:
     from embedded import movestepmotor
+    from embedded import moveservomotor
+    from embedded import electromagnet
+
 
 manual_bp = Blueprint('manual', __name__)
 
@@ -12,35 +15,38 @@ manual_bp = Blueprint('manual', __name__)
 def getCommand():
     try:
         command = request.json.get('command')
-        print(command)
+            
+    
+        # On vérifie le contenu reçu
+        parts = command.split("_")
+        if(parts[0] != "MOVE" or parts[0] != "TOGGLE"):
+            return jsonify({"success": False, "error": "Invalid command format"}), 400
         
-        if(command == "TOGGLE_MAGNET"):
-            # machine.send("TOGGLE_MAGNET")
-            print("Toggling electromagnet")
+        # On extrait les paramètres
+        axis = parts[1]
+        direction = parts[2]
+
+    
+        if not IS_ON_RASPBERRY:
+            return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
+    
+        if(axis == "X" and direction in ["cw", "ccw"]):
+            movestepmotor.moveX(50, direction)
+
+        elif(axis == "Y" and direction in ["cw", "ccw"]):
+            movestepmotor.moveY(50, direction)
+        
+        elif(axis == "Z" and int(direction) <= 180 and int(direction) >= 0):
+            moveservomotor.moveZToAngle(int(direction))
+        
+        elif(axis == "MAGNET" and direction in ["True", "False"]):
+            if(bool(direction)): electromagnet.setMagnetOn()
+            else: electromagnet.setMagnetOff()
+        
         else:
-            # On vérifie le contenu reçu
-            parts = command.split("_")
-            if(parts[0] != "MOVE" or len(parts) != 3):
-                return jsonify({"success": False, "error": "Invalid command format"}), 400
+            return jsonify({"success": False, "error": "Invalid axis or direction"}), 400
             
-            # On extrait les paramètres
-            axis = parts[1]
-            direction = parts[2]
-
-        
-            if not IS_ON_RASPBERRY:
-                return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
-        
-            if(axis == "X" and direction in ["cw", "ccw"]):
-                movestepmotor.moveX(50, direction)
-
-            elif(axis == "Y" and direction in ["cw", "ccw"]):
-                movestepmotor.moveY(50, direction)
-            
-            else:
-                return jsonify({"success": False, "error": "Invalid axis or direction"}), 400
-              
-        
+    
 
 
         return jsonify({"success": True}), 200

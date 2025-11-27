@@ -6,13 +6,13 @@ GPIO.setwarnings(False)        # Ne pas tenir comte des alertes
 GPIO.setup(ELECTRO_MAGNET, GPIO.OUT)  # Définir le pin comme sortie
 
 
-def electro_magnet_on():
+def setMagnetOn():
     """
     Function to active electromagnet 
     """
     GPIO.output(ELECTRO_MAGNET, GPIO.HIGH)  # Activer l'électroaimant
 
-def electro_magnet_off():
+def setMagnetOff():
     """
     Function to desactive electromagnet 
     """

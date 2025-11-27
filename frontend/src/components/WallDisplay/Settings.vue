@@ -26,8 +26,8 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                 <!-- Axe Z -->
                 <div class="control">
                     <h5>Axe Z</h5>
-                    <button @click="move('Z', 'cw')">-</button>
-                    <button @click="move('Z', 'ccw')">+</button>
+                    <button @click="move('Z', '30')">-</button>
+                    <button @click="move('Z', '80')">+</button>
                 </div>
 
                 <!-- Axe Z -->
@@ -73,6 +73,7 @@ export default {
     data() {
         return {
             open: false,
+            electromagnetState: false,
             listBluetoothPeriph: ["Bose", "CR4XBT", "JBL"],
             listArtists: ["Zamdane", "Freeze", "Luv Resval", "Gizo Ecoracci", "Dr .Dre", "Bekar", "Bob Marley", "Zuukou Mayzie", "Youv Dee", "Disiz"],
         }
@@ -89,7 +90,8 @@ export default {
                 });
         },
         toggleMagnet() {
-            let command = `TOGGLE_MAGNET`;
+            let command = `TOGGLE_MAGNET_${this.electromagnetState}`;
+            this.electromagnetState = !this.electromagnetState;
             api.postApiManual('command', { command: command })
                 .then((resp) => {
                     console.log(`Command ${command} sent successfully.`);

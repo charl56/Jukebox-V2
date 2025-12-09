@@ -1,20 +1,26 @@
 #!/usr/bin/python3
 # from movestepmotor import moveX, moveXToEnd, moveXToOrigin, moveY, moveYToEnd, moveYToOrigin
 # from moveservomotor import moveZToAngle
-# from electromagnet import electro_magnet_on, electro_magnet_off
+# from electromagnet import setMagnetOn, setMagnetOff
 import threading
 import time
 import os
+from embedded.config import IS_ON_RASPBERRY
 
-IS_ON_RASPBERRY = os.getenv("IS_ON_SERVER", "True") == "False"
 
 if(IS_ON_RASPBERRY):
+    from embedded.movestepmotor import moveX, moveXToOrigin, moveXToEnd, moveY, moveYToOrigin, moveYToEnd
+    from embedded.moveservomotor import moveZToAngle, moveZToOrigin, moveZToPlayer, moveZToSupport
+    from embedded.electromagnet import setMagnetOn, setMagnetOff
+    
     import RPi.GPIO as GPIO
 
     LED_PIN = 18  # Vous pouvez changer ce numéro selon votre connexion
     GPIO.setmode(GPIO.BCM)  # Utilisation de la numérotation BCM
     GPIO.setup(LED_PIN, GPIO.OUT)
     GPIO.output(LED_PIN, GPIO.LOW)  # LED éteinte au démarrage
+    
+    
 
 
 def cleanup():
@@ -32,6 +38,7 @@ class JukeboxStateMachine:
         self.maxStepX = 0
         self.maxStepY = 0
         self.nextCD = None
+        self.cdOnMagnet = False
         # Movements
         self.positionFirst = None
         # Coord of each positions
@@ -73,9 +80,10 @@ class JukeboxStateMachine:
                 elif self.current_state == "GoToOrigin":
                     print(f"{self.prefix} : going to origin...")
                     ## Etre sur que la fonction est terminée avant de passer à la suite
-                    # moveXToOrigin()
-                    # moveYToOrigin()
-                    # moveZToAngle(0)
+                    if(IS_ON_RASPBERRY):
+                        moveXToOrigin()
+                        moveYToOrigin()
+                        moveZToOrigin()
 
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
@@ -86,8 +94,10 @@ class JukeboxStateMachine:
 
                 elif self.current_state == "GoToEnd":
                     print(f"{self.prefix} : going to end...")
-                    # self.maxStepX = moveXToEnd()
-                    # self.maxStepY = moveYToEnd()
+
+                    if(IS_ON_RASPBERRY):
+                        self.maxStepX = moveXToEnd()
+                        self.maxStepY = moveYToEnd()
 
                     self.current_state = "GoToOrigin"
                     self.next_state = "CalculCoords"
@@ -102,14 +112,26 @@ class JukeboxStateMachine:
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
 
                     ## Move X and Y to the first position
-                    # moveX(self.positionFirst['x'], "cw")
-                    # moveY(self.positionFirst['y'], "cw")
+                    if(IS_ON_RASPBERRY):
 
-                    ## Move forward electromagnet
-                    # moveZToAngle(self.locationZ[0])
+                        moveX(self.positionFirst['x'], "cw")
+                        moveY(self.positionFirst['y'], "cw")
+                        
+                        if(not self.cdOnMagnet):
+                            ## Move down electromagnet
+                            moveZToPlayer()
+                            setMagnetOn()
+                            self.cdOnMagnet = True
+                            moveZToOrigin()
+                        
+                        else:
+                            ## Move down electromagnet
+                            moveZToSupport()
+                            setMagnetOff()
+                            self.cdOnMagnet = False
+                            moveZToOrigin()
 
-                    ## Simulate moving
-                    # time.sleep(0.1)
+
 
                     self.current_state = "Wait"
 
@@ -157,23 +179,13 @@ class JukeboxStateMachine:
         ## Origin, permet ensuite d'avoir le cd n°1 dans la liste self.locationsPos[1]...
         self.locationsPos[0]['x'] = 00
         self.locationsPos[0]['y'] = 00
+        
         self.locationsPos[1]['x'] = 11
         self.locationsPos[1]['y'] = 11
+        
         self.locationsPos[2]['x'] = 22
         self.locationsPos[2]['y'] = 22
         
         self.locationsPos[3]['x'] = 33
         self.locationsPos[3]['y'] = 33
-        # self.locationsPos[4]['x'] = 44
-        # self.locationsPos[4]['y'] = 44
-        # self.locationsPos[5]['x'] = 55
-        # self.locationsPos[5]['y'] = 55
-
-        # self.locationsPos[6]['x'] = 66
-        # self.locationsPos[6]['y'] = 66
-        # self.locationsPos[7]['x'] = 77
-        # self.locationsPos[7]['y'] = 77
-        # self.locationsPos[8]['x'] = 88
-        # self.locationsPos[8]['y'] = 88
- 
 

@@ -14,7 +14,7 @@
 ```bash
 ssh -L 5025:127.0.0.1:5025 charl@169.254.25.25
 ```
-3. Mot de passe : `network`
+3. Mot de passe : `network!`
 
 
 ## Création d'un tunnel avec MobaXterm

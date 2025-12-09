@@ -6,6 +6,10 @@ import time
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(SERVO_MOTOR, GPIO.OUT)
 
+ORIGIN_ANGLE = 0
+PLAYER_ANGLE = 60
+SUPPORT_ANGLE = 170
+
 # Initialisation du signal PWM à 50Hz
 pwm = GPIO.PWM(SERVO_MOTOR, 50)  # Fréquence de 50Hz
 pwm.start(0)  # Démarrer le PWM avec un cycle de service de 0
@@ -27,3 +31,33 @@ def moveZToAngle(angle):
     pwm.ChangeDutyCycle(duty)
     time.sleep(0.2)  # Temps pour laisser le servomoteur atteindre la position
     pwm.ChangeDutyCycle(0)
+
+
+def moveZToOrigin():
+    """
+    Function to move in Z axe to the origin angle (0 degrees).
+
+    Example of use:
+    moveZToOrigin()
+    """
+    moveZToAngle(ORIGIN_ANGLE)
+
+
+def moveZToPlayer():
+    """
+    Function to move in Z axe to the player angle (60 degrees).
+
+    Example of use:
+    moveZToPlayer()
+    """
+    moveZToAngle(PLAYER_ANGLE)
+
+
+def moveZToSupport():
+    """
+    Function to move in Z axe to the support angle (170 degrees).
+
+    Example of use:
+    moveZToSupport()
+    """
+    moveZToAngle(SUPPORT_ANGLE)

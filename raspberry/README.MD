@@ -33,7 +33,7 @@ pipeline, 3 jobs :  deploy and build for private and public image of project
     Private is for Raspberry application
 
 
-Create raspberry branch, to start puibl and public image for raspberry
+Create `raspberry` branch, to start build and deploy public image for raspberry
 
 
-Prévoir copier le répertoire git pour récupérer les fichier dans le dossier Raspberry
+Prévoir copier le répertoire git pour récupérer les fichier dans le dossier Raspberry ???

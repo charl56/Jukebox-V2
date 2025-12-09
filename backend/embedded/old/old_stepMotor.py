@@ -141,7 +141,7 @@ class StepMotorsFunctions:
 				
 					# Création liste des coordonnées des cds/lecteur : 1 = bas a gauche, 8 = haut a droite
 					i = 0
-					for i in range(9):
+					for i in range(4):
 						coordsCdslecteur.append({
 							'x': 0,
 							'y': 0,
@@ -166,17 +166,7 @@ class StepMotorsFunctions:
 					
 					coordsCdslecteur[3]['x'] = int(coordLectX-spaceBetweenCdStep)
 					coordsCdslecteur[3]['y'] = int(coordLectY)
-					coordsCdslecteur[4]['x'] = int(coordLectX)
-					coordsCdslecteur[4]['y'] = int(coordLectY)
-					coordsCdslecteur[5]['x'] = int(coordLectX+spaceBetweenCdStep)
-					coordsCdslecteur[5]['y'] = int(coordLectY)
-									
-					coordsCdslecteur[6]['x'] = int(coordLectX-spaceBetweenCdStep)
-					coordsCdslecteur[6]['y'] = int(coordLectY+spaceBetweenCdStep)
-					coordsCdslecteur[7]['x'] = int(coordLectX)
-					coordsCdslecteur[7]['y'] = int(coordLectY+spaceBetweenCdStep)						
-					coordsCdslecteur[8]['x'] = int(coordLectX+spaceBetweenCdStep)
-					coordsCdslecteur[8]['y'] = int(coordLectY+spaceBetweenCdStep)	
+				
 									
 					print("Coordonnée lecteur :", coordsCdslecteur)
 					

@@ -5,7 +5,7 @@ Liste des variables à initialiser, dans le dépôt GitHub sous Settings > Secre
 - SSH_PORT : Port utilisé pour se connecter en SSH au serveur
 - SSH_PRIVATE_KEY : Clé privé de connection SSH
 - SSH_USER : Utilisateur qui se connecte en SSH
-- WORK_DIR : Chemion du dossier, où se trouve le docker-compose.yml du projet
+- WORK_DIR : Chemion du dossier sur le serveur, où se trouve le docker-compose.yml du projet
 
 #### Sur ton serveur, génère une clé avec un nom définit
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"

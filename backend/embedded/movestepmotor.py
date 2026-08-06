@@ -43,6 +43,51 @@ def moveX(step, direction):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def moveXToOrigin():
+    """
+    Function to move in X axe to the origin of the rail
+    """
+    try:
+        GPIO.output([R_DIR, L_DIR], GPIO.LOW)
+        print("Déplacement à l'origine en X")
+        
+        while GPIO.input(SWITCH_1):	
+            
+            GPIO.output([L_STEP, R_STEP], GPIO.HIGH)
+            sleep(SLEEP_TIME)
+            GPIO.output([L_STEP, R_STEP], GPIO.LOW)
+            sleep(SLEEP_TIME)
+        
+        print("Arrivé à l'origine en X")
+        
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def moveXToEnd():
+    """
+    Function to move in X axe to the end of the rail
+    
+    Return: Number of steps to reach the end of the rail
+    """
+    try:
+        stepToEndX = 0
+        GPIO.output([R_DIR, L_DIR], GPIO.HIGH)
+        print("Déplacement au max en X")
+        
+        while GPIO.input(SWITCH_3):	
+            
+            GPIO.output([L_STEP, R_STEP], GPIO.HIGH)
+            sleep(SLEEP_TIME)
+            GPIO.output([L_STEP, R_STEP], GPIO.LOW)
+            sleep(SLEEP_TIME)
+            
+            stepToEndX += 1
+        
+        return stepToEndX
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def moveY(step, direction):
     """
@@ -80,28 +125,6 @@ def moveY(step, direction):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-def moveXToOrigin():
-    """
-    Function to move in X axe to the origin of the rail
-    """
-    try:
-        GPIO.output([R_DIR, L_DIR], GPIO.LOW)
-        print("Déplacement à l'origine en X")
-        
-        while GPIO.input(SWITCH_1):	
-            
-            GPIO.output([L_STEP, R_STEP], GPIO.HIGH)
-            sleep(SLEEP_TIME)
-            GPIO.output([L_STEP, R_STEP], GPIO.LOW)
-            sleep(SLEEP_TIME)
-        
-        print("Arrivé à l'origine en X")
-        
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-
 def moveYToOrigin():
     """
     Function to move in Y axe to the origin of the rail
@@ -124,34 +147,6 @@ def moveYToOrigin():
     except Exception as e:
         print(f"An error occurred: {e}")
 
-
-def moveXToEnd():
-    """
-    Function to move in X axe to the end of the rail
-    
-    Return: Number of steps to reach the end of the rail
-    """
-    try:
-        stepToEndX = 0
-        GPIO.output([R_DIR, L_DIR], GPIO.HIGH)
-        print("Déplacement au max en X")
-        
-        while GPIO.input(SWITCH_4):	
-            
-            GPIO.output([L_STEP, R_STEP], GPIO.HIGH)
-            sleep(SLEEP_TIME)
-            GPIO.output([L_STEP, R_STEP], GPIO.LOW)
-            sleep(SLEEP_TIME)
-            
-            stepToEndX += 1
-        
-        return stepToEndX
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-
-
 def moveYToEnd():
     """
     Function to move in Y axe to the end of the rail
@@ -164,7 +159,7 @@ def moveYToEnd():
         GPIO.output(L_DIR, GPIO.LOW)
         print("Déplacement au max en Y")
         
-        while GPIO.input(SWITCH_3):	
+        while GPIO.input(SWITCH_4):	
             
             GPIO.output([L_STEP, R_STEP], GPIO.HIGH)
             sleep(SLEEP_TIME)
@@ -177,3 +172,8 @@ def moveYToEnd():
     
     except Exception as e:
         print(f"An error occurred: {e}")
+
+
+
+
+

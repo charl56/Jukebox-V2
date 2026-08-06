@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-# from movestepmotor import moveX, moveXToEnd, moveXToOrigin, moveY, moveYToEnd, moveYToOrigin
-# from moveservomotor import moveZToAngle
-# from electromagnet import setMagnetOn, setMagnetOff
 import threading
 import time
 import os
@@ -87,10 +84,10 @@ class JukeboxStateMachine:
 
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
-                        self.current_state = self.next_state
+                        self.set_state(self.next_state)
                         self.next_state = None
                     else:
-                        self.current_state = "GoToEnd"
+                        self.set_state("GoToEnd")
 
                 elif self.current_state == "GoToEnd":
                     print(f"{self.prefix} : going to end...")
@@ -99,14 +96,14 @@ class JukeboxStateMachine:
                         self.maxStepX = moveXToEnd()
                         self.maxStepY = moveYToEnd()
 
-                    self.current_state = "GoToOrigin"
+                    self.set_state("GoToOrigin")
                     self.next_state = "CalculCoords"
 
                 elif self.current_state == "CalculCoords":
                     print(f"{self.prefix} : Calcul of steps for each cd... Step to X : {self.maxStepX} and Step to Y : {self.maxStepY}")
                     self.calculateCoords()
                     print(f"{self.prefix} : Locations : {self.locationsPos}")
-                    self.current_state = "Wait"
+                    self.set_state("Wait")
 
                 elif self.current_state == "GoToPos":
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
@@ -132,8 +129,7 @@ class JukeboxStateMachine:
                             moveZToOrigin()
 
 
-
-                    self.current_state = "Wait"
+                    self.set_state("Wait")
 
                 elif self.current_state == "Play":
                     ## Start player rotation
@@ -144,23 +140,23 @@ class JukeboxStateMachine:
                         time.sleep(1)
                         GPIO.output(LED_PIN, GPIO.LOW)
 
-                    self.current_state = "Wait"
+                    self.set_state("Wait")
 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
                     # time.sleep(0.1)
-                    self.current_state = "Wait"
+                    self.set_state("Wait")
                     
                 elif self.current_state == "Prev":
                     print(f"{self.prefix} Prev sound...")
                     # time.sleep(0.1)
-                    self.current_state = "Wait"
+                    self.set_state("Wait")
 
                 elif self.current_state == "Next":
                     print(f"{self.prefix} Next sound...")
                     # time.sleep(0.1)
-                    self.current_state = "Wait"
-                    
+                    self.set_state("Wait")
+
                 elif self.current_state == "Wait":
                     # Instead of sleeping inside the lock, release it and sleep outside
                     self.should_sleep = True

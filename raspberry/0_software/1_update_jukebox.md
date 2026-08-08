@@ -40,6 +40,7 @@
    ./start-jukebox.sh
    ```
 
+Then, go to [http://raspberrypi.local](http://raspberrypi.local)
 ---
 
 ## Additional Info

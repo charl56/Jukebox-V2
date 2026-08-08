@@ -40,13 +40,13 @@ def moveX(step, direction):
 
             # TODO STEPS -> additionner ou soustraire a chaque tour
 
-            if GPIO.input(SWITCH_1) == 0 and direction == "ccw":
+            if GPIO.input(SWITCH_1) == 0 and direction == "cw":
                 print("Limite de course atteinte en X (origine)")
-                moveX(5, "cw")
-                break
-            elif getRealValueOfSwitch3(GPIO.input(SWITCH_3)) == 0 and direction == "cw":
-                print("Limite de course atteinte en X (fin)")
                 moveX(5, "ccw")
+                break
+            elif getRealValueOfSwitch3(GPIO.input(SWITCH_3)) == 0 and direction == "ccw":
+                print("Limite de course atteinte en X (fin)")
+                moveX(5, "cw")
                 break
         
         sleep(0.1)
@@ -59,7 +59,7 @@ def moveXToOrigin():
     Function to move in X axe to the origin of the rail
     """
     try:
-        GPIO.output([R_DIR, L_DIR], GPIO.LOW)
+        GPIO.output([R_DIR, L_DIR], GPIO.HIGH)
         print("Déplacement à l'origine en X")
         
         while GPIO.input(SWITCH_1):	
@@ -71,7 +71,7 @@ def moveXToOrigin():
         
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de 5 pas pour avoir une petite marge
-        moveX(5, "cw")
+        moveX(5, "ccw")
         print("Arrivé à l'origine en X")
         
 
@@ -86,7 +86,7 @@ def moveXToEnd():
     """
     try:
         stepToEndX = 0
-        GPIO.output([R_DIR, L_DIR], GPIO.HIGH)
+        GPIO.output([R_DIR, L_DIR], GPIO.LOW)
         print("Déplacement au max en X")
         
         while getRealValueOfSwitch3(GPIO.input(SWITCH_3)):	
@@ -100,7 +100,7 @@ def moveXToEnd():
         
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de 5 pas pour avoir une petite marge
-        moveX(5, "ccw")
+        moveX(5, "cw")
 
         return stepToEndX
     

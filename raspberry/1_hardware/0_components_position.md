@@ -6,3 +6,4 @@ Pin out : https://www.etechnophiles.com/raspberry-pi-3-gpio-pinout-pin-diagram-a
 
 
 Mon fin de course en SWITCH3 étant cassé, je l'utilise à l'envers. Fonction utilisé pour inverser sa valeur 
+getRealValueOfSwitch3 dans utils.py

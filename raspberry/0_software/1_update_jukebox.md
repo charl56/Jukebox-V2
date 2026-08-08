@@ -16,7 +16,7 @@
    Verify the connection with:
 
    ```bash
-   ping google.com
+   ping ostudio426.com
    ```
 
 4. **Pull the Latest Jukebox Version**

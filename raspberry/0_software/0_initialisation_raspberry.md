@@ -13,6 +13,8 @@ Start by install the OS using the image in the `XXX` folder on your SD card.
 * **Username:** `user`
 * **Password:** `network!`
 
+Une fois connecté vous avez accès à différents script .sh, et également à des fichiers .py pour tester manuellement les composants
+
 🟢 On first boot, the Raspberry starts in Access Point (AP) mode.
 You can directly access the Jukebox application already installed.
 

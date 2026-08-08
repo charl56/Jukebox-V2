@@ -1,7 +1,7 @@
 from embedded.config import L_STEP, L_DIR, R_STEP, R_DIR, SLEEP_TIME, SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4
 import RPi.GPIO as GPIO
 from time import sleep
-
+from embedded.utils import getRealValueOfSwitch3
 
 GPIO.setmode(GPIO.BCM)              # Paramétrage de la numérotation des GPIO en mode BCM
 GPIO.setwarnings(False)             # Ne pas tenir comte des alertes
@@ -37,6 +37,17 @@ def moveX(step, direction):
             sleep(SLEEP_TIME)
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
+
+            # TODO STEPS -> additionner ou soustraire a chaque tour
+
+            if GPIO.input(SWITCH_1) == 0 and direction == "ccw":
+                print("Limite de course atteinte en X (origine)")
+                moveX(5, "cw")
+                break
+            elif getRealValueOfSwitch3(GPIO.input(SWITCH_3)) == 0 and direction == "cw":
+                print("Limite de course atteinte en X (fin)")
+                moveX(5, "ccw")
+                break
         
         sleep(0.1)
 
@@ -58,6 +69,9 @@ def moveXToOrigin():
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
         
+        # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
+        # Et on recule de 5 pas pour avoir une petite marge
+        moveX(5, "cw")
         print("Arrivé à l'origine en X")
         
 
@@ -75,7 +89,7 @@ def moveXToEnd():
         GPIO.output([R_DIR, L_DIR], GPIO.HIGH)
         print("Déplacement au max en X")
         
-        while GPIO.input(SWITCH_3):	
+        while getRealValueOfSwitch3(GPIO.input(SWITCH_3)):	
             
             GPIO.output([L_STEP, R_STEP], GPIO.HIGH)
             sleep(SLEEP_TIME)
@@ -84,6 +98,10 @@ def moveXToEnd():
             
             stepToEndX += 1
         
+        # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
+        # Et on recule de 5 pas pour avoir une petite marge
+        moveX(5, "ccw")
+
         return stepToEndX
     
     except Exception as e:
@@ -119,6 +137,15 @@ def moveY(step, direction):
             sleep(SLEEP_TIME)
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
+
+            if GPIO.input(SWITCH_2) == 0 and direction == "cw":
+                print("Limite de course atteinte en Y (origine)")
+                moveY(5, "ccw")
+                break
+            elif GPIO.input(SWITCH_4) == 0 and direction == "ccw":
+                print("Limite de course atteinte en Y (fin)")
+                moveY(5, "cw")
+                break
         
         sleep(0.1)
 
@@ -141,6 +168,9 @@ def moveYToOrigin():
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
         
+        # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
+        # Et on monte de 5 pas pour avoir une petite marge
+        moveY(5, "ccw")
         print("Arrivé à l'origine en Y")
         
 
@@ -167,7 +197,11 @@ def moveYToEnd():
             sleep(SLEEP_TIME)
             
             stepToEndY += 1
-        
+
+        # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
+        # Et on recule de 5 pas pour avoir une petite marge
+        moveY(5, "cw")
+
         return stepToEndY
     
     except Exception as e:

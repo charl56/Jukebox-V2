@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import threading
-import time
+from time import sleep
 import os
-from embedded.config import IS_ON_RASPBERRY, NB_POSITIONS, PLAYER_POSITION
+from embedded.config import IS_ON_RASPBERRY, IS_ON_SERVER, NB_POSITIONS, PLAYER_POSITION
 from utils import load_json_file, save_json_file
 
 
@@ -132,7 +132,7 @@ class JukeboxStateMachine:
                     self._set_state_locked("GoToOrigin")
 
                 elif self.current_state == "GoToPos":
-                    if(self.next_state is "GoToPos"): selft.next_state = "Wait"
+                    if(self.next_state == "GoToPos"): self.next_state = "Wait"
 
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
                     
@@ -142,6 +142,7 @@ class JukeboxStateMachine:
                         # TODO : caluler le nb de pas en fonction de la pisition actuelle (0 normalement),
                         # Et choisir en fonction cw ou ccw pour aller à la position souhaitée
 
+                        sleep(10)
                         directionX = ""
                         stepsX = 0
                         directionY = ""
@@ -197,7 +198,7 @@ class JukeboxStateMachine:
 
                     if(IS_ON_RASPBERRY):
                         GPIO.output(LED_PIN, GPIO.HIGH)
-                        time.sleep(1)
+                        sleep(1)
                         GPIO.output(LED_PIN, GPIO.LOW)
 
                     self._set_state_locked("Wait")
@@ -232,7 +233,7 @@ class JukeboxStateMachine:
                     self.should_sleep = False
         
             if self.should_sleep:
-                time.sleep(self.wait_time)
+                sleep(self.wait_time)
 
 
     def calculateCoords(self):

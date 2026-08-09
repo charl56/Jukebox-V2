@@ -35,8 +35,8 @@ class JukeboxStateMachine:
         self.next_state = None
         self.maxStepX = 0
         self.maxStepY = 0
-        self.stepX = 0
-        self.stepY = 0
+        self.actualStepX = 0
+        self.actualStepY = 0
         self.nextCD = None
         self.cdOnMagnet = False
         # Movements
@@ -109,8 +109,8 @@ class JukeboxStateMachine:
                         moveYToOrigin()
                         moveZToOrigin()
 
-                        self.stepX = 0
-                        self.stepY = 0
+                        self.actualStepX = 0
+                        self.actualStepY = 0
 
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
@@ -138,30 +138,30 @@ class JukeboxStateMachine:
                         # TODO : caluler le nb de pas en fonction de la pisition actuelle (0 normalement),
                         # Et choisir en fonction cw ou ccw pour aller à la position souhaitée
 
-                        directionX = None
-                        moveX = None
-                        directionY = None
-                        moveY = None
+                        directionX = ""
+                        stepsX = 0
+                        directionY = ""
+                        stepsY = 0
 
-                        if self.stepX < self.positionFirst['x']:
+                        if self.actualStepX < self.positionFirst['x']:
                             directionX = "ccw"
-                            moveX = self.positionFirst['x'] - self.stepX
+                            stepsX = self.positionFirst['x'] - self.actualStepX
                         else:
                             directionX = "cw"
-                            moveX = self.positionFirst['x'] - self.stepX
+                            stepsX = self.positionFirst['x'] - self.actualStepX
 
-                        if self.stepY < self.positionFirst['y']:
+                        if self.actualStepY < self.positionFirst['y']:
                             directionY = "ccw"
-                            moveY = self.positionFirst['y'] - self.stepY
+                            stepsY = self.positionFirst['y'] - self.actualStepY
                         else:
                             directionY = "cw"
-                            moveY = self.positionFirst['y'] - self.stepY
+                            stepsY = self.positionFirst['y'] - self.actualStepY
 
-                        if directionX == "ccw": self.stepX += moveX(moveX, directionX)
-                        else: self.stepX -= moveX(moveX, directionX)
+                        if directionX == "ccw": self.actualStepX += moveX(stepsX, directionX)
+                        else: self.actualStepX -= moveX(stepsX, directionX)
 
-                        if directionY == "ccw": self.stepY += moveY(moveY, directionY)
-                        else: self.stepY -= moveY(moveY, directionY)
+                        if directionY == "ccw": self.actualStepY += moveY(stepsY, directionY)
+                        else: self.actualStepY -= moveY(stepsY, directionY)
 
 
 
@@ -245,14 +245,14 @@ class JukeboxStateMachine:
             print(f"{self.prefix} : Position invalide '{position}', doit être un entier.")
             return
 
-        print(f"Saving position... {position} with coordinates: ({self.stepX}, {self.stepY})")
+        print(f"Saving position... {position} with coordinates: ({self.actualStepX}, {self.actualStepY})")
         if position < 0 or position >= len(self.locationsPos) + 1:
             print(f"{self.prefix} : Invalid position {position}. Must be between 0 and {len(self.locationsPos)-1}.")
             return
 
-        self.locationsPos[position]['x'] = self.stepX
-        self.locationsPos[position]['y'] = self.stepY
-        print(f"{self.prefix} : Position {position} saved with coordinates: ({self.stepX}, {self.stepY})")
+        self.locationsPos[position]['x'] = self.actualStepX
+        self.locationsPos[position]['y'] = self.actualStepY
+        print(f"{self.prefix} : Position {position} saved with coordinates: ({self.actualStepX}, {self.actualStepY})")
 
         save_json_file("./static/positions.json", self.locationsPos)  # Save to JSON file
 

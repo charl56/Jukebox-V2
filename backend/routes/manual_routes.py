@@ -34,6 +34,8 @@ def getCommand():
     
         # if not IS_ON_RASPBERRY:
         #     return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
+
+        
         if(axis == "X" and direction in ["cw", "ccw"]):
             stepX = movestepmotor.moveX(50, direction) 
             if(direction == "cw"):
@@ -42,7 +44,7 @@ def getCommand():
                 jukebox.state_machine.stepX += stepX
 
         elif(axis == "Y" and direction in ["cw", "ccw"]):
-            stepY = movestepmotor.moveY(50, direction)
+            movestepmotor.moveY(50, direction)
             if(direction == "cw"):
                 jukebox.state_machine.stepY -= stepY
             else:

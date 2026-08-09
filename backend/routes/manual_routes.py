@@ -24,7 +24,6 @@ def getCommand():
     
         # On vérifie le contenu reçu
         parts = command.split("_")
-        print(parts[0])
         if(parts[0] != "MOVE" and parts[0] != "TOGGLE"):
             return jsonify({"success": False, "error": "Invalid command format"}), 400
         
@@ -35,20 +34,19 @@ def getCommand():
     
         # if not IS_ON_RASPBERRY:
         #     return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
-    
         if(axis == "X" and direction in ["cw", "ccw"]):
-            step = movestepmotor.moveX(50, direction) 
+            stepX = movestepmotor.moveX(50, direction) 
             if(direction == "cw"):
-                jukebox.state_machine.stepX -= step
+                jukebox.state_machine.stepX -= stepX
             else:
-                jukebox.state_machine.stepX += step
+                jukebox.state_machine.stepX += stepX
 
         elif(axis == "Y" and direction in ["cw", "ccw"]):
-            step = movestepmotor.moveY(50, direction)
+            stepY = movestepmotor.moveY(50, direction)
             if(direction == "cw"):
-                jukebox.state_machine.stepY -= step
+                jukebox.state_machine.stepY -= stepY
             else:
-                jukebox.state_machine.stepY += step
+                jukebox.state_machine.stepY += stepY
 
         elif(axis == "Z" and int(direction) <= 180 and int(direction) >= 0):
             moveservomotor.moveZToAngle(int(direction))

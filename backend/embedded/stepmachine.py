@@ -247,7 +247,6 @@ class JukeboxStateMachine:
         self.locationsPos[position]['y'] = self.stepY
         print(f"{self.prefix} : Position {position} saved with coordinates: ({self.stepX}, {self.stepY})")
 
-        # TODO 
         save_json_file("./static/positions.json", self.locationsPos)  # Save to JSON file
 
     def getPositions(self):

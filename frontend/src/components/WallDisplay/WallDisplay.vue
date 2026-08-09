@@ -17,9 +17,9 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
         
         <!-- Affiche grille avec CDs et lecteur -->
         <div v-else class="col-display" v-for="n in 2" :key="n">
-            <CdDisplay :cd="list.find(cd => cd.position == (2 * n - 1))" :position="(2 * n - 1)" :key="keyUpdate" />
-            <CdDisplay v-if="(2 * n) != 2" :cd="list.find(cd => cd.position == (2 * n))" :position="(2 * n)" :key="keyUpdate" />
+            <CdDisplay v-if="(2 *n) == 2" :cd="list.find(cd => cd.position == (n))" :position="(n)" :key="keyUpdate" />
             <CdDisplay v-else :active="false" />
+            <CdDisplay :cd="list.find(cd => cd.position == (2 + n))" :position="(2 + n)" :key="keyUpdate" />
         </div>
 
         <div v-if="!isOnServer && cdPlayingPosition == 0" class="settings">

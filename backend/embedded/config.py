@@ -7,6 +7,8 @@ IS_ON_RASPBERRY = os.getenv("IS_ON_RASPBERRY", "False") == "True"
 print(f"IS_ON_SERVER: {IS_ON_SERVER} | IS_ON_RASPBERRY: {IS_ON_RASPBERRY}")
 
 
+NB_POSITIONS = 4
+
 # Pins of limit switches 
 SWITCH_1 = 16
 SWITCH_2 = 26
@@ -23,7 +25,7 @@ R_DIR = 27      # Motor plug in Y, move Y axe
 
 # Sleep time between steps for motor speed control
 SLEEP_TIME = 0.002  # Adjust this value to control speed
-
+STEP_RETURN = 20 # Nb of step when limit
 
 # GPIO pin for the servo motor
 SERVO_MOTOR = 4

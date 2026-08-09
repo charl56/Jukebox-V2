@@ -19,5 +19,11 @@ class Jukebox:
         self.set_state("GoToPos")
         self.set_state("Play")
 
+    def getPositions(self):
+        return self.state_machine.getPositions()
+
+    def saveThisPosition(self, positionId):
+        self.state_machine.saveThisPosition(positionId)
+        return self.state_machine.getPositions()
 
 jukebox = Jukebox()

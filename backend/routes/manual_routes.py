@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request
 import time
 from embedded.config import IS_ON_RASPBERRY
+from jukebox import jukebox
 
 if IS_ON_RASPBERRY:
     from embedded import movestepmotor
@@ -10,6 +11,10 @@ if IS_ON_RASPBERRY:
 
 
 manual_bp = Blueprint('manual', __name__)
+
+stepX = 0
+stepY = 0
+
 
 @manual_bp.route('/command', methods=['POST'])
 def getCommand():
@@ -28,15 +33,23 @@ def getCommand():
         direction = parts[2]
 
     
-        if not IS_ON_RASPBERRY:
-            return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
+        # if not IS_ON_RASPBERRY:
+        #     return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
     
         if(axis == "X" and direction in ["cw", "ccw"]):
-            movestepmotor.moveX(50, direction)
+            step = movestepmotor.moveX(50, direction) 
+            if(direction == "cw"):
+                jukebox.state_machine.stepX -= step
+            else:
+                jukebox.state_machine.stepX += step
 
         elif(axis == "Y" and direction in ["cw", "ccw"]):
-            movestepmotor.moveY(50, direction)
-        
+            step = movestepmotor.moveY(50, direction)
+            if(direction == "cw"):
+                jukebox.state_machine.stepY -= step
+            else:
+                jukebox.state_machine.stepY += step
+
         elif(axis == "Z" and int(direction) <= 180 and int(direction) >= 0):
             moveservomotor.moveZToAngle(int(direction))
         
@@ -46,11 +59,28 @@ def getCommand():
         
         else:
             return jsonify({"success": False, "error": "Invalid axis or direction"}), 400
-            
-    
 
-
-        return jsonify({"success": True}), 200
+        return jsonify({"success": True, "stepX": stepX, "stepY": stepY}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@manual_bp.route('/command_position', methods=['POST'])
+def setPosition():
+    try:
+        positionId = request.json.get('positionId')
+        positions = jukebox.saveThisPosition(positionId)
+
+        return jsonify({"success": True, "positions": positions}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+
+@manual_bp.route('/command_position', methods=['GET'])
+def getPositions():
+    try:
+        print("Getting positions...")
+        positions = jukebox.getPositions()
+        return jsonify({"success": True, "positions": positions}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500

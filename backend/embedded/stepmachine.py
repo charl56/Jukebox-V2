@@ -2,7 +2,8 @@
 import threading
 import time
 import os
-from embedded.config import IS_ON_RASPBERRY
+from embedded.config import IS_ON_RASPBERRY, NB_POSITIONS
+from utils import load_json_file, save_json_file
 
 
 if(IS_ON_RASPBERRY):
@@ -34,14 +35,16 @@ class JukeboxStateMachine:
         self.next_state = None
         self.maxStepX = 0
         self.maxStepY = 0
+        self.stepX = 0
+        self.stepY = 0
         self.nextCD = None
         self.cdOnMagnet = False
         # Movements
         self.positionFirst = None
         # Coord of each positions
         self.locationsPos = []
-        for _ in range(4):
-            self.locationsPos.append({'x': 0, 'y': 0})
+        for i in range(NB_POSITIONS):
+            self.locationsPos.append({'id': str(i + 1), 'x': 0, 'y': 0})
         # Angle of Z, with servo motor
         self.locationZ = [0, 180]
         # Player actions
@@ -72,7 +75,25 @@ class JukeboxStateMachine:
             with self.lock:
                 if self.current_state == "Init":
                     print(f"{self.prefix} : Initializing...")
-                    self.current_state = "GoToOrigin"
+             
+                    try:
+                        data = load_json_file("./static/positions.json")
+                        if(len(data) == NB_POSITIONS):
+                            self.locationsPos = data
+                        elif(len(data) < NB_POSITIONS):
+                            print(f"{self.prefix} : Not enough positions in JSON. Expected {NB_POSITIONS}, got {len(data)}. Using default positions.")
+                            data.extend([{'id': str(i + 1), 'x': 0, 'y': 0} for i in range(len(data), NB_POSITIONS)])
+                            self.locationsPos = data
+                            save_json_file("./static/positions.json", self.locationsPos)
+                        else:
+                            raise FileNotFoundError(f"{self.prefix} : Too many positions in JSON. Expected {NB_POSITIONS}, got {len(data)}. Using default positions.")
+
+                    except FileNotFoundError:
+                        print(f"{self.prefix} : File not found, using default positions.")
+
+                    self.set_state("GoToOrigin")
+                    self.next_state = "GoToEnd"
+
 
                 elif self.current_state == "GoToOrigin":
                     print(f"{self.prefix} : going to origin...")
@@ -82,12 +103,15 @@ class JukeboxStateMachine:
                         moveYToOrigin()
                         moveZToOrigin()
 
+                        self.stepX = 0
+                        self.stepY = 0
+
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
                         self.set_state(self.next_state)
-                        self.next_state = None
+                        self.next_state = "Wait"
                     else:
-                        self.set_state("GoToEnd")
+                        self.set_state("Wait")
 
                 elif self.current_state == "GoToEnd":
                     print(f"{self.prefix} : going to end...")
@@ -97,13 +121,13 @@ class JukeboxStateMachine:
                         self.maxStepY = moveYToEnd()
 
                     self.set_state("GoToOrigin")
-                    self.next_state = "CalculCoords"
+                    self.next_state = "Wait"
 
-                elif self.current_state == "CalculCoords":
-                    print(f"{self.prefix} : Calcul of steps for each cd... Step to X : {self.maxStepX} and Step to Y : {self.maxStepY}")
-                    self.calculateCoords()
-                    print(f"{self.prefix} : Locations : {self.locationsPos}")
-                    self.set_state("Wait")
+                # elif self.current_state == "CalculCoords":
+                #     print(f"{self.prefix} : Calcul of steps for each cd... Step to X : {self.maxStepX} and Step to Y : {self.maxStepY}")
+                #     self.calculateCoords()
+                #     print(f"{self.prefix} : Locations : {self.locationsPos}")
+                #     self.set_state("Wait")
 
                 elif self.current_state == "GoToPos":
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
@@ -111,9 +135,36 @@ class JukeboxStateMachine:
                     ## Move X and Y to the first position
                     if(IS_ON_RASPBERRY):
 
-                        moveX(self.positionFirst['x'], "cw")
-                        moveY(self.positionFirst['y'], "cw")
-                        
+                        # TODO : caluler le nb de pas en fonction de la pisition actuelle (0 normalement),
+                        # Et choisir en fonction cw ou ccw pour aller à la position souhaitée
+
+                        directionX = None
+                        moveX = None
+                        directionY = None
+                        moveY = None
+
+                        if self.stepX < self.positionFirst['x']:
+                            directionX = "ccw"
+                            moveX = self.positionFirst['x'] - self.stepX
+                        else:
+                            directionX = "cw"
+                            moveX = self.positionFirst['x'] - self.stepX
+
+                        if self.stepY < self.positionFirst['y']:
+                            directionY = "ccw"
+                            moveY = self.positionFirst['y'] - self.stepY
+                        else:
+                            directionY = "cw"
+                            moveY = self.positionFirst['y'] - self.stepY
+
+                        if directionX == "ccw": self.stepX += moveX(moveX, directionX)
+                        else: self.stepX -= moveX(moveX, directionX)
+
+                        if directionY == "ccw": self.stepY += moveY(moveY, directionY)
+                        else: self.stepY -= moveY(moveY, directionY)
+
+
+
                         if(not self.cdOnMagnet):
                             ## Move down electromagnet
                             moveZToPlayer()
@@ -173,15 +224,36 @@ class JukeboxStateMachine:
     def calculateCoords(self):
 
         ## Origin, permet ensuite d'avoir le cd n°1 dans la liste self.locationsPos[1]...
-        self.locationsPos[0]['x'] = 00
-        self.locationsPos[0]['y'] = 00
+        # self.locationsPos[0]['x'] = 00
+        # self.locationsPos[0]['y'] = 00
+        print("Not used")
+        # self.locationsPos[1]['x'] = 11
+        # self.locationsPos[1]['y'] = 11
         
-        self.locationsPos[1]['x'] = 11
-        self.locationsPos[1]['y'] = 11
+        # self.locationsPos[2]['x'] = 22
+        # self.locationsPos[2]['y'] = 22
         
-        self.locationsPos[2]['x'] = 22
-        self.locationsPos[2]['y'] = 22
-        
-        self.locationsPos[3]['x'] = 33
-        self.locationsPos[3]['y'] = 33
+        # self.locationsPos[3]['x'] = 33
+        # self.locationsPos[3]['y'] = 33
 
+    def saveThisPosition(self, position):
+        try:
+            position = int(position) - 1
+        except (ValueError, TypeError):
+            print(f"{self.prefix} : Position invalide '{position}', doit être un entier.")
+            return
+
+        print(f"Saving position... {position} with coordinates: ({self.stepX}, {self.stepY})")
+        if position < 0 or position >= len(self.locationsPos) + 1:
+            print(f"{self.prefix} : Invalid position {position}. Must be between 0 and {len(self.locationsPos)-1}.")
+            return
+
+        self.locationsPos[position]['x'] = self.stepX
+        self.locationsPos[position]['y'] = self.stepY
+        print(f"{self.prefix} : Position {position} saved with coordinates: ({self.stepX}, {self.stepY})")
+
+        # TODO 
+        save_json_file("./static/positions.json", self.locationsPos)  # Save to JSON file
+
+    def getPositions(self):
+        return self.locationsPos

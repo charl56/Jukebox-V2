@@ -30,6 +30,10 @@ export default {
         return api.get('api/' + url, { params });
     },
 
+    getApiManual(url, params = {}) {
+        return api.get('api/manual/' + url, { params });
+    },
+
     // Requête POST
     postApi(url, data = {}, config) {
         if (isOnServer) {

@@ -1,4 +1,4 @@
-from embedded.config import L_STEP, L_DIR, R_STEP, R_DIR, SLEEP_TIME, SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4
+from embedded.config import L_STEP, L_DIR, R_STEP, R_DIR, SLEEP_TIME, SWITCH_1, SWITCH_2, SWITCH_3, SWITCH_4, STEP_RETURN
 import RPi.GPIO as GPIO
 from time import sleep
 from embedded.utils import getRealValueOfSwitch3
@@ -28,6 +28,8 @@ def moveX(step, direction):
     if direction not in ["cw", "ccw"]:
         raise ValueError('Direction must be "cw" or "ccw".')
 
+    stepMove = 0
+
     try:
         dir_state = GPIO.HIGH if direction == "cw" else GPIO.LOW
         GPIO.output([R_DIR, L_DIR], dir_state)
@@ -38,26 +40,31 @@ def moveX(step, direction):
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
 
-            # TODO STEPS -> additionner ou soustraire a chaque tour
+            stepMove += 1
 
             if GPIO.input(SWITCH_1) == 0 and direction == "cw":
                 print("Limite de course atteinte en X (origine)")
-                moveX(5, "ccw")
+                moveX(STEP_RETURN, "ccw")
                 break
             elif getRealValueOfSwitch3(GPIO.input(SWITCH_3)) == 0 and direction == "ccw":
                 print("Limite de course atteinte en X (fin)")
-                moveX(5, "cw")
+                moveX(STEP_RETURN, "cw")
                 break
         
         sleep(0.1)
 
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        return stepMove
+
 
 def moveXToOrigin():
     """
     Function to move in X axe to the origin of the rail
     """
+    step = 0
+
     try:
         GPIO.output([R_DIR, L_DIR], GPIO.HIGH)
         print("Déplacement à l'origine en X")
@@ -68,15 +75,18 @@ def moveXToOrigin():
             sleep(SLEEP_TIME)
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
-        
+            step += 1
+
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de 5 pas pour avoir une petite marge
-        moveX(5, "ccw")
+        moveX(STEP_RETURN, "ccw")
         print("Arrivé à l'origine en X")
         
 
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        return step
 
 def moveXToEnd():
     """
@@ -84,8 +94,9 @@ def moveXToEnd():
     
     Return: Number of steps to reach the end of the rail
     """
+
+    step = 0
     try:
-        stepToEndX = 0
         GPIO.output([R_DIR, L_DIR], GPIO.LOW)
         print("Déplacement au max en X")
         
@@ -96,16 +107,16 @@ def moveXToEnd():
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
             
-            stepToEndX += 1
+            step += 1
         
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de 5 pas pour avoir une petite marge
-        moveX(5, "cw")
+        moveX(STEP_RETURN, "cw")
 
-        return stepToEndX
-    
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        return step
 
 def moveY(step, direction):
     """
@@ -126,6 +137,7 @@ def moveY(step, direction):
         raise ValueError("Step must be a non-negative integer.")
     if direction not in ["cw", "ccw"]:
         raise ValueError('Direction must be "cw" or "ccw".')
+    step = 0
 
     try:
         dir_state = GPIO.HIGH if direction == "cw" else GPIO.LOW
@@ -137,25 +149,29 @@ def moveY(step, direction):
             sleep(SLEEP_TIME)
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
+            step =+ 1
 
             if GPIO.input(SWITCH_2) == 0 and direction == "cw":
                 print("Limite de course atteinte en Y (origine)")
-                moveY(5, "ccw")
+                moveY(STEP_RETURN, "ccw")
                 break
             elif GPIO.input(SWITCH_4) == 0 and direction == "ccw":
                 print("Limite de course atteinte en Y (fin)")
-                moveY(5, "cw")
+                moveY(STEP_RETURN, "cw")
                 break
         
         sleep(0.1)
 
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        return step
 
 def moveYToOrigin():
     """
     Function to move in Y axe to the origin of the rail
     """
+    step = 0
     try:
         GPIO.output(R_DIR, GPIO.LOW)
         GPIO.output(L_DIR, GPIO.HIGH)
@@ -167,15 +183,17 @@ def moveYToOrigin():
             sleep(SLEEP_TIME)
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
-        
+            step += 1
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on monte de 5 pas pour avoir une petite marge
-        moveY(5, "ccw")
+        moveY(STEP_RETURN, "ccw")
         print("Arrivé à l'origine en Y")
         
 
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        return step
 
 def moveYToEnd():
     """
@@ -183,8 +201,8 @@ def moveYToEnd():
     
     Return: Number of steps to reach the end of the rail
     """
+    step = 0
     try:
-        stepToEndY = 0
         GPIO.output(R_DIR, GPIO.HIGH)
         GPIO.output(L_DIR, GPIO.LOW)
         print("Déplacement au max en Y")
@@ -196,17 +214,16 @@ def moveYToEnd():
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
             
-            stepToEndY += 1
+            step += 1
 
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de 5 pas pour avoir une petite marge
-        moveY(5, "cw")
-
-        return stepToEndY
+        moveY(STEP_RETURN, "cw")
     
     except Exception as e:
         print(f"An error occurred: {e}")
-
+    finally:
+        return step
 
 
 

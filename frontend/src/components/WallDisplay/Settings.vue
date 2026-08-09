@@ -37,9 +37,20 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                 </div>
             </div>
 
+            <h3>Calibration CDs</h3>
+            <div class="div-settings-calibrate-position">
+                <div class="control" v-for="cd in listPositions" :key="cd">
+                    <h5>CD {{ cd.id }}</h5>
+                    <button @click="save(cd.id)">Save</button>
+                    <input type="number" v-model="cd.position[0]" disabled placeholder="X">
+                    <input type="number" v-model="cd.position[1]" disabled placeholder="Y">
+                </div>
+            </div>
+
+
             
             <div class="div-settings-bluetooth">
-                <p>Bluetooth</p>
+                <h3>Bluetooth</h3>
                 <div>
                     <p>Liste des périphériques disponible : </p>
                     <p v-for="periph in listBluetoothPeriph" :key="periph.id">{{ periph }}</p>
@@ -68,12 +79,14 @@ export default {
     mounted() {
         eventBus.on('openSettings', () => {
             this.open = true;
+            this.getPositions()
         })
     },
     data() {
         return {
             open: false,
             electromagnetState: false,
+            listPositions: [{ id: 1, position: [0, 0] }, { id: 2, position: [33, 0] }, { id: 3, position: [0, 0] }, { id: 4, position: [0, 0] }],
             listBluetoothPeriph: ["Bose", "CR4XBT", "JBL"],
             listArtists: ["Zamdane", "Freeze", "Luv Resval", "Gizo Ecoracci", "Dr .Dre", "Bekar", "Bob Marley", "Zuukou Mayzie", "Youv Dee", "Disiz"],
         }
@@ -100,6 +113,36 @@ export default {
                     console.error(`Error sending command ${command}:`, error);
                 });
         },
+        getPositions() {
+            api.getApiManual('command_position')
+                .then((resp) => {
+                    console.log('Positions retrieved successfully:', resp.data.positions);
+                    // Handle the retrieved positions as needed
+                    this.listPositions = resp.data.positions.map((pos, index) => ({
+                        id: pos.id,
+                        position: [pos.x, pos.y]
+                    }));
+                })
+                .catch((error) => {
+                    console.error('Error retrieving positions:', error);
+                });
+        },
+        save(positionId) {
+            api.postApiManual('command_position', { positionId: positionId })
+                .then((resp) => {
+                    console.log(`Position ${resp.data.positions} saved successfully.`);
+                    // Optionally, you can refresh the positions after saving
+
+                    this.listPositions = resp.data.positions.map((pos, index) => ({
+                        id: pos.id,
+                        position: [pos.x, pos.y]
+                    }));
+                    
+                })
+                .catch((error) => {
+                    console.error(`Error saving position ${positionId}:`, error);
+                });
+        }
       
 
 
@@ -144,6 +187,17 @@ export default {
 
     div {
         width: 150px;
+    }
+}
+
+.div-settings-calibrate-position{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 5vh;
+
+    input {
+        color: wheat;
+        text-align: center;
     }
 }
 

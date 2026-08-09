@@ -12,10 +12,6 @@ if IS_ON_RASPBERRY:
 
 manual_bp = Blueprint('manual', __name__)
 
-stepX = 0
-stepY = 0
-
-
 @manual_bp.route('/command', methods=['POST'])
 def getCommand():
     try:
@@ -35,20 +31,20 @@ def getCommand():
         # if not IS_ON_RASPBERRY:
         #     return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
 
-        
+
         if(axis == "X" and direction in ["cw", "ccw"]):
-            stepX = movestepmotor.moveX(50, direction) 
+            steps = movestepmotor.moveX(50, direction) 
             if(direction == "cw"):
-                jukebox.state_machine.stepX -= stepX
+                jukebox.state_machine.actualStepX -= steps
             else:
-                jukebox.state_machine.stepX += stepX
+                jukebox.state_machine.actualStepX += steps
 
         elif(axis == "Y" and direction in ["cw", "ccw"]):
-            movestepmotor.moveY(50, direction)
+            steps = movestepmotor.moveY(50, direction)
             if(direction == "cw"):
-                jukebox.state_machine.stepY -= stepY
+                jukebox.state_machine.actualStepY -= steps
             else:
-                jukebox.state_machine.stepY += stepY
+                jukebox.state_machine.actualStepY += steps
 
         elif(axis == "Z" and int(direction) <= 180 and int(direction) >= 0):
             moveservomotor.moveZToAngle(int(direction))

@@ -123,11 +123,6 @@ class JukeboxStateMachine:
                     self.set_state("GoToOrigin")
                     self.next_state = "Wait"
 
-                # elif self.current_state == "CalculCoords":
-                #     print(f"{self.prefix} : Calcul of steps for each cd... Step to X : {self.maxStepX} and Step to Y : {self.maxStepY}")
-                #     self.calculateCoords()
-                #     print(f"{self.prefix} : Locations : {self.locationsPos}")
-                #     self.set_state("Wait")
 
                 elif self.current_state == "GoToPos":
                     print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
@@ -180,7 +175,7 @@ class JukeboxStateMachine:
                             moveZToOrigin()
 
 
-                    self.set_state("Wait")
+                    self.set_state("Play")
 
                 elif self.current_state == "Play":
                     ## Start player rotation
@@ -191,7 +186,8 @@ class JukeboxStateMachine:
                         time.sleep(1)
                         GPIO.output(LED_PIN, GPIO.LOW)
 
-                    self.set_state("Wait")
+                    self.set_state("GoToOrigin")
+                    self.next_state = "Wait"
 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")

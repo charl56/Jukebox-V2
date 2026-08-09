@@ -14,6 +14,7 @@ class Jukebox:
         self.state_machine.state_complete_event.wait()
 
     def play_cd(self, cd_position):
+        # TODO gestion de prise ou pose de cd
         self.actual_cd = cd_position
         self.state_machine.positionFirst = self.state_machine.locationsPos[cd_position]
         self.set_state("GoToPos")

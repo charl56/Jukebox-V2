@@ -137,7 +137,7 @@ def moveY(step, direction):
         raise ValueError("Step must be a non-negative integer.")
     if direction not in ["cw", "ccw"]:
         raise ValueError('Direction must be "cw" or "ccw".')
-    step = 0
+    stepToMove = 0
 
     try:
         dir_state = GPIO.HIGH if direction == "cw" else GPIO.LOW
@@ -149,7 +149,7 @@ def moveY(step, direction):
             sleep(SLEEP_TIME)
             GPIO.output([L_STEP, R_STEP], GPIO.LOW)
             sleep(SLEEP_TIME)
-            step =+ 1
+            stepToMove += 1
 
             if GPIO.input(SWITCH_2) == 0 and direction == "cw":
                 print("Limite de course atteinte en Y (origine)")
@@ -165,7 +165,7 @@ def moveY(step, direction):
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
-        return step
+        return stepToMove
 
 def moveYToOrigin():
     """

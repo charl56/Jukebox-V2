@@ -121,7 +121,6 @@ class JukeboxStateMachine:
                         self.maxStepY = moveYToEnd()
 
                     self.set_state("GoToOrigin")
-                    self.next_state = "Wait"
 
 
                 elif self.current_state == "GoToPos":

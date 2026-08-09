@@ -56,7 +56,7 @@ def getCommand():
         else:
             return jsonify({"success": False, "error": "Invalid axis or direction"}), 400
 
-        return jsonify({"success": True, "stepX": stepX, "stepY": stepY}), 200
+        return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 

@@ -66,9 +66,15 @@ class JukeboxStateMachine:
             return self.current_state
 
     def set_state(self, state):
+        """Appelé depuis l'extérieur du thread transition() — acquiert le lock."""
         with self.lock:
-            self.current_state = state
-            self.state_complete_event.clear()  # Clear the event when a new state is set
+            self._set_state_locked(state)
+
+    def _set_state_locked(self, state):
+        """Appelé depuis transition(), qui tient déjà le lock."""
+        self.current_state = state
+        self.state_complete_event.clear()
+
 
     def transition(self):
         while self.stepMachineActive:
@@ -91,7 +97,7 @@ class JukeboxStateMachine:
                     except FileNotFoundError:
                         print(f"{self.prefix} : File not found, using default positions.")
 
-                    self.set_state("GoToOrigin")
+                    self._set_state_locked("GoToOrigin")
                     self.next_state = "GoToEnd"
 
 
@@ -108,10 +114,10 @@ class JukeboxStateMachine:
 
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
-                        self.set_state(self.next_state)
+                        self._set_state_locked(self.next_state)
                         self.next_state = "Wait"
                     else:
-                        self.set_state("Wait")
+                        self._set_state_locked("Wait")
 
                 elif self.current_state == "GoToEnd":
                     print(f"{self.prefix} : going to end...")
@@ -120,7 +126,7 @@ class JukeboxStateMachine:
                         self.maxStepX = moveXToEnd()
                         self.maxStepY = moveYToEnd()
 
-                    self.set_state("GoToOrigin")
+                    self._set_state_locked("GoToOrigin")
 
 
                 elif self.current_state == "GoToPos":
@@ -174,7 +180,7 @@ class JukeboxStateMachine:
                             moveZToOrigin()
 
 
-                    self.set_state("Play")
+                    self._set_state_locked("GoToOrigin")
 
                 elif self.current_state == "Play":
                     ## Start player rotation
@@ -185,23 +191,23 @@ class JukeboxStateMachine:
                         time.sleep(1)
                         GPIO.output(LED_PIN, GPIO.LOW)
 
-                    self.set_state("GoToOrigin")
+                    self._set_state_locked("GoToOrigin")
                     self.next_state = "Wait"
 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
                     # time.sleep(0.1)
-                    self.set_state("Wait")
+                    self._set_state_locked("Wait")
                     
                 elif self.current_state == "Prev":
                     print(f"{self.prefix} Prev sound...")
                     # time.sleep(0.1)
-                    self.set_state("Wait")
+                    self._set_state_locked("Wait")
 
                 elif self.current_state == "Next":
                     print(f"{self.prefix} Next sound...")
                     # time.sleep(0.1)
-                    self.set_state("Wait")
+                    self._set_state_locked("Wait")
 
                 elif self.current_state == "Wait":
                     # Instead of sleeping inside the lock, release it and sleep outside
@@ -212,9 +218,10 @@ class JukeboxStateMachine:
                     print(f"{self.prefix} : Closing the machine...")
                     self.stepMachineActive = False
                     self.should_sleep = False
-
+        
             if self.should_sleep:
                 time.sleep(self.wait_time)
+
 
     def calculateCoords(self):
 

@@ -10,6 +10,8 @@ def music_play(cd_position):
     try:
         jukebox.play_cd(int(cd_position))
         return jsonify({"success": True}), 200
+    except ValueError as e:
+        return jsonify({"success": False, "error": str(e)}), 400
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 

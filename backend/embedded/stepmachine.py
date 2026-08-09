@@ -2,7 +2,7 @@
 import threading
 import time
 import os
-from embedded.config import IS_ON_RASPBERRY, NB_POSITIONS
+from embedded.config import IS_ON_RASPBERRY, NB_POSITIONS, PLAYER_POSITION
 from utils import load_json_file, save_json_file
 
 
@@ -39,6 +39,8 @@ class JukeboxStateMachine:
         self.actualStepY = 0
         self.nextCD = None
         self.cdOnMagnet = False
+        self.cdInPlayer = False
+        self.actualCdId = 0
         # Movements
         self.positionFirst = None
         # Coord of each positions
@@ -60,6 +62,8 @@ class JukeboxStateMachine:
         # Event for state completion
         self.state_complete_event = threading.Event()
 
+    def get_player_position(self):
+        return self.locationsPos[PLAYER_POSITION]
 
     def get_state(self):
         with self.lock:
@@ -100,7 +104,6 @@ class JukeboxStateMachine:
                     self._set_state_locked("GoToOrigin")
                     self.next_state = "GoToEnd"
 
-
                 elif self.current_state == "GoToOrigin":
                     print(f"{self.prefix} : going to origin...")
                     ## Etre sur que la fonction est terminée avant de passer à la suite
@@ -128,10 +131,11 @@ class JukeboxStateMachine:
 
                     self._set_state_locked("GoToOrigin")
 
-
                 elif self.current_state == "GoToPos":
-                    print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
+                    if(self.next_state is "GoToPos"): selft.next_state = "Wait"
 
+                    print(f"{self.prefix} : Go from origin to position {self.positionFirst}")
+                    
                     ## Move X and Y to the first position
                     if(IS_ON_RASPBERRY):
 
@@ -179,8 +183,13 @@ class JukeboxStateMachine:
                             self.cdOnMagnet = False
                             moveZToOrigin()
 
+                    if self.next_state == None:
+                        self._set_state_locked("Wait")
+                    else:
+                        self._set_state_locked(self.next_state)
+                        self.next_state = None
 
-                    self._set_state_locked("GoToOrigin")
+
 
                 elif self.current_state == "Play":
                     ## Start player rotation
@@ -191,8 +200,9 @@ class JukeboxStateMachine:
                         time.sleep(1)
                         GPIO.output(LED_PIN, GPIO.LOW)
 
-                    self._set_state_locked("GoToOrigin")
-                    self.next_state = "Wait"
+                    self._set_state_locked("Wait")
+                    # self._set_state_locked("GoToOrigin")
+                    # self.next_state = "Wait"
 
                 elif self.current_state == "Pause":
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
@@ -211,7 +221,9 @@ class JukeboxStateMachine:
 
                 elif self.current_state == "Wait":
                     # Instead of sleeping inside the lock, release it and sleep outside
+                    print("Waiting for next command...")
                     self.should_sleep = True
+                    self.next_state = None
                     self.state_complete_event.set()  # Signal that the state is complete
 
                 elif self.current_state == "Close":

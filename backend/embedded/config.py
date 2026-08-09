@@ -8,6 +8,7 @@ print(f"IS_ON_SERVER: {IS_ON_SERVER} | IS_ON_RASPBERRY: {IS_ON_RASPBERRY}")
 
 
 NB_POSITIONS = 4
+PLAYER_POSITION = 1 # A partir de 0, de gauche a droite, haut en bas
 
 # Pins of limit switches 
 SWITCH_1 = 16

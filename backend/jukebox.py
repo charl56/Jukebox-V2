@@ -19,6 +19,14 @@ class Jukebox:
 
     def play_cd(self, cd_position):
         # TODO gestion de prise ou pose de cd
+
+        # Si cd to player
+        state pos 1
+        next pos 2
+
+        Dans pos, si next stat on prend, puis on vide la case pour retour origine
+
+
         self.actual_cd = cd_position - 1 # On recoit la position du cd de 1 à 6, mais on stocke de 0 à 5
         self.state_machine.positionFirst = self.state_machine.locationsPos[self.actual_cd]
         self.set_state("GoToPos")

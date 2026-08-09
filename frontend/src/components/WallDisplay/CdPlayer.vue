@@ -71,6 +71,8 @@ export default {
             api.postApiJukebox('pause')
                 .then((res) => {
                     localStorage.cdPlaying = 0
+                })
+                .finally(() => {
                     eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
                     eventBus.emit('backScreen', { "artiste": '' }) // On met à jour l'artiste sur le backScreen
                 })
@@ -169,7 +171,8 @@ export default {
 
 @media (min-width: 800px) {
     .album-class_img:hover {
-        animation: none;    /* Permet a la transformation au hover de se faire */
+        animation: none;
+        /* Permet a la transformation au hover de se faire */
         transform: scale(1.03);
         cursor: pointer;
     }
@@ -186,9 +189,11 @@ export default {
     0% {
         transform: scale(1);
     }
+
     25% {
         transform: scale(1.02);
     }
+
     50% {
         transform: scale(1);
     }

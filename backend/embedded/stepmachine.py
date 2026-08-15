@@ -142,7 +142,6 @@ class JukeboxStateMachine:
                         # TODO : caluler le nb de pas en fonction de la pisition actuelle (0 normalement),
                         # Et choisir en fonction cw ou ccw pour aller à la position souhaitée
 
-                        sleep(10)
                         directionX = ""
                         stepsX = 0
                         directionY = ""

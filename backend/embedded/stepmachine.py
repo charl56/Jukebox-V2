@@ -152,14 +152,14 @@ class JukeboxStateMachine:
                             stepsX = self.positionFirst['x'] - self.actualStepX
                         else:
                             directionX = "cw"
-                            stepsX = self.positionFirst['x'] - self.actualStepX
+                            stepsX = self.actualStepX - self.positionFirst['x']
 
                         if self.actualStepY < self.positionFirst['y']:
                             directionY = "ccw"
                             stepsY = self.positionFirst['y'] - self.actualStepY
                         else:
                             directionY = "cw"
-                            stepsY = self.positionFirst['y'] - self.actualStepY
+                            stepsY = self.actualStepY - self.positionFirst['y']
 
                         if directionX == "ccw": self.actualStepX += moveX(stepsX, directionX)
                         else: self.actualStepX -= moveX(stepsX, directionX)

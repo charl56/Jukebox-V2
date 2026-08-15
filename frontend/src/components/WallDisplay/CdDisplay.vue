@@ -1,17 +1,17 @@
 <script setup>// Quand je l'enlève j'ai une erreur : la fonction drag ne fonctionne plus, elle n'est plus trouvée
 </script>
 <template>
-    <div v-if="cd != undefined" class="div-cd-wall" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
+    <div v-if="cd != undefined" class="div-cd-display" draggable="true" @dragstart="drag(cd)" @dragend="dragEnd()"
         @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }" @click.stop="playThisAlbum()">
         <!-- Img album -->
         <img :src="imageSrc" class="album-class" @error="imgSrcNotFound()">
     </div>
-    <div v-else-if="active" class="div-cd-wall no-cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
+    <div v-else-if="active" class="div-cd-display cd" @drop="onDrop(position, $event)" @dragover="onAllowDrop($event)"
         @dragend="dragEnd()" @dragleave="dragLeaveMe()"
         :class="{ 'drag-over': isDraggingOver, 'drag-over-me': isDraggingOverMine }">
     </div>
-    <div v-else class="div-cd-wall no-cd"></div>
+    <div v-else class="div-cd-display no-cd"></div>
 </template>
 
 <script>
@@ -54,9 +54,18 @@ export default {
         playThisAlbum() {
             eventBus.emit("waitingScreen", { "bool": true })      // Active animation du chargemeent de la pause
 
+            console.log("Play album " + this.cd.position + " == localStorage.cdPlaying"+ localStorage.cdPlaying)
             api.postApiJukebox(`play/${this.cd.position}`)
                 .then((res) => {
-                    localStorage.cdPlaying = this.cd.position
+                    if(this.cd.position == localStorage.cdPlaying) {
+                        localStorage.cdPlaying = 0
+                        localStorage.isPlaying = false
+                        localStorage.isPlayerOpen = false
+                    } else {
+                        localStorage.cdPlaying = this.cd.position
+                        localStorage.isPlaying = true
+                        localStorage.isPlayerOpen = true
+                    }
                 })
                 .catch((err) => console.log(err))
                 .finally(() => eventBus.emit("waitingScreen", { "bool": false }))
@@ -110,7 +119,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.div-cd-wall {
+.div-cd-display {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -120,7 +129,7 @@ export default {
 }
 
 @media (max-width: 800px) {
-    .div-cd-wall {
+    .div-cd-display {
         width: 14vh;
         height: 14vh;
     }
@@ -151,7 +160,8 @@ export default {
 
 
 .no-cd {
-    background-color: var(--background-color-black-1);
+    background-color: #353535;
+    /* var(--background-color-black-1); */
     border-radius: 50%;
 }
 

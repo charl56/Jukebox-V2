@@ -6,20 +6,17 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 
 <template>
     <div class="div-wall-display">
-        <CdPlayer v-if="cdPlayingPosition != 0" :cd="list.find(cd => cd.position == cdPlayingPosition)" />
-            
-        
-            <!-- <div v-else class="col-display" v-for="n in 3" :key="n"> -->
-            <!-- <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 2))" :position="(3 * n - 2)" :key="keyUpdate" /> -->
-            <!-- <CdDisplay :cd="list.find(cd => cd.position == (3 * n - 1))" :position="(3 * n - 1)" :key="keyUpdate" /> -->
-            <!-- <CdDisplay :cd="list.find(cd => cd.position == (3 * n))" :position="(3 * n)" :key="keyUpdate" /> -->
-        
-        
+        <BorderPlayer v-if="!getLocalStorageIsPlayerOpen() && getLocalStorageIsPlaying()" :cd="list.find(cd => cd.position == cdPlayingPosition)" />
+
+        <CdPlayer v-if="getLocalStorageIsPlayerOpen()" :cd="list.find(cd => cd.position == cdPlayingPosition)" :key="keyUpdate"/>
         <!-- Affiche grille avec CDs et lecteur -->
         <div v-else class="col-display" v-for="n in 2" :key="n">
-            <CdDisplay v-if="(2 *n) == 2" :cd="list.find(cd => cd.position == (n))" :position="(n)" :key="keyUpdate" />
-            <CdDisplay v-else :active="false" />
-            <CdDisplay :cd="list.find(cd => cd.position == (2 + n))" :position="(2 + n)" :key="keyUpdate" />
+            <WallPlayer v-if="n == 2 && getLocalStorageIsPlaying()" :cd="list.find(cd => cd.position == (getLocalStorageCdPlaying()))" />
+            <CdDisplay v-else-if="n != 2 && n != getLocalStorageCdPlaying()" :cd="list.find(cd => cd.position == (n))" :position="(n)" :key="keyUpdate" />
+            <CdDisplay v-else :active="false"/>
+
+            <CdDisplay v-if="getLocalStorageIsPlaying() && getLocalStorageCdPlaying() == (2 + n)" :active="false" />
+            <CdDisplay v-else :cd="list.find(cd => cd.position == (2 + n))" :position="(2 + n)" :key="keyUpdate" />
         </div>
 
         <div v-if="!isOnServer && cdPlayingPosition == 0" class="settings">
@@ -32,6 +29,8 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 <script>
 import CdDisplay from './CdDisplay.vue';
 import CdPlayer from './CdPlayer.vue';
+import WallPlayer from './WallPlayer.vue';
+import BorderPlayer from './BorderPlayer.vue';
 
 import { eventBus } from '@/plugins/eventBus';
 
@@ -40,6 +39,8 @@ export default {
     components: {
         CdDisplay,
         CdPlayer,
+        WallPlayer,
+        BorderPlayer
     },
     props: {
         list: Array,
@@ -56,6 +57,11 @@ export default {
 
         eventBus.on('waitingScreen', (data) => {
             this.cdPlayingPosition = localStorage.cdPlaying
+            this.keyUpdate++
+        })
+
+        eventBus.on('refresh', (data) => {
+            this.keyUpdate++
         })
     },
     data() {
@@ -67,6 +73,15 @@ export default {
     methods: {
         openSettings() {
             eventBus.emit('openSettings')
+        },
+        getLocalStorageCdPlaying() {
+            return localStorage.cdPlaying == undefined ? 0 : localStorage.cdPlaying
+        },
+        getLocalStorageIsPlaying() {
+            return localStorage.isPlaying == undefined ? false : localStorage.isPlaying == 'true' ? true : false
+        },
+        getLocalStorageIsPlayerOpen() {
+            return localStorage.isPlayerOpen == undefined ? false : localStorage.isPlayerOpen == 'true' ? true : false
         }
     }
 }
@@ -84,7 +99,7 @@ export default {
 
     background-color: var(--background-color-black-2);
     border-radius: 5px;
-    padding: 10px;
+    padding: 0 10px;
 
     z-index: 0;
 }

@@ -20,7 +20,7 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                     class="slider" />
             </div>
         </div>
-        <img :src="iconClose" class="icon icon-close" @click="stop()" draggable="false">
+        <img :src="iconClose" class="icon icon-close" @click="closePlayer()" draggable="false">
     </div>
 </template>
 
@@ -66,16 +66,9 @@ export default {
         openBackScreen() {
             eventBus.emit('backScreenOpen', { "isOpen": true }) // On met à jour l'artiste sur le backScreen
         },
-        stop() {
-            eventBus.emit("waitingScreen", { "bool": true })      // Active animation du chargemeent de la pause
-            api.postApiJukebox('pause')
-                .then((res) => {
-                    localStorage.cdPlaying = 0
-                })
-                .finally(() => {
-                    eventBus.emit("waitingScreen", { "bool": false })     // Arrête animation de la pause
-                    eventBus.emit('backScreen', { "artiste": '' }) // On met à jour l'artiste sur le backScreen
-                })
+        closePlayer() {
+            localStorage.isPlayerOpen = false
+            eventBus.emit('refresh') // On met à jour l'artiste sur le backScreen
         },
         play() {
             api.postApiJukebox(`play/${this.cdPlaying}`)
@@ -106,8 +99,9 @@ export default {
             }
         },
         stopTurningCd() {
-            this.isPlaying = false
-            localStorage.isPlaying = false
+            // this.isPlaying = false
+            // localStorage.isPlaying = false
+            localStorage.isPlayerOpen = false
 
             try {
                 document.getElementById('album_played').classList.remove('zooming-cd')

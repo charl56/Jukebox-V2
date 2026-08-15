@@ -6,7 +6,7 @@ const isOnServer = import.meta.env.VITE_CUSTOM_MODE || false
 // Configuration de base pour axios
 const api = axios.create({
     baseURL: backend,
-    timeout: 30000,
+    timeout: 40000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

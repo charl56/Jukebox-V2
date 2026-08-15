@@ -40,6 +40,8 @@ class Jukebox:
             self.state_machine.actualCdId = cd_position
             self.state_machine.cdInPlayer = True
 
+        elif cd_position == (PLAYER_POSITION + 1) and self.state_machine.cdInPlayer == False:
+            raise ValueError("Aucun CD à enlever du lecteur.")
 
         elif cd_position == self.state_machine.actualCdId or cd_position == (PLAYER_POSITION + 1):  
             # On déplace le rail au lecteur pour récupérer le CD

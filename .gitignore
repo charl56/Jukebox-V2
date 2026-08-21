@@ -3,3 +3,6 @@ nodes_modules
 __pycache__/
 
 backend/templates
+
+backend/static/data.json
+backend/static/positions.json

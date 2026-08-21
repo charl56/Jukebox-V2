@@ -13,13 +13,9 @@ class Jukebox:
         self.state_machine.set_state(state)
         self.state_machine.state_complete_event.wait()
 
-
-
-
-
     def play_cd(self, cd_position):
 
-# Si cd poosition == position du cd dans le lecteur ou si cd position == position du lecteur
+        # Si cd poosition == position du cd dans le lecteur ou si cd position == position du lecteur
         # + 1 car on recoit un id qui commence par 1, pas 0 ; Trop chiant de convertir à différents endroits ??? 
         print("cd_position:", cd_position)
         print("actualCdId:", self.state_machine.actualCdId)
@@ -68,6 +64,10 @@ class Jukebox:
 
     def saveThisPosition(self, positionId):
         self.state_machine.saveThisPosition(positionId)
+        return self.state_machine.getPositions()
+
+    def saveZPosition(self, positionType):
+        self.state_machine.saveZPosition(positionType)
         return self.state_machine.getPositions()
 
 jukebox = Jukebox()

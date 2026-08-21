@@ -2,13 +2,23 @@
 import os
 from flask import Blueprint, jsonify, request
 from utils import load_json_file, save_json_file
+import shutil
 
 data_bp = Blueprint('data', __name__)
+data_path = './static/data.json'
+empty_data_path = './static/data_empty.json'
+
 
 @data_bp.route('/cd', methods=['GET'])
 def get_data():
     try:
-        data = load_json_file('./static/data.json')
+        if not os.path.exists(data_path):
+            print("pas fichier")
+            shutil.copy(empty_data_path, data_path)
+            print("copie fichier")
+
+        data = load_json_file(data_path)
+
         return jsonify({"success": True, "data": data}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
@@ -17,7 +27,7 @@ def get_data():
 def sync_data():
     try:
         data = request.json['data']
-        save_json_file('./static/data.json', data)
+        save_json_file(data_path, data)
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500

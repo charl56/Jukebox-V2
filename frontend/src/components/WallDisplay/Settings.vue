@@ -26,11 +26,14 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                 <!-- Axe Z -->
                 <div class="control">
                     <h5>Axe Z</h5>
-                    <button @click="move('Z', '30')">-</button>
-                    <button @click="move('Z', '80')">+</button>
+                    <button @click="move('Z', 'cw')">-</button>
+                    <button @click="move('Z', 'ccw')">+</button>
+                    <button @click="saveZPosition('origin')">Save Origin</button>
+                    <button @click="saveZPosition('cd')">Save Cd</button>
+                    <button @click="saveZPosition('player')">Save Player</button>
                 </div>
 
-                <!-- Axe Z -->
+                <!-- Aimant -->
                 <div class="control">
                     <h5>Aimant</h5>
                     <button @click="toggleMagnet()">On/Off</button>
@@ -42,8 +45,26 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                 <div class="control" v-for="cd in listPositions" :key="cd">
                     <h5>CD {{ cd.id }}</h5>
                     <button @click="save(cd.id)">Save</button>
-                    <input type="number" v-model="cd.position[0]" disabled placeholder="X">
-                    <input type="number" v-model="cd.position[1]" disabled placeholder="Y">
+                    <div>
+                        <label for="positionX">positionX</label>
+                        <input id="positionX" type="number" v-model="cd.position[0]" disabled placeholder="X">
+                    </div>
+                    <div>
+                        <label for="positionY">positionY</label>
+                        <input id="positionY" type="number" v-model="cd.position[1]" disabled placeholder="Y">
+                    </div>
+                    <div>
+                        <label for="zOrigin">Origin</label>
+                        <input id="zOrigin" type="number" v-model="cd.z[0]" disabled placeholder="Origin">
+                    </div>
+                    <div>
+                        <label for="zPlayer">Player</label>
+                        <input id="zPlayer" type="number" v-model="cd.z[1]" disabled placeholder="Player">
+                    </div>
+                    <div>
+                        <label for="zCD">CD</label>
+                        <input id="zCD" type="number" v-model="cd.z[2]" disabled placeholder="CD">
+                    </div>  
                 </div>
             </div>
 
@@ -86,7 +107,7 @@ export default {
         return {
             open: false,
             electromagnetState: false,
-            listPositions: [{ id: 1, position: [0, 0] }, { id: 2, position: [33, 0] }, { id: 3, position: [0, 0] }, { id: 4, position: [0, 0] }],
+            listPositions: [{ id: 1, position: [0, 0], z: [0, 0, 0] }, { id: 2, position: [33, 0], z: [0, 0, 0] }, { id: 3, position: [0, 0], z: [0, 0, 0] }, { id: 4, position: [0, 0], z: [0, 0, 0] }],
             listBluetoothPeriph: ["Bose", "CR4XBT", "JBL"],
             listArtists: ["Zamdane", "Freeze", "Luv Resval", "Gizo Ecoracci", "Dr .Dre", "Bekar", "Bob Marley", "Zuukou Mayzie", "Youv Dee", "Disiz"],
         }
@@ -120,7 +141,8 @@ export default {
                     // Handle the retrieved positions as needed
                     this.listPositions = resp.data.positions.map((pos, index) => ({
                         id: pos.id,
-                        position: [pos.x, pos.y]
+                        position: [pos.x, pos.y],
+                        z: [pos.origin, pos.player, pos.cd]
                     }));
                 })
                 .catch((error) => {
@@ -129,20 +151,22 @@ export default {
         },
         save(positionId) {
             api.postApiManual('command_position', { positionId: positionId })
-                .then((resp) => {
-                    console.log(`Position ${resp.data.positions} saved successfully.`);
-                    // Optionally, you can refresh the positions after saving
-
-                    this.listPositions = resp.data.positions.map((pos, index) => ({
-                        id: pos.id,
-                        position: [pos.x, pos.y]
-                    }));
-                    
-                })
                 .catch((error) => {
                     console.error(`Error saving position ${positionId}:`, error);
+                })
+                .finally(() => {
+                   this.getPositions();
                 });
-        }
+        },
+        saveZPosition(positionType) {
+            api.postApiManual('command_position', { positionType: positionType })
+                .catch((error) => {
+                    console.error(`Error saving position for ${positionType}):`, error);
+                })
+                .finally(() => {
+                    this.getPositions();
+                });
+        },
       
 
 
@@ -176,6 +200,8 @@ export default {
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
+
+    overflow-y: auto;
 }
 
 

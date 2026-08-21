@@ -7,8 +7,6 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(SERVO_MOTOR, GPIO.OUT)
 
 ORIGIN_ANGLE = 0
-PLAYER_ANGLE = 60
-SUPPORT_ANGLE = 170
 
 # Initialisation du signal PWM à 50Hz
 pwm = GPIO.PWM(SERVO_MOTOR, 50)  # Fréquence de 50Hz
@@ -43,21 +41,3 @@ def moveZToOrigin():
     moveZToAngle(ORIGIN_ANGLE)
 
 
-def moveZToPlayer():
-    """
-    Function to move in Z axe to the player angle (60 degrees).
-
-    Example of use:
-    moveZToPlayer()
-    """
-    moveZToAngle(PLAYER_ANGLE)
-
-
-def moveZToSupport():
-    """
-    Function to move in Z axe to the support angle (170 degrees).
-
-    Example of use:
-    moveZToSupport()
-    """
-    moveZToAngle(SUPPORT_ANGLE)

@@ -46,8 +46,20 @@ def getCommand():
             else:
                 jukebox.state_machine.actualStepY += steps
 
-        elif(axis == "Z" and int(direction) <= 180 and int(direction) >= 0):
-            moveservomotor.moveZToAngle(int(direction))
+        elif(axis == "Z" and direction in ["cw", "ccw"]):
+            if(direction == "cw" and jukebox.state_machine.actualStepZ - 5 >= 0):
+                jukebox.state_machine.actualStepZ -= 5
+            elif(direction == "cw" and jukebox.state_machine.actualStepZ - 5 < 0):
+                jukebox.state_machine.actualStepZ = 0
+
+            elif(direction == "ccw" and jukebox.state_machine.actualStepZ + 5 <= 180):
+                jukebox.state_machine.actualStepZ += 5
+            elif(direction == "ccw" and jukebox.state_machine.actualStepZ + 5 > 180):
+                jukebox.state_machine.actualStepZ = 180
+            
+            print("Moving Z to angle:", jukebox.state_machine.actualStepZ)
+            moveservomotor.moveZToAngle(jukebox.state_machine.actualStepZ)
+
         
         elif(axis == "MAGNET" and direction in ["True", "False"]):
             if(bool(direction)): electromagnet.setMagnetOn()
@@ -63,8 +75,14 @@ def getCommand():
 @manual_bp.route('/command_position', methods=['POST'])
 def setPosition():
     try:
-        positionId = request.json.get('positionId')
-        positions = jukebox.saveThisPosition(positionId)
+        if 'positionId' in request.json:
+            positionId = request.json.get('positionId')
+            positions = jukebox.saveThisPosition(positionId)
+        elif 'positionType' in request.json:
+            positionType = request.json.get('positionType')
+            jukebox.state_machine.saveZPosition(positionType)
+            positions = jukebox.getPositions()
+        
 
         return jsonify({"success": True, "positions": positions}), 200
     except Exception as e:

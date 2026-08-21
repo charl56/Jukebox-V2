@@ -4,11 +4,12 @@ from time import sleep
 import os
 from embedded.config import IS_ON_RASPBERRY, IS_ON_SERVER, NB_POSITIONS, PLAYER_POSITION
 from utils import load_json_file, save_json_file
+import shutil
 
 
 if(IS_ON_RASPBERRY):
     from embedded.movestepmotor import moveX, moveXToOrigin, moveXToEnd, moveY, moveYToOrigin, moveYToEnd
-    from embedded.moveservomotor import moveZToAngle, moveZToOrigin, moveZToPlayer, moveZToSupport
+    from embedded.moveservomotor import moveZToAngle, moveZToOrigin
     from embedded.electromagnet import setMagnetOn, setMagnetOff
     
     import RPi.GPIO as GPIO
@@ -37,6 +38,7 @@ class JukeboxStateMachine:
         self.maxStepY = 0
         self.actualStepX = 0
         self.actualStepY = 0
+        self.actualStepZ = 0
         self.nextCD = None
         self.cdOnMagnet = False
         self.cdInPlayer = False
@@ -46,7 +48,7 @@ class JukeboxStateMachine:
         # Coord of each positions
         self.locationsPos = []
         for i in range(NB_POSITIONS):
-            self.locationsPos.append({'id': str(i + 1), 'x': 0, 'y': 0})
+            self.locationsPos.append({'id': str(i + 1), 'x': 0, 'y': 0, 'origin': 0, 'player': 0, 'cd': 0})
         # Angle of Z, with servo motor
         self.locationZ = [0, 180]
         # Player actions
@@ -87,12 +89,18 @@ class JukeboxStateMachine:
                     print(f"{self.prefix} : Initializing...")
              
                     try:
+
+                        if not os.path.exists("./static/positions.json"):
+                            shutil.copy("./static/positions_empty.json", "./static/positions.json")
+
                         data = load_json_file("./static/positions.json")
+
+
                         if(len(data) == NB_POSITIONS):
                             self.locationsPos = data
                         elif(len(data) < NB_POSITIONS):
                             print(f"{self.prefix} : Not enough positions in JSON. Expected {NB_POSITIONS}, got {len(data)}. Using default positions.")
-                            data.extend([{'id': str(i + 1), 'x': 0, 'y': 0} for i in range(len(data), NB_POSITIONS)])
+                            data.extend([{'id': str(i + 1), 'x': 0, 'y': 0, 'origin': 0, 'player': 0, 'cd': 0} for i in range(len(data), NB_POSITIONS)])
                             self.locationsPos = data
                             save_json_file("./static/positions.json", self.locationsPos)
                         else:
@@ -110,10 +118,12 @@ class JukeboxStateMachine:
                     if(IS_ON_RASPBERRY):
                         moveXToOrigin()
                         moveYToOrigin()
+                        # moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
                         moveZToOrigin()
 
                         self.actualStepX = 0
                         self.actualStepY = 0
+                        self.actualStepZ = 0
 
                     # Permet de retourner à l'origine sans passer par le GoToEnd
                     if self.next_state:
@@ -138,9 +148,6 @@ class JukeboxStateMachine:
                     
                     ## Move X and Y to the first position
                     if(IS_ON_RASPBERRY):
-
-                        # TODO : caluler le nb de pas en fonction de la pisition actuelle (0 normalement),
-                        # Et choisir en fonction cw ou ccw pour aller à la position souhaitée
 
                         directionX = ""
                         stepsX = 0
@@ -171,17 +178,27 @@ class JukeboxStateMachine:
 
                         if(not self.cdOnMagnet):
                             ## Move down electromagnet
-                            moveZToPlayer()
+                            if self.cdInPlayer: 
+                                moveZToAngle(self.locationsPos[PLAYER_POSITION]['player'])
+                            else:
+                                moveZToAngle(self.locationsPos[PLAYER_POSITION]['cd'])
                             setMagnetOn()
                             self.cdOnMagnet = True
-                            moveZToOrigin()
+                            moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
                         
                         else:
                             ## Move down electromagnet
-                            moveZToSupport()
+                            if self.cdInPlayer: 
+                                moveZToAngle(self.locationsPos[PLAYER_POSITION]['cd'])
+                            else:
+                                moveZToAngle(self.locationsPos[PLAYER_POSITION]['player'])
+
+                            # moveZToSupport()
                             setMagnetOff()
                             self.cdOnMagnet = False
-                            moveZToOrigin()
+                            # moveZToOrigin()
+                            moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
+
 
                     if self.next_state == None:
                         self._set_state_locked("Wait")
@@ -197,7 +214,7 @@ class JukeboxStateMachine:
 
                     if(IS_ON_RASPBERRY):
                         GPIO.output(LED_PIN, GPIO.HIGH)
-                        sleep(1)
+                        sleep(0.5)
                         GPIO.output(LED_PIN, GPIO.LOW)
 
                     self._set_state_locked("Wait")
@@ -235,20 +252,9 @@ class JukeboxStateMachine:
                 sleep(self.wait_time)
 
 
-    def calculateCoords(self):
-
-        ## Origin, permet ensuite d'avoir le cd n°1 dans la liste self.locationsPos[1]...
-        # self.locationsPos[0]['x'] = 00
-        # self.locationsPos[0]['y'] = 00
-        print("Not used")
-        # self.locationsPos[1]['x'] = 11
-        # self.locationsPos[1]['y'] = 11
-        
-        # self.locationsPos[2]['x'] = 22
-        # self.locationsPos[2]['y'] = 22
-        
-        # self.locationsPos[3]['x'] = 33
-        # self.locationsPos[3]['y'] = 33
+    
+    def getPositions(self):
+        return self.locationsPos
 
     def saveThisPosition(self, position):
         try:
@@ -268,5 +274,24 @@ class JukeboxStateMachine:
 
         save_json_file("./static/positions.json", self.locationsPos)  # Save to JSON file
 
-    def getPositions(self):
-        return self.locationsPos
+    def saveZPosition(self, positionType):
+        if positionType not in ["origin", "cd", "player"]:
+            print(f"{self.prefix} : Invalid Z position '{positionType}'. Must be 'origin', 'cd', or 'player'.")
+            return
+
+
+        for i in range(len(self.locationsPos)):
+            if 'origin' not in self.locationsPos[i]:
+                self.locationsPos[i]['origin'] = 0
+            if 'player' not in self.locationsPos[i]:
+                self.locationsPos[i]['player'] = 0
+            if 'cd' not in self.locationsPos[i]:
+                self.locationsPos[i]['cd'] = 0
+        
+            self.locationsPos[i][positionType] = self.actualStepZ
+
+
+        print(f"{self.prefix} : Z position '{positionType}' saved with angle: {self.actualStepZ}")
+
+        save_json_file("./static/positions.json", self.locationsPos)  # Save to JSON file
+

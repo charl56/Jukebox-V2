@@ -2,12 +2,12 @@
 from flask import Blueprint, jsonify, request
 import time
 from embedded.config import IS_ON_RASPBERRY
-from jukebox import jukebox
 
 if IS_ON_RASPBERRY:
     from embedded import movestepmotor
     from embedded import moveservomotor
     from embedded import electromagnet
+    from jukebox import jukebox
 
 
 manual_bp = Blueprint('manual', __name__)
@@ -28,8 +28,8 @@ def getCommand():
         direction = parts[2]
 
     
-        # if not IS_ON_RASPBERRY:
-        #     return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
+        if not IS_ON_RASPBERRY:
+            return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
 
 
         if(axis == "X" and direction in ["cw", "ccw"]):
@@ -75,6 +75,11 @@ def getCommand():
 @manual_bp.route('/command_position', methods=['POST'])
 def setPosition():
     try:
+
+        if not IS_ON_RASPBERRY:
+            return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
+
+
         if 'positionId' in request.json:
             positionId = request.json.get('positionId')
             positions = jukebox.saveThisPosition(positionId)

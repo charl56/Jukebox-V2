@@ -4,5 +4,5 @@ __pycache__/
 
 backend/templates
 
-backend/static/data.json
-backend/static/positions.json
+# backend/static/data.json
+# backend/static/positions.json

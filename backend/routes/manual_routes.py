@@ -87,6 +87,8 @@ def setPosition():
             positionType = request.json.get('positionType')
             jukebox.state_machine.saveZPosition(positionType)
             positions = jukebox.getPositions()
+        elif 'action' in request.json:
+            jukebox.setState("GoToOrigin")
         
 
         return jsonify({"success": True, "positions": positions}), 200

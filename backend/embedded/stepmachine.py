@@ -174,7 +174,8 @@ class JukeboxStateMachine:
                         if directionY == "ccw": self.actualStepY += moveY(stepsY, directionY)
                         else: self.actualStepY -= moveY(stepsY, directionY)
 
-
+                        # Position XY ok
+                        sleep(0.5)
 
                         if(not self.cdOnMagnet):
                             ## Move down electromagnet
@@ -182,8 +183,10 @@ class JukeboxStateMachine:
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['player'])
                             else:
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['cd'])
+                            sleep(1)
                             setMagnetOn()
                             self.cdOnMagnet = True
+                            sleep(1)
                             moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
                         
                         else:
@@ -192,11 +195,12 @@ class JukeboxStateMachine:
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['cd'])
                             else:
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['player'])
-
+                            sleep(1)
                             # moveZToSupport()
                             setMagnetOff()
                             self.cdOnMagnet = False
                             # moveZToOrigin()
+                            sleep(1)
                             moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
 
 

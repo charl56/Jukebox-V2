@@ -38,6 +38,12 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                     <h5>Aimant</h5>
                     <button @click="toggleMagnet()">On/Off</button>
                 </div>
+
+                <!-- Origin -->
+                <div class="control">
+                    <h5>Oriine</h5>
+                    <button @click="goToOrigin()">On/Off</button>
+                </div>
             </div>
 
             <h3>Calibration CDs</h3>
@@ -167,7 +173,12 @@ export default {
                     this.getPositions();
                 });
         },
-      
+        goToOrigin() {
+            api.postApiManual('command_position', { action: 'goToOrigin' })
+                .catch((error) => {
+                    console.error(error);
+                })
+        },
 
 
     },

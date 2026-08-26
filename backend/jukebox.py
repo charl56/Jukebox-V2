@@ -22,7 +22,10 @@ class Jukebox:
         print("PLAYER_POSITION + 1:", PLAYER_POSITION + 1)
         print("cdInPlayer:", self.state_machine.cdInPlayer)
 
-        if self.state_machine.cdInPlayer == False:
+        if self.state_machine.cdInPlayer == False and cd_position == (PLAYER_POSITION + 1):
+            raise ValueError("Aucun CD à enlever du lecteur.")
+
+        elif self.state_machine.cdInPlayer == False:
             # On init la position de départ, le fait qu'il n'y a pas de manet pour aller chercher le CD
             self.state_machine.positionFirst = self.state_machine.locationsPos[cd_position - 1] # -1 car l'id commence a 1 et index à 0
             self.state_machine.cdOnMagnet = False
@@ -35,9 +38,6 @@ class Jukebox:
             # Une fois placé on init dans la machine l'id du cd sur le lecteur
             self.state_machine.actualCdId = cd_position
             self.state_machine.cdInPlayer = True
-
-        elif cd_position == (PLAYER_POSITION + 1) and self.state_machine.cdInPlayer == False:
-            raise ValueError("Aucun CD à enlever du lecteur.")
 
         elif cd_position == self.state_machine.actualCdId or cd_position == (PLAYER_POSITION + 1):  
             # On déplace le rail au lecteur pour récupérer le CD

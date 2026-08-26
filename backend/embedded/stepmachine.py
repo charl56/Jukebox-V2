@@ -131,6 +131,8 @@ class JukeboxStateMachine:
                         self.next_state = "Wait"
                     else:
                         self._set_state_locked("Wait")
+                    print("Waiting for next command...")
+
 
                 elif self.current_state == "GoToEnd":
                     print(f"{self.prefix} : going to end...")
@@ -206,6 +208,7 @@ class JukeboxStateMachine:
 
                     if self.next_state == None:
                         self._set_state_locked("Wait")
+                        print("Waiting for next command...")
                     else:
                         self._set_state_locked(self.next_state)
                         self.next_state = None
@@ -222,6 +225,8 @@ class JukeboxStateMachine:
                         GPIO.output(LED_PIN, GPIO.LOW)
 
                     self._set_state_locked("Wait")
+                    print("Waiting for next command...")
+
                     # self._set_state_locked("GoToOrigin")
                     # self.next_state = "Wait"
 
@@ -229,6 +234,8 @@ class JukeboxStateMachine:
                     print(f"{self.prefix} : Pausing CD {self.nextCD}...")
                     # time.sleep(0.1)
                     self._set_state_locked("Wait")
+                    print("Waiting for next command...")
+
                     
                 elif self.current_state == "Prev":
                     print(f"{self.prefix} Prev sound...")
@@ -242,7 +249,6 @@ class JukeboxStateMachine:
 
                 elif self.current_state == "Wait":
                     # Instead of sleeping inside the lock, release it and sleep outside
-                    print("Waiting for next command...")
                     self.should_sleep = True
                     self.next_state = None
                     self.state_complete_event.set()  # Signal that the state is complete

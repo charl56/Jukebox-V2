@@ -11,6 +11,7 @@ if IS_ON_RASPBERRY:
 
 
 manual_bp = Blueprint('manual', __name__)
+zMovementCalibration = 15
 
 @manual_bp.route('/command', methods=['POST'])
 def getCommand():
@@ -47,14 +48,14 @@ def getCommand():
                 jukebox.state_machine.actualStepY += steps
 
         elif(axis == "Z" and direction in ["cw", "ccw"]):
-            if(direction == "cw" and jukebox.state_machine.actualStepZ - 5 >= 0):
-                jukebox.state_machine.actualStepZ -= 5
-            elif(direction == "cw" and jukebox.state_machine.actualStepZ - 5 < 0):
+            if(direction == "cw" and jukebox.state_machine.actualStepZ - zMovementCalibration >= 0):
+                jukebox.state_machine.actualStepZ -= zMovementCalibration
+            elif(direction == "cw" and jukebox.state_machine.actualStepZ - zMovementCalibration < 0):
                 jukebox.state_machine.actualStepZ = 0
 
-            elif(direction == "ccw" and jukebox.state_machine.actualStepZ + 5 <= 180):
-                jukebox.state_machine.actualStepZ += 5
-            elif(direction == "ccw" and jukebox.state_machine.actualStepZ + 5 > 180):
+            elif(direction == "ccw" and jukebox.state_machine.actualStepZ + zMovementCalibration <= 180):
+                jukebox.state_machine.actualStepZ += zMovementCalibration
+            elif(direction == "ccw" and jukebox.state_machine.actualStepZ + zMovementCalibration > 180):
                 jukebox.state_machine.actualStepZ = 180
             
             print("Moving Z to angle:", jukebox.state_machine.actualStepZ)
@@ -88,7 +89,7 @@ def setPosition():
             jukebox.state_machine.saveZPosition(positionType)
             positions = jukebox.getPositions()
         elif 'action' in request.json:
-            jukebox.setState("GoToOrigin")
+            jukebox.set_state("GoToOrigin")
         
 
         return jsonify({"success": True, "positions": positions}), 200

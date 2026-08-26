@@ -42,7 +42,7 @@ const iconClose = new URL('@/assets/icons/close_white.png', import.meta.url).hre
                 <!-- Origin -->
                 <div class="control">
                     <h5>Oriine</h5>
-                    <button @click="goToOrigin()">On/Off</button>
+                    <button @click="goToOrigin()">GoOrigine</button>
                 </div>
             </div>
 

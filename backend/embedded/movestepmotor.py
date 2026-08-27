@@ -44,13 +44,13 @@ def moveX(step, direction):
 
             if GPIO.input(SWITCH_1) == 0 and direction == "cw":
                 print("Limite de course atteinte en X (origine)")
-                moveX(STEP_RETURN, "ccw")
-                stepMoved -= STEP_RETURN  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
+                reculed = moveX(STEP_RETURN, "ccw")
+                stepMoved -= reculed  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
                 break
             elif getRealValueOfSwitch3(GPIO.input(SWITCH_3)) == 0 and direction == "ccw":
                 print("Limite de course atteinte en X (fin)")
-                moveX(STEP_RETURN, "cw")
-                stepMoved -= STEP_RETURN  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
+                reculed = moveX(STEP_RETURN, "cw")
+                stepMoved -= reculed  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
                 break
         
         sleep(0.1)
@@ -110,8 +110,8 @@ def moveXToEnd():
         
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de X pas pour avoir une petite marge
-        moveX(STEP_RETURN, "cw")
-        stepMoved -= STEP_RETURN  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
+        reculed = moveX(STEP_RETURN, "cw")
+        stepMoved -= reculed  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -154,13 +154,13 @@ def moveY(step, direction):
 
             if GPIO.input(SWITCH_2) == 0 and direction == "cw":
                 print("Limite de course atteinte en Y (origine)")
-                moveY(STEP_RETURN, "ccw")
-                stepMoved -= STEP_RETURN  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
+                reculed = moveY(STEP_RETURN, "ccw")
+                stepMoved -= reculed  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
                 break
             elif GPIO.input(SWITCH_4) == 0 and direction == "ccw":
                 print("Limite de course atteinte en Y (fin)")
-                moveY(STEP_RETURN, "cw")
-                stepMoved -= STEP_RETURN  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
+                reculed = moveY(STEP_RETURN, "cw")
+                stepMoved -= reculed  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
                 break
         
         sleep(0.1)
@@ -219,8 +219,8 @@ def moveYToEnd():
 
         # Comme on est à l'ogine, on peut réinitialiser le compteur de pas à 0
         # Et on recule de X pas pour avoir une petite marge
-        moveY(STEP_RETURN, "cw")
-        stepMoved -= STEP_RETURN  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
+        reculed = moveY(STEP_RETURN, "cw")
+        stepMoved -= reculed  # On decremente les pas fait dans l'autre sens, une fois le bout atteint
     
     except Exception as e:
         print(f"An error occurred: {e}")

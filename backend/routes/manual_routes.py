@@ -27,7 +27,7 @@ def getCommand():
         # On extrait les paramètres
         axis = parts[1]
         direction = parts[2]
-
+        print(f"Received command: {command}, axis: {axis}, direction: {direction}")
     
         if not IS_ON_RASPBERRY:
             return jsonify({"success": False, "error": "Not running on Raspberry Pi"}), 400
@@ -35,17 +35,21 @@ def getCommand():
 
         if(axis == "X" and direction in ["cw", "ccw"]):
             steps = movestepmotor.moveX(50, direction) 
+            print(f"Moved X axis {steps} steps in {direction} direction.")
             if(direction == "cw"):
                 jukebox.state_machine.actualStepX -= steps
             else:
                 jukebox.state_machine.actualStepX += steps
+            print(f"Updated actualStepX: {jukebox.state_machine.actualStepX}")
 
         elif(axis == "Y" and direction in ["cw", "ccw"]):
             steps = movestepmotor.moveY(50, direction)
+            print(f"Moved Y axis {steps} steps in {direction} direction.")
             if(direction == "cw"):
                 jukebox.state_machine.actualStepY -= steps
             else:
                 jukebox.state_machine.actualStepY += steps
+            print(f"Updated actualStepY: {jukebox.state_machine.actualStepY}")
 
         elif(axis == "Z" and direction in ["cw", "ccw"]):
             if(direction == "cw" and jukebox.state_machine.actualStepZ - zMovementCalibration >= 0):

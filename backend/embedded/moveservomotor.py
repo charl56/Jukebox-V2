@@ -25,10 +25,13 @@ def moveZToAngle(angle):
     Example of use:
     moveZToAngle(90)
     """
+    time.sleep(0.5)  # Temps de pause avant pour éviter les mouvements brusques, bug...
+
     duty = 2 + (angle / 18)  # Calcul du cycle de service correspondant à l'angle
     pwm.ChangeDutyCycle(duty)
-    time.sleep(0.2)  # Temps pour laisser le servomoteur atteindre la position
+    time.sleep(0.3)  # Temps pour laisser le servomoteur atteindre la position
     pwm.ChangeDutyCycle(0)
+
 
 
 def moveZToOrigin():

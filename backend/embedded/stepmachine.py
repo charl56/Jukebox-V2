@@ -118,9 +118,11 @@ class JukeboxStateMachine:
                     if(IS_ON_RASPBERRY):
                         moveXToOrigin()
                         moveYToOrigin()
-                        # moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
-                        moveZToOrigin()
-
+                        if isinstance(self.locationsPos[PLAYER_POSITION].get('origin'), int):
+                            moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
+                        else:
+                            moveZToOrigin()
+                    
                         self.actualStepX = 0
                         self.actualStepY = 0
                         self.actualStepZ = 0

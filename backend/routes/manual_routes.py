@@ -66,7 +66,7 @@ def getCommand():
             moveservomotor.moveZToAngle(jukebox.state_machine.actualStepZ)
 
         
-        elif(axis == "MAGNET" and direction in ["True", "False"]):
+        elif(axis == "MAGNET" and direction in ["True", "False", "true", "false"]):
             if(bool(direction)): electromagnet.setMagnetOn()
             else: electromagnet.setMagnetOff()
         

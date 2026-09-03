@@ -131,10 +131,10 @@ export default {
         },
         toggleMagnet() {
             let command = `TOGGLE_MAGNET_${this.electromagnetState}`;
-            this.electromagnetState = !this.electromagnetState;
             api.postApiManual('command', { command: command })
-                .then((resp) => {
-                    console.log(`Command ${command} sent successfully.`);
+            .then((resp) => {
+                console.log(`Command ${command} sent successfully.`);
+                this.electromagnetState = !this.electromagnetState;
                 })
                 .catch((error) => {
                     console.error(`Error sending command ${command}:`, error);

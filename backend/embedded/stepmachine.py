@@ -185,25 +185,25 @@ class JukeboxStateMachine:
                             ## Move down electromagnet
                             if self.cdInPlayer: 
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['player'])
-                                print("move z to player " + self.locationsPos[PLAYER_POSITION]['player'])
+                                print("move z to player " + str(self.locationsPos[PLAYER_POSITION]['player']))
                             else:
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['cd'])
-                                print("move z to cd " + self.locationsPos[PLAYER_POSITION]['cd'])
+                                print("move z to cd " + str(self.locationsPos[PLAYER_POSITION]['cd']))
                             sleep(1)
                             setMagnetOn()
                             self.cdOnMagnet = True
                             sleep(1)
                             moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
-                            print("move z to origin " + self.locationsPos[PLAYER_POSITION]['origin'])
+                            print("move z to origin " + str(self.locationsPos[PLAYER_POSITION]['origin']))
                         
                         else:
                             ## Move down electromagnet
                             if self.cdInPlayer: 
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['cd'])
-                                print("move z to cd " + self.locationsPos[PLAYER_POSITION]['cd'])
+                                print("move z to cd " + str(self.locationsPos[PLAYER_POSITION]['cd']))
                             else:
                                 moveZToAngle(self.locationsPos[PLAYER_POSITION]['player'])
-                                print("move z to player " + self.locationsPos[PLAYER_POSITION]['player'])
+                                print("move z to player " + str(self.locationsPos[PLAYER_POSITION]['player']))
                             sleep(1)
                             # moveZToSupport()
                             setMagnetOff()
@@ -211,7 +211,7 @@ class JukeboxStateMachine:
                             # moveZToOrigin()
                             sleep(1)
                             moveZToAngle(self.locationsPos[PLAYER_POSITION]['origin'])
-                            print("move z to origin " + self.locationsPos[PLAYER_POSITION]['origin'])
+                            print("move z to origin " + str(self.locationsPos[PLAYER_POSITION]['origin']))
 
 
                     if self.next_state == None:
